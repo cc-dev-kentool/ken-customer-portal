@@ -1,0 +1,1 @@
+export { SMSYSAlert as default } from './SMSYSAlert'

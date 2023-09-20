@@ -1,0 +1,189 @@
+/* css for popup dialog */
+.modal-dialog {
+    max-width: none !important;
+    margin: 0;
+}
+
+.modal-instruction {
+    width: 50%;
+    left: 25%;
+}
+
+.modal-instruction .modal-body {
+    padding: 25px 50px 40px 50px;
+}
+
+.modalContent {
+    border-radius: 0;
+    border: none;
+}
+
+.modalHeader {
+    background-color: #BD1F2C;
+    justify-content: left;
+    border-radius: 0;
+}
+
+.titlePopup {
+    width: 100%;
+    text-align: center;
+    color: #fff !important;
+    font-weight: bold  !important;
+    font-size: 20px;
+    margin-bottom: -1px;
+}
+
+.item-content-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnPopup .btnCancel {
+    background: none;
+    color: red ;
+    border: 1px solid red ;
+    box-shadow: none ;
+    border-radius: 0;
+    width: 120px;
+    height: 40px;
+}
+
+.btnPopup .btnCancel:hover {
+    color: #BD202D !important;
+    border: 1px solid #BD202D !important;
+    background-color: #fff !important;
+    box-shadow: none !important;
+}
+
+.btnPopup .btnSubmitPopup {
+    border-radius: 0;
+    width: 120px;
+    height: 40px;
+    margin-left: 15px;
+}
+
+.btn-Colse {
+    float: right;
+    color: #fff;
+    cursor: pointer;
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    .modal-instruction {
+        width: 70%;
+        left: 15%;
+    }
+}
+
+/* css for modal add comment */
+.modal-instruction .modal-body .lableComment {
+    font-weight: bold;
+}
+
+.modal-instruction .modal-body textarea {
+    margin-bottom: 35px;
+}
+
+.required {
+    color: #BD202D;
+    font-weight: bold;
+}
+
+/* css for modal add test type */
+.modalContentAddTestType {
+    height: 100vh;
+}
+
+.modal-test-type .modal-body {
+    height: 90vh;
+}
+
+.searchTestType {
+    margin: 0 0 15px 15px;
+    border-bottom: 1px solid #B3B3B3;
+    top: 14px;
+    padding: 0 !important;
+    width: 270px !important;
+}
+
+.searchTestType input {
+    width: 80%;
+}
+
+.searchTestType input:focus {
+    outline: none;
+}
+
+.iconCloseSearch {
+    float: right;
+    margin-top: 3px;
+    cursor: pointer;
+}
+
+.table-testing {
+    position: sticky;
+    overflow: auto;
+    border: 1px solid #d9dbdd;
+}
+
+.table-testing thead tr {
+    padding-top: 0 !important;
+    border-top: 0 !important;
+}
+
+.table-testing thead th {
+    padding-bottom: 8px;
+    top: -1px;
+    position: sticky;
+    z-index: 1;
+    background: #e9ecef;
+    vertical-align: middle;
+}
+
+.table-testing thead th label {
+    cursor: pointer;
+}
+
+.table-testing tr td {
+    vertical-align: top !important;
+    min-width: 220px;
+    border-bottom: none;
+}
+
+.table-testing .testTypeName {
+    display: inline;
+    margin-left: 2px;
+}
+
+.btn-radio {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    margin-top: 2vh;
+}
+
+.btnYN {
+    margin-left: 20px;
+    outline: none;
+}
+
+.labelYN {
+    margin-left: 40px;
+}
+
+.btnYN, .labelYN, .testTypeName {
+    cursor: pointer;
+}
+
+.iconCheck {
+    border-radius: 0 !important;
+    margin-left: 0;
+    position: static;
+    background-position: 0;
+}
+
+.form-check-input:checked {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}

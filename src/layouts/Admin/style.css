@@ -1,0 +1,152 @@
+.sidebar-nav .sidebar-item {
+    padding-bottom: 15px;
+}
+
+nav#sidebar {
+    background: #FFFFFF !important;
+}
+
+.sidebar, .sidebar-content {
+    background: #FFFFFF !important;
+}
+
+.sidebar-link i {
+    margin-left: 20px;
+}
+
+.sidebar-link span {
+    margin-left: 20px;
+}
+
+a.sidebar-link {
+    background: #FFFFFF !important;
+}
+
+li.active > a.sidebar-link {
+    background: #3f4046 !important;
+}
+
+.navbar {
+    box-shadow: none !important;
+}
+
+/* .border-content {
+    border: 1px solid rgba(0,0,0,.12) !important;
+    border-radius: 10px;
+} */
+
+main.content {
+    padding: 1.5rem 1.5rem 0.75rem !important;
+}
+
+h4.admin-breadcum {
+    padding: 0rem 1.5rem 0rem !important;
+    color: #495057;
+}
+
+h4.admin-breadcum a{
+    color: #4C4C4C;
+}
+
+.my-account {
+    padding-top: 8px;
+}
+
+.avatar {
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+#alertsDropdown svg {
+    height: 30px !important;
+    width: 30px !important;
+}
+
+.my-account {
+    text-decoration: none !important;
+    color: #4C4C4C;
+}
+
+.my-account:hover {
+    color: white !important;
+}
+.invalid-feedback-server {
+    font-size: 16px !important;
+    color: #dc3545;
+    /* font-size: 80% !important; */
+    margin-top: 0.25rem;
+    width: 100%;
+}
+
+.dropdown-index .dropdown-menu {
+    text-align: left !important;
+    margin-top: 35px !important;
+    border-radius: 0px !important;
+}
+
+.dropdown-index {
+    margin-left: 80px !important;
+}
+
+.dropdown-index .dropdown-item:hover {
+    background: #DC3545 !important;
+    color: white !important;
+}
+
+.nav-avatar:hover {
+    background: none !important;
+}
+
+.wrapper {
+    min-height: 665px !important;
+}
+
+.main {
+    min-height: 780px !important;
+}
+
+.sidebar-link i {
+    margin-left: -6px;
+}
+
+.breadcum-item:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a:hover { 
+    text-decoration: none; 
+}
+
+/* Media query for tablet/ipad devices with min-width: 768px and max-width: 1024px */
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    .container-fluid {
+        min-width: 720px !important;
+    }
+
+    .navbar {
+        min-width: 770px !important;
+    }
+
+    .notification-top-bar {
+        min-width: 134% !important;
+    }
+
+    .navbar .show {
+        inset: 0px 0px auto auto !important;
+    }
+}
+
+.notification-top-bar {
+    position: fixed;
+    top: 0;
+    z-index: 10000;
+    height: auto;
+    width: 100%;
+}
+
+nav.navbar {
+    background: #f5f7fb !important;
+}
