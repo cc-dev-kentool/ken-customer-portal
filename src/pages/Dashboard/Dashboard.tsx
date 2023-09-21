@@ -1,7 +1,7 @@
 import AdminLayout from "layouts/Admin";
 import "./style.css";
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import { Worker, Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import { searchPlugin } from "@react-pdf-viewer/search";
@@ -12,13 +12,12 @@ import { ScrollMode } from "@react-pdf-viewer/core";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 
-
 // Define a function called "Dashboard" which receives a single parameter called "props"
 export function Dashboard(props) {
   const [url, setUrl] = useState("");
   const searchPluginInstance = searchPlugin();
   const { highlight } = searchPluginInstance;
-
+  const [key, setKey] = useState("");
   const toolbarPluginInstance = toolbarPlugin();
   const { Toolbar } = toolbarPluginInstance;
   const [data, setData] = useState([
@@ -33,9 +32,8 @@ export function Dashboard(props) {
 
   const onHighlight = () => {
     highlight([
-      "document",
       {
-        keyword: "This Agreement shall take effect",
+        keyword: key,
         matchCase: true,
       },
     ]);
@@ -74,65 +72,77 @@ export function Dashboard(props) {
     <AdminLayout routeName={props.routeName}>
       {/* Start of container */}
       <div className="container-fluid-padding-default">
-      <Row>
-        <Col sm={4}>
-        <input type="file" accept=".pdf" onChange={onChange} />
-
-        <Button
-            variant="success"
-            style={{ marginTop: "10px" }}
-            onClick={onHighlight}
-          >
-            This Agreement shall take effect
-          </Button>
-        </Col>
-        <Col sm={8}>
-        <div>
+        <Row>
+          <Col sm={4}>
+            <input type="file" accept=".pdf" onChange={onChange} />
             {url ? (
-              <div id="div_iframe">
-                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min.js">
-                  <div
-                    className="rpv-core__viewer"
-                    style={{
-                      border: "1px solid rgba(0, 0, 0, 0.3)",
-                      display: "flex",
-                      flexDirection: "column",
-                      height: "100%",
-                    }}
-                  >
-                    <div
-                      style={{
-                        alignItems: "center",
-                        backgroundColor: "#eeeeee",
-                        borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
-                        display: "flex",
-                        padding: "4px",
-                      }}
-                    >
-                      <Toolbar />
-                    </div>
-                    <div
-                      style={{
-                        flex: 1,
-                        overflow: "hidden",
-                      }}
-                    >
-                      <Viewer
-                        fileUrl={url}
-                        plugins={[toolbarPluginInstance, searchPluginInstance]}
-                        scrollMode={ScrollMode.Vertical}
-                      />
-                      ;
-                    </div>
-                  </div>
-                </Worker>
+              <div>
+                Highlight text:{" "}
+                <input
+                  type="text"
+                  value={key}
+                  onChange={(e) => setKey(e.target.value)}
+                />
+                <Button
+                  variant="success"
+                  style={{ marginTop: "10px" }}
+                  onClick={onHighlight}
+                >
+                  Click to Highlight
+                </Button>
               </div>
-            ) : (
-              <div></div>
-            )}
-          </div>
-        </Col>
-      </Row>
+            ) : null}
+          </Col>
+          <Col sm={8}>
+            <div>
+              {url ? (
+                <div id="div_iframe">
+                  <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.10.111/build/pdf.worker.min.js">
+                    <div
+                      className="rpv-core__viewer"
+                      style={{
+                        border: "1px solid rgba(0, 0, 0, 0.3)",
+                        display: "flex",
+                        flexDirection: "column",
+                        height: "100%",
+                      }}
+                    >
+                      <div
+                        style={{
+                          alignItems: "center",
+                          backgroundColor: "#eeeeee",
+                          borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
+                          display: "flex",
+                          padding: "4px",
+                        }}
+                      >
+                        <Toolbar />
+                      </div>
+                      <div
+                        style={{
+                          flex: 1,
+                          overflow: "hidden",
+                        }}
+                      >
+                        <Viewer
+                          fileUrl={url}
+                          plugins={[
+                            toolbarPluginInstance,
+                            searchPluginInstance,
+                          ]}
+                          scrollMode={ScrollMode.Vertical}
+                        />
+                        ;
+                      </div>
+                    </div>
+                  </Worker>
+                </div>
+              ) : (
+                <div></div>
+              )}
+            </div>
+          </Col>
+        </Row>
       </div>
     </AdminLayout>
   );
