@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { useHistory } from "react-router-dom";
 import { NavDropdown } from "react-bootstrap";
+import { logout } from "store/actions/auth";
 import SMSYSAlert from "components/SMSYSAlert";
 import LOGO from "assets/images/logo.png";
-import { logout } from "store/actions/auth";
-import "assets/css/app.css";
-import "./style.css";
+import avatar from "assets/images/avatar.png";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import Button from "react-bootstrap/Button";
+import "assets/css/app.css";
+import "./style.css";
 
 function AdminLayout(props) {
   const [styles, setStyles] = useState<any>({ background: "white" });
@@ -26,8 +26,6 @@ function AdminLayout(props) {
         : { background: "white", overflowX: "auto" }
     );
   };
-
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   const currentRoute = localStorage.getItem("currentRoute") || "homepage";
 
@@ -49,6 +47,33 @@ function AdminLayout(props) {
           </a>
 
           <ul className="sidebar-nav text-left">
+            <li>
+              <button className="btn-add-document"> <i className="fa-regular fa-plus fs-1"></i> <br/> New Document
+              </button>
+            </li>
+            <li className="main-menu">
+              <p>
+                <i className="fa-solid fa-chevron-down"></i>
+                {' '}Main
+              </p>
+              <div>
+                <p className="p-1">
+                  <i className="fa-regular fa-file-lines m-2" style={{color: "#26adc9"}}></i>
+                  <span>TemplatePDF.pdf</span>
+                  <i className="fa-solid fa-ellipsis icon-action"></i>
+                </p>
+                <p className="p-1">
+                  <i className="fa-regular fa-file-lines m-2" style={{color: "#26adc9"}}></i>
+                  Sharefile.pdf
+                  <i className="fa-solid fa-ellipsis icon-action"></i>
+                </p>
+                <p className="active-file p-1">
+                  <i className="fa-regular fa-file-lines m-2" style={{color: "#26adc9"}}></i>
+                  Jerry2020-torm.pdf
+                  <i className="fa-solid fa-ellipsis icon-action"></i>
+                </p>
+              </div>
+            </li>
             <li
               className={`sidebar-item ${
                 currentRoute === "/" ? "active" : ""
@@ -63,7 +88,7 @@ function AdminLayout(props) {
         <div className="notification-top-bar">
           <SMSYSAlert isShowMenu={isShowMenu} />
         </div>
-        <nav className="navbar navbar-expand navbar-light navbar-bg">
+        <nav className="navbar navbar-expand navbar-light">
           <span
             className="sidebar-toggle js-sidebar-toggle"
             onClick={() => toggleMenu()}
@@ -90,10 +115,11 @@ function AdminLayout(props) {
               <li className="nav-item dropdown dropdown-index">
                 <NavDropdown
                   id="nav-dropdown-dark-example"
+                  className="custom-nav-dropdown"
                   title={
                     <b className="">
-                      {/* <img src={avatar} alt="" className="avatar" /> */}
-                      User
+                      <i className="fa-solid fa-download"></i>
+                      <img src={avatar} alt="" className="avatar" />
                     </b>
                   }
                 >
