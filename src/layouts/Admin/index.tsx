@@ -12,10 +12,12 @@ import "assets/css/app.css";
 import "./style.css";
 
 function AdminLayout(props) {
+  const dispatch = useAppDispatch();
+
+  const { children } = props;
+
   const [styles, setStyles] = useState<any>({ background: "white" });
   const [isShowMenu, setIsShowMenu] = useState(true);
-  const dispatch = useAppDispatch();
-  const { children } = props;
   const [isLoading] = useAppSelector((state) => [state.app.isLoading]);
 
   const toggleMenu = () => {
@@ -27,11 +29,9 @@ function AdminLayout(props) {
     );
   };
 
-  const currentRoute = localStorage.getItem("currentRoute") || "homepage";
-
   const onLogout = () => {
     dispatch(logout());
-    window.location.href = "/login";
+    window.location.href = "/";
   };
   const history = useHistory();
 
@@ -43,12 +43,12 @@ function AdminLayout(props) {
       >
         <div className="sidebar-content js-simplebar">
           <a href="/">
-            <img src={LOGO} alt="logo" className="sidebar-brand" />
+            <img src={LOGO} alt="logo" className="sidebar-brand mt-3" />
           </a>
 
           <ul className="sidebar-nav text-left">
             <li>
-              <button className="btn-add-document"> <i className="fa-regular fa-plus fs-1"></i> <br/> New Document
+              <button className="btn-add-document"> <i className="fa-regular fa-plus fs-1"></i> <br /> New Document
               </button>
             </li>
             <li className="main-menu">
@@ -58,27 +58,21 @@ function AdminLayout(props) {
               </p>
               <div>
                 <p className="p-1">
-                  <i className="fa-regular fa-file-lines m-2" style={{color: "#26adc9"}}></i>
+                  <i className="fa-regular fa-file-lines m-2" style={{ color: "#26adc9" }}></i>
                   <span>TemplatePDF.pdf</span>
                   <i className="fa-solid fa-ellipsis icon-action"></i>
                 </p>
                 <p className="p-1">
-                  <i className="fa-regular fa-file-lines m-2" style={{color: "#26adc9"}}></i>
+                  <i className="fa-regular fa-file-lines m-2" style={{ color: "#26adc9" }}></i>
                   Sharefile.pdf
                   <i className="fa-solid fa-ellipsis icon-action"></i>
                 </p>
                 <p className="active-file p-1">
-                  <i className="fa-regular fa-file-lines m-2" style={{color: "#26adc9"}}></i>
+                  <i className="fa-regular fa-file-lines m-2" style={{ color: "#26adc9" }}></i>
                   Jerry2020-torm.pdf
                   <i className="fa-solid fa-ellipsis icon-action"></i>
                 </p>
               </div>
-            </li>
-            <li
-              className={`sidebar-item ${
-                currentRoute === "/" ? "active" : ""
-              }`}
-            >
             </li>
           </ul>
         </div>
@@ -98,20 +92,6 @@ function AdminLayout(props) {
 
           <div className="navbar-collapse collapse">
             <ul className="navbar-nav navbar-align">
-              <li className="nav-item dropdown">
-                <span
-                  className="nav-icon dropdown-toggle"
-                  id="alertsDropdown"
-                  data-bs-toggle="dropdown"
-                ></span>
-              </li>
-              <li className="nav-item dropdown">
-                <span
-                  className="nav-icon dropdown-toggle"
-                  id="alertsDropdown"
-                  data-bs-toggle="dropdown"
-                ></span>
-              </li>
               <li className="nav-item dropdown dropdown-index">
                 <NavDropdown
                   id="nav-dropdown-dark-example"
@@ -123,7 +103,7 @@ function AdminLayout(props) {
                     </b>
                   }
                 >
-                  <NavDropdown.Item onClick={() => history.push("/my-account")}>
+                  <NavDropdown.Item onClick={() => history.push("/")}>
                     My Account
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={() => onLogout()}>
