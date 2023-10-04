@@ -11,18 +11,11 @@ import ChatGPT from "./ChatGPT";
 
 // Define a function called "Dashboard" which receives a single parameter called "props"
 export function Dashboard() {
-
-  const [styles, setStyles] = useState<any>({ background: "#F2F2F2" });
   const [isShowMenu, setIsShowMenu] = useState(true);
   const [url, setUrl] = useState("");
   
   const toggleMenu = () => {
     setIsShowMenu(!isShowMenu);
-    setStyles(
-      !isShowMenu
-        ? { background: "#F2F2F2" }
-        : { background: "#F2F2F2", overflowX: "auto" }
-    );
   };
 
   // Return the following JSX
@@ -30,12 +23,12 @@ export function Dashboard() {
     <div className="wrapper">
       <Sidebar isShowMenu={isShowMenu} toggleMenu={toggleMenu} setUrl={setUrl}/>
 
-      <div className="main" style={styles}>
+      <div className="main">
         <Navmenu isShowMenu={isShowMenu} toggleMenu={toggleMenu}/>
 
-        <Row className="bg-transparent">
-          <Col lg={url ? 7 : 12}>
-            <RiskContent />
+        <Row className="main-content">
+          <Col lg={url ? 7 : 12} style={{marginRight: `${url && "-14px"}`}}>
+            <RiskContent url={url}/>
             <ChatGPT />
           </Col>
           <Col lg={url ? 5 : 0}>

@@ -75,7 +75,7 @@ export default function Sidebar(props) {
         title={"Upload Document"}
         content={getContentPopupArea()}
         firstLabelButon={"Cancel"}
-        seconLabelButton={"Analye"}
+        seconLabelButton={"Analyze"}
         handleFirstButtonCalback={() => setshowModalUplaod(false)}
         handleSeconButtonCalback={handleSubmitPupopUpload}
         enableSecondButton={true}
