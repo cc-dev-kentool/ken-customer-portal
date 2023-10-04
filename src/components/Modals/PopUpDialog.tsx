@@ -42,9 +42,8 @@ type Props = {
   size?: string,
 
   showIconClose?: boolean,
-
-  setHeightTable?: any,
 }
+
 export function PopupDialog(props: Props) {
   const {
     isShow,
@@ -60,28 +59,8 @@ export function PopupDialog(props: Props) {
     modalContentClass = "modal-instruction",
     size = "xl",
     showIconClose = true,
-    setHeightTable,
   } = props
   const grBtnRef: any = useRef(null);
-
-  // Handle show title.
-  const handleShowTitle = () => {
-    return title.length <= 95 ? (
-      title
-    ) : (
-      <span>
-        {title.slice(0, title.indexOf("-"))} <br />{" "}
-        {title.slice(title.indexOf("-") + 1, title.length)}
-      </span>
-    );
-  };
-
-  useEffect(() => {
-    if (grBtnRef.current && setHeightTable) {
-      const heightInVh = (grBtnRef.current.clientHeight / window.innerHeight) * 100;
-      setHeightTable(100 - (heightInVh * 5.5))
-    }
-  }, [isShow])
 
   // Return html dialog modal.
   return (
@@ -93,10 +72,9 @@ export function PopupDialog(props: Props) {
     >
       <Modal.Header className="modalHeader">
         <Modal.Title className="titlePopup">
-          {handleShowTitle()}
+          {title}
           {showIconClose && <i
             className="fa fa-times btn-Colse"
-            style={{ marginTop: `${title.length > 95 ? "-10px" : "2px"}` }}
             aria-hidden="true"
             onClick={handleFirstButtonCalback}
           ></i>}
@@ -115,7 +93,6 @@ export function PopupDialog(props: Props) {
           )}
           {(seconLabelButton && showSecondButton) && (
             <Button
-              variant="danger"
               onClick={handleSeconButtonCalback}
               className="btnSubmitPopup"
               disabled={!enableSecondButton}
