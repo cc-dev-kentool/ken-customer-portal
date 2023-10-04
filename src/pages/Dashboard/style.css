@@ -82,8 +82,9 @@
   width: 100%;
 }
 
-.area-upload .content-warn {
+.content-popup-upload .content-warn {
   color: #999999;
+  font-size: 14px;
 }
 
 .area-upload .btn-upload {
