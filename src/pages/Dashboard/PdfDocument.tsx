@@ -1,6 +1,6 @@
 import { Worker, Viewer } from "@react-pdf-viewer/core";
 import { searchPlugin } from "@react-pdf-viewer/search";
-import { toolbarPlugin } from "@react-pdf-viewer/toolbar";
+import { ToolbarSlot, TransformToolbarSlot, toolbarPlugin } from "@react-pdf-viewer/toolbar";
 import { ScrollMode } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/toolbar/lib/styles/index.css";
 import "@react-pdf-viewer/highlight/lib/styles/index.css";
@@ -12,7 +12,18 @@ export default function PdfDocument(props) {
   const { url } = props;
 
   const toolbarPluginInstance = toolbarPlugin();
-  const { Toolbar } = toolbarPluginInstance;
+  const { renderDefaultToolbar, Toolbar } = toolbarPluginInstance;
+
+  const transform: TransformToolbarSlot = (slot: ToolbarSlot) => ({
+    ...slot,
+    EnterFullScreen: () => <></>,
+    SwitchTheme: () => <></>,
+    GoToPreviousPage: () => <></>,
+    GoToNextPage: () => <></>,
+    Rotate: () => <></>,
+    Search: () => <></>,
+    Download: () => <></>,
+  })
 
   const searchPluginInstance = searchPlugin();
   // const { highlight } = searchPluginInstance;
@@ -53,7 +64,7 @@ export default function PdfDocument(props) {
           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
             <div className="component-pdf">
               <div className="header-pdf" >
-                <Toolbar />
+                <Toolbar>{renderDefaultToolbar(transform)}</Toolbar>
               </div>
               <div className="content-pdf">
                 <Viewer

@@ -42,6 +42,11 @@
   font-size: 14px;
 }
 
+.btn-add-document:hover {
+  background-color: #A8DEE9;
+  border-color: #A8DEE9;
+}
+
 .main-menu {
   background-color: #d4eff4;
   margin: 10px;
@@ -117,7 +122,7 @@
 
 /* Main */
 .main {
-  overflow-y: auto;
+  background-color: #F2F2F2;
 }
 /* Nav menu */
 .notification-top-bar {
@@ -164,6 +169,12 @@
   display: none;
 }
 
+/* Main Content */
+.main-content {
+  overflow-y: auto;
+  background-color: #F2F2F2;
+}
+
 /* Risk content */
 .risk-content {
   background-color: #fff;
@@ -175,9 +186,51 @@
 .risk-content .title-risk {
   font-size: 20px;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 28px;
   margin: 10px;
+}
+
+.table-content {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 91%;
+}
+
+.risk-content-item {
+  background-color: #f4fbfc !important;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.risk-content-item-topic {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.fa-chevron-down, .fa-chevron-up {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.title-left {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  line-height: 20px;
+  color: #26ADC9;
+  font-weight: 600;
+}
+
+.source-text {
+  border-bottom: 1px solid #cccccc;
+  padding-bottom: 10px;
+}
+
+.source-text-item {
+  border-top: 1px dashed #cccccc;
 }
 
 /* ChatGPT Content */
@@ -193,17 +246,14 @@
 .chat-content .title-chat {
   font-size: 20px;
   text-align: center;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 28px;
   margin: 10px;
 }
 
 /* PDF Document */
 .pdf-document {
-  margin-left: -14px;
   border-radius: 15px;
-  margin-right: 20px;
-  min-width: 525px;
 }
 
 .rpv-search__highlight--current {
