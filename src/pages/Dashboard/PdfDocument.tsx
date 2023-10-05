@@ -1,7 +1,7 @@
-import { Worker, Viewer } from "@react-pdf-viewer/core";
+import { Worker, Viewer, ScrollMode } from "@react-pdf-viewer/core";
 import { searchPlugin } from "@react-pdf-viewer/search";
 import { ToolbarSlot, TransformToolbarSlot, toolbarPlugin } from "@react-pdf-viewer/toolbar";
-import { ScrollMode } from "@react-pdf-viewer/core";
+import close from "assets/icon/icon_close.svg";
 import "@react-pdf-viewer/toolbar/lib/styles/index.css";
 import "@react-pdf-viewer/highlight/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
@@ -9,21 +9,24 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 // import { useState } from "react";
 
 export default function PdfDocument(props) {
-  const { url } = props;
+  const { url, setShowPdf } = props;
 
   const toolbarPluginInstance = toolbarPlugin();
   const { renderDefaultToolbar, Toolbar } = toolbarPluginInstance;
 
-  const transform: TransformToolbarSlot = (slot: ToolbarSlot) => ({
-    ...slot,
-    EnterFullScreen: () => <></>,
-    SwitchTheme: () => <></>,
-    GoToPreviousPage: () => <></>,
-    GoToNextPage: () => <></>,
-    Rotate: () => <></>,
-    Search: () => <></>,
-    Download: () => <></>,
-  })
+  const transform: TransformToolbarSlot = (slot: ToolbarSlot) => {
+    const { NumberOfPages } = slot;
+    return {
+      ...slot,
+      EnterFullScreen: () => <></>,
+      SwitchTheme: () => <></>,
+      GoToPreviousPage: () => <></>,
+      GoToNextPage: () => <></>,
+      Open: () => <></>,
+      ShowSearchPopover: () => <></>,
+      NumberOfPages: () => <span style={{color: "#fff"}}>/ <NumberOfPages /></span>
+    }
+  }
 
   const searchPluginInstance = searchPlugin();
   // const { highlight } = searchPluginInstance;
@@ -59,12 +62,15 @@ export default function PdfDocument(props) {
             </Button>
             rpv-core__viewer
           </div> */}
-          
+
 
           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
             <div className="component-pdf">
               <div className="header-pdf" >
-                <Toolbar>{renderDefaultToolbar(transform)}</Toolbar>
+                <Toolbar>{renderDefaultToolbar(transform)}</Toolbar><br />
+                <div className="btn-closePdf">
+                  <img src={close} alt="" onClick={() => setShowPdf(false)} />
+                </div>
               </div>
               <div className="content-pdf">
                 <Viewer
