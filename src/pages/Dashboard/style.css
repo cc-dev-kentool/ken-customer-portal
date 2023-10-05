@@ -275,6 +275,42 @@
   border-radius: 15px 15px 0 0;
 }
 
+.header-pdf .rpv-core__textbox {
+  color: #fff;
+  background-color: #0d3c46;
+  border-radius: 0;
+  border: none !important;
+  height: auto;
+  text-align: center;
+  width: 80%;
+}
+
+.header-pdf .rpv-core__minimal-button {
+  color: #fff;
+  padding: 5px;
+}
+
+.header-pdf .rpv-zoom__popover-target {
+  background-color: #0d3c46;
+  padding: 0 3px 0 7px;
+}
+
+.header-pdf .rpv-zoom__popover-target-arrow {
+  display: none;
+}
+
+.header-pdf .btn-closePdf {
+  padding: 0 2px;
+  font-size: 20px;
+  margin-right: 3px;
+  cursor: pointer;
+}
+
+.header-pdf .btn-closePdf:hover {
+  background-color: #229bb5;
+  border-radius: 5px;
+}
+
 .content-pdf {
   overflow: hidden;
   flex: 1;

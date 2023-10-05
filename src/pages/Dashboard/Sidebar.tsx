@@ -5,7 +5,7 @@ import logo from "assets/images/logo.png";
 
 // Define a function called "Dashboard" which receives a single parameter called "props"
 export default function Sidebar(props) {
-  const {isShowMenu, toggleMenu, setUrl} = props;
+  const {isShowMenu, toggleMenu, setUrl, setShowPdf} = props;
 
   const [showModalUplaod, setshowModalUplaod] = useState(false)
   const [file, setFile] = useState<any>(null);
@@ -17,6 +17,7 @@ export default function Sidebar(props) {
   const handleSubmitPupopUpload = () => {
     file && setUrl(URL.createObjectURL(file));
     setshowModalUplaod(false);
+    setShowPdf(true);
   }
   
 
