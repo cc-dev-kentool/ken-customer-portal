@@ -11,21 +11,21 @@ import "./style.css";
 
 // Define a function called "Dashboard" which receives a single parameter called "props"
 export function Dashboard() {
-  const [isShowMenu, setIsShowMenu] = useState(true);
+  const [isShowFullSidebar, setIsShowFullSidebar] = useState(true);
   const [url, setUrl] = useState("");
   const [showPdf, setShowPdf] = useState(true);
   
   const toggleMenu = () => {
-    setIsShowMenu(!isShowMenu);
+    setIsShowFullSidebar(!isShowFullSidebar);
   };
 
   // Return the following JSX
   return (
     <div className="wrapper">
-      <Sidebar isShowMenu={isShowMenu} toggleMenu={toggleMenu} setUrl={setUrl} setShowPdf={setShowPdf}/>
+      <Sidebar isShowFullSidebar={isShowFullSidebar} toggleMenu={toggleMenu} setUrl={setUrl} setShowPdf={setShowPdf}/>
 
       <div className="main">
-        <Navmenu isShowMenu={isShowMenu} toggleMenu={toggleMenu}/>
+        <Navmenu isShowFullSidebar={isShowFullSidebar} toggleMenu={toggleMenu}/>
 
         <Row className="main-content">
           <Col lg={url && showPdf ? 7 : 12} style={{marginRight: `${url && "-14px"}`}}>

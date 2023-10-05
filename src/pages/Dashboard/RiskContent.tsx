@@ -93,10 +93,10 @@ export default function RiskContent(props) {
                   </Col>
                   <Col sm="2" className="text-end">
                     {getStatusRisk(item.status)}
-                    {getStatusShowTopic(item.topic)
-                      ? <i className="fa-solid fa-chevron-up" onClick={() => handleShowTopic(item.topic)}></i>
-                      : <i className="fa-solid fa-chevron-down" onClick={() => handleShowTopic(item.topic)}></i>
-                    }
+                    <i 
+                      className={`fa-solid fa-chevron-${getStatusShowTopic(item.topic) ? 'up' : 'down'}`} 
+                      onClick={() => handleShowTopic(item.topic)}
+                    />
                   </Col>
                 </Row>
                 {getStatusShowTopic(item.topic) &&

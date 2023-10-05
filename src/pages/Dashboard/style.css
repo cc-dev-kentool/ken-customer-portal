@@ -5,40 +5,59 @@
 }
 
 /* Side bar */
-.sidebar {
-  margin-right: 10px;
+.full-sidebar {
   width: 300px;
 }
 
-.sidebar, .sidebar-content {
-  background: #FFFFFF !important;
+.small-sidebar {
+  width: 130px;
+  min-width: 130px;
 }
 
-.sidebar .logo-sidebar {
-  width: 70%;
+.sidebar, .sidebar-content {
+  background: #FFFFFF;
+}
+
+.sidebar .logo {
+  text-align: center;
+  border-bottom: 1px solid #f2f2f2;
+  margin-bottom: 30px;
+  padding: 30px 0 15px 0;
+}
+
+.sidebar .logo a {
+  text-decoration: none;
+  color: #000;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: bold;
+}
+
+.sidebar .list-group {
+  padding: 0 10px;
 }
 
 .sidebar .sidebar-toggle {
   float: right;
   display: inline;
-  margin-top: 25px;
-  margin-right: 10px;
-}
-
-.sidebar .icon-toggle {
   border: 1px solid #F2F2F2;
   border-radius: 50%;
-  padding: 5px 9px;
+  padding-top: 2px;
   width: 28px;
+  margin: -45px 10px 0 0;
+  background-color: #fff;
+}
+
+.sidebar .expand-sidebar {
+  margin-right: -10px;
 }
 
 .btn-add-document {
   background-color: #26ADC9;
-  width: 92%;
+  width: 100%;
   border-radius: 10px;
   border: 1px solid #26ADC9;
   color: white;
-  margin: 30px 10px 0px 10px;
   font-size: 14px;
 }
 
@@ -49,10 +68,15 @@
 
 .main-menu {
   background-color: #d4eff4;
-  margin: 10px;
+  margin-top: 15px;
   border-radius: 10px;
-  padding: 10px 10px 1px 10px;
+  padding: 10px 10px 0 5px;
   font-size: 16px;
+}
+
+.main-menu-extended {
+  width: 270px;
+  z-index: 2;
 }
 
 .active-file {
@@ -123,6 +147,7 @@
 /* Main */
 .main {
   background-color: #F2F2F2;
+  margin-left: 10px;
 }
 /* Nav menu */
 .notification-top-bar {
@@ -138,14 +163,6 @@
   height: 9vh;
   background: #F2F2F2;
   padding-left: 0;
-}
-
-.navbar .sidebar-toggle {
-  border: 1px solid #495057;
-  border-radius: 50%;
-  padding: 5px 9px;
-  width: 28px;
-  margin-left: 0;
 }
 
 .avatar {
