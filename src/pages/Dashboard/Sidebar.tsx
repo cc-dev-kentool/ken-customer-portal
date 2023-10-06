@@ -7,9 +7,9 @@ import classNames from "classnames";
 export default function Sidebar(props) {
   const { isShowFullSidebar, toggleMenu, setUrl, setShowPdf } = props;
 
-  const [showModalUplaod, setshowModalUplaod] = useState(false);
-  const [isShowFiles, setIsShowFiles] = useState(true);
-  const [file, setFile] = useState<any>(null);
+  const [showModalUplaod, setshowModalUplaod] = useState<boolean>(false);
+  const [isShowFiles, setIsShowFiles] = useState<boolean>(true);
+  const [file, setFile] = useState<File>();
 
   const fileNames = [
     "TemplatePDF.pdf",
@@ -35,9 +35,9 @@ export default function Sidebar(props) {
   return (
     <nav
       id="sidebar"
-      className={classNames("sidebar", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}
+      className={classNames("sidebar bg-white", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}
     >
-      <div className="sidebar-content">
+      <div className="bg-white">
         <div className="logo">
           <a href="/">
             <p>KEN</p>
