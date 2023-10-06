@@ -1,12 +1,13 @@
+import classNames from "classnames";
 import { statusRisk } from "constants/riskAnalysis";
 import { useState } from "react";
 import { Col, Row } from "react-bootstrap";
 
 export default function RiskContent(props) {
 
-  const { url } = props;
+  const { url, setValueSearch } = props;
 
-  const [topic, setTopic] = useState([
+  const [topic, setTopic] = useState<Array<object>>([
     { name: 'Governing law', isShow: true },
     { name: 'Court jurisdiction', isShow: true },
     { name: 'Arbitration', isShow: true },
@@ -36,7 +37,11 @@ export default function RiskContent(props) {
     {
       id: 'dataAnalysis_2',
       topic: 'Court jurisdiction',
-      source_text: ["Loss, destruction, damage, death, injury, disablement or liability or any consequential loss occasioned by war..."],
+      source_text: [
+        "Loss, destruction, damage, death, injury, disablement or liability or any consequential loss occasioned by war...",
+        "Business",
+        "Legal advice service",
+      ],
       comment: "The Governing Law is England & Wales...",
       status: "amber"
     },
@@ -55,7 +60,7 @@ export default function RiskContent(props) {
   for (let i = 3; i < 12; i++) {
     dataAnalysis.push({
       id: `dataAnalysis_${i + 1}`,
-      topic: topic[i].name,
+      topic: topic[i]['name'],
       source_text: [],
       comment: "",
       status: `${i % 2 ? "red" : "questionmark"}`
@@ -67,16 +72,20 @@ export default function RiskContent(props) {
   }
 
   const getStatusShowTopic = (name) => {
-    return topic.find(item => item.name === name)?.isShow;
+    return topic.find(item => item['name'] === name)?.['isShow'];
   }
 
   const handleShowTopic = (name) => {
     let newTopic = [...topic];
-    const findIndex = topic.findIndex(item => item.name === name);
+    const findIndex = topic.findIndex(item => item['name'] === name);
 
-    newTopic[findIndex].isShow = !newTopic[findIndex].isShow;
+    newTopic[findIndex]['isShow'] = !newTopic[findIndex]['isShow'];
 
     setTopic(newTopic);
+  }
+
+  const handleSearch = (text) => {
+    setValueSearch(text)
   }
 
   return (
@@ -93,10 +102,10 @@ export default function RiskContent(props) {
                   </Col>
                   <Col sm="2" className="text-end">
                     {getStatusRisk(item.status)}
-                    {getStatusShowTopic(item.topic)
-                      ? <i className="fa-solid fa-chevron-up" onClick={() => handleShowTopic(item.topic)}></i>
-                      : <i className="fa-solid fa-chevron-down" onClick={() => handleShowTopic(item.topic)}></i>
-                    }
+                    <i
+                      className={`fa-solid fa-chevron-${getStatusShowTopic(item.topic) ? 'up' : 'down'}`}
+                      onClick={() => handleShowTopic(item.topic)}
+                    />
                   </Col>
                 </Row>
                 {getStatusShowTopic(item.topic) &&
@@ -106,7 +115,13 @@ export default function RiskContent(props) {
                       <Col sm="10" className="p-0">
                         {item.source_text.map((text, index) => {
                           return (
-                            <p className={`${index !== 0 && "source-text-item"} pt-2 mb-2`} key={index}>{text}</p>
+                            <p
+                              key={index}
+                              className={classNames("pt-2 mb-2 cursor-pointer source-text-item", {"item-style" : index !== 0})}
+                              onClick={() => handleSearch(text)}
+                            >
+                              {text}
+                            </p>
                           )
                         })}
                       </Col>

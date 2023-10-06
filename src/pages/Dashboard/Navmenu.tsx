@@ -7,7 +7,7 @@ import avatar from "assets/images/avatar.png";
 
 // Define a function called "Dashboard" which receives a single parameter called "props"
 export default function Navmenu(props) {
-  const { isShowMenu, toggleMenu } = props;
+  const { isShowFullSidebar } = props;
 
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -21,16 +21,10 @@ export default function Navmenu(props) {
   return (
     <>
       <div className="notification-top-bar">
-        <SMSYSAlert isShowMenu={isShowMenu} />
+        <SMSYSAlert isShowMenu={isShowFullSidebar} />
       </div>
       <nav className="navbar navbar-expand navbar-light">
         <div className="navbar-collapse collapse">
-          {!isShowMenu && <span
-            className="sidebar-toggle js-sidebar-toggle"
-            onClick={() => toggleMenu()}
-          >
-            <i className="fa fa-chevron-right" aria-hidden="true"></i>
-          </span>}
           <ul className="navbar-nav navbar-align">
             <li className="nav-item dropdown dropdown-index">
               <NavDropdown
