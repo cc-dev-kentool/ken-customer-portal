@@ -43,7 +43,7 @@ const ROUTES: routes[] = [
     routes: [], // Optional array of child routes if any
     requiredAuth: false, // Indicates whether authentication is required or not
     name: "dashboard", // Identifier for this route
-    title: "Dashboard", // Title that will be displayed in the header
+    title: "Ken", // Title that will be displayed in the header
   }
 ];
 

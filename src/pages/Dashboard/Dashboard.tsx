@@ -6,7 +6,6 @@ import Navmenu from "./Navmenu";
 import RiskContent from "./RiskContent";
 import PdfDocument from "./PdfDocument";
 import ChatGPT from "./ChatGPT";
-import "assets/css/app.css";
 import "./style.css";
 
 // Define a function called "Dashboard" which receives a single parameter called "props"
