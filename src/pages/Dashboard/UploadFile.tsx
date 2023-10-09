@@ -1,16 +1,18 @@
-import { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import image from "assets/icon/icon_image.svg";
 import warn from "assets/icon/icon_warning.svg";
 
+// Define a function called "UploadFile" which receives a single parameter called "props"
 export default function UploadFile(props) {
   const {file, setFile} = props;
   const fileTypes = ["pdf"];
 
+  // Define a function called "handleChange" that sets the selected file using the setFile function
   const handleChange = (file) => {
     setFile(file);
   };
 
+  // Return the following JSX
   return (
     <div className="content-popup-upload">
       <p>The deal document uploaded into the system will automatically be analyzed for risk by the solution.</p>
