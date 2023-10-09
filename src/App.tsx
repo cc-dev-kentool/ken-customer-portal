@@ -4,6 +4,7 @@ import store from './store'
 import { Provider } from 'react-redux'
 import { history } from 'helpers/common';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'assets/css/app.css';
 import './App.css'
 
 const App = () => {

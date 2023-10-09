@@ -7,7 +7,6 @@ import RiskContent from "./RiskContent";
 import PdfDocument from "./PdfDocument";
 import ChatGPT from "./ChatGPT";
 import classNames from "classnames";
-import "assets/css/app.css";
 import "./style.css";
 
 // Define a function component named "Dashboard" which does not receive any parameters.
