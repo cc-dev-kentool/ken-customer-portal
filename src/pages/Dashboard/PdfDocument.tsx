@@ -7,9 +7,12 @@ import "@react-pdf-viewer/toolbar/lib/styles/index.css";
 import "@react-pdf-viewer/highlight/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 
+// Define a function component named "PdfDocument" and receive a single parameter called "props"
 export default function PdfDocument(props) {
+  // Destructure the "url", "valueSearch", and "setShowPdf" props from the "props" object
   const { url, valueSearch, setShowPdf } = props;
 
+  // Define a transform function for the TransformToolbarSlot type
   const transform: TransformToolbarSlot = (slot: ToolbarSlot) => {
     const { NumberOfPages } = slot;
     return {
@@ -24,12 +27,15 @@ export default function PdfDocument(props) {
     }
   }
 
+  // Create an instance of the toolbar plugin and get the renderDefaultToolbar and Toolbar components
   const toolbarPluginInstance = toolbarPlugin();
   const { renderDefaultToolbar, Toolbar } = toolbarPluginInstance;
 
+  // Create an instance of the search plugin and get the highlight method
   const searchPluginInstance = searchPlugin();
   const { highlight } = searchPluginInstance;
 
+  // Define an onHighlight function that takes a value to search for and highlights it
   const onHighlight = (valueSearch) => {
     highlight([
       {
@@ -39,12 +45,14 @@ export default function PdfDocument(props) {
     ]);
   };
 
+  // Use the useEffect hook to perform the highlight when the valueSearch changes
   useEffect(() => {
     if (valueSearch) {
       onHighlight(valueSearch);
     }
   }, [valueSearch])
 
+  // Return the following JSX
   return (
     <div>
       {url && (

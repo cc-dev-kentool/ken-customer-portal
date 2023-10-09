@@ -5,16 +5,22 @@ import { logout } from "store/actions/auth";
 import { useAppDispatch } from "hooks";
 import avatar from "assets/images/avatar.png";
 
-// Define a function called "Dashboard" which receives a single parameter called "props"
+// Define a function component named "Navmenu" and receive a single parameter called "props"
 export default function Navmenu(props) {
+  // Destructure the "isShowFullSidebar" prop from the "props" object
   const { isShowFullSidebar } = props;
 
+  // Get the history object from react-router-dom
   const history = useHistory();
+
+  // Get the app dispatch from your custom hook or path
   const dispatch = useAppDispatch();
 
+  // Define an "onLogout" function that dispatches the "logout" action 
+  // and redirects to the home page ("/")
   const onLogout = () => {
     dispatch(logout());
-    window.location.href = "/";
+    history.push("/");
   };
 
   // Return the following JSX
