@@ -1,10 +1,13 @@
 import { PopupDialog } from "components/Modals/PopUpDialog";
 import { useState } from "react";
+import { useAppDispatch } from "hooks";
+import { getAnalysisData } from "store/actions/analysis";
 import UploadFile from "./UploadFile";
 import classNames from "classnames";
 
 // Define a function called "Sidebar" which receives a single parameter called "props"
 export default function Sidebar(props) {
+  const dispatch = useAppDispatch();
   const { isShowFullSidebar, toggleMenu, setUrl, setShowPdf } = props;
 
   // Define state variables
@@ -16,7 +19,7 @@ export default function Sidebar(props) {
   const fileNames = [
     "TemplatePDF.pdf",
     "Sharefile.pdf",
-    "Jerry2020-torm.pdf",
+    "Jerry2020-form.pdf",
   ]
 
   // Define a function called "getContentPopupArea" that returns some JSX
@@ -26,9 +29,12 @@ export default function Sidebar(props) {
 
   // Define a function called "handleSubmitPupopUpload" that updates the URL and state variables
   const handleSubmitPupopUpload = () => {
-    file && setUrl(URL.createObjectURL(file));
-    setshowModalUplaod(false);
-    setShowPdf(true);
+    if (file) {
+      file && setUrl(URL.createObjectURL(file));
+      setshowModalUplaod(false);
+      setShowPdf(true);
+      dispatch(getAnalysisData(file));
+    }
   }
 
   // Define a function called "handleShowFiles" that toggles the value of "isShowFiles"
@@ -86,6 +92,7 @@ export default function Sidebar(props) {
           </div>
         </div>
       </div>
+
       <PopupDialog
         isShow={showModalUplaod}
         title={"Upload Document"}
