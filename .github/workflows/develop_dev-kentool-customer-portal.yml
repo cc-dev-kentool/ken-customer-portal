@@ -8,11 +8,14 @@ on:
     branches:
       - develop
   workflow_dispatch:
+    
+env:
+  REACT_APP_API_ENDPOINT:  'https://dev-kentool-backend.azurewebsites.net/api'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
       - uses: actions/checkout@v2
 
