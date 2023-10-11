@@ -200,24 +200,6 @@ const auth = (state = initialState, action) => {
         ...state,
         errorRegisterSize: action.payload,
       }
-    // Case for GET_BUSINESS action type.
-    case authActionType.GET_BUSINESS:
-      return {
-        ...state,
-        business: action.payload,
-      }
-    // Case for ERROR_BUSINESS action type.
-    case authActionType.ERROR_BUSINESS:
-      return {
-        ...state,
-        errorBusiness: action.payload,
-      }
-    // Case for UPDATE_BUSINESS_SUCCESS action type.
-    case authActionType.UPDATE_BUSINESS_SUCCESS:
-      return {
-        ...state,
-        isUpdateBusinessSuccess: action.payload,
-      }
     // Default fallback case returns the current state.
     default:
       return state

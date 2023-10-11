@@ -33,7 +33,7 @@ export function Dashboard() {
 
         <Row className="main-content">
           <Col lg={url && showPdf ? 7 : 12} className={classNames("", { 'main-risk': url })}>
-            <RiskContent url={url} setValueSearch={setValueSearch} />
+            <RiskContent setValueSearch={setValueSearch} />
             <ChatGPT />
           </Col>
           <Col lg={url && showPdf ? 5 : 0}>
