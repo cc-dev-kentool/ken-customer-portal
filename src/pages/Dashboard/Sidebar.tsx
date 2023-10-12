@@ -2,6 +2,7 @@ import { PopupDialog } from "components/Modals/PopUpDialog";
 import { useState } from "react";
 import { useAppDispatch } from "hooks";
 import { getAnalysisData } from "store/actions/analysis";
+import { remove as removeAlert } from "store/actions/alert"
 import UploadFile from "./UploadFile";
 import classNames from "classnames";
 
@@ -64,7 +65,10 @@ export default function Sidebar(props) {
           </span>
         </div>
         <div className="list-group">
-          <button className="btn-add-document" onClick={() => setshowModalUplaod(true)}>
+          <button className="btn-add-document" onClick={() => {
+            dispatch(removeAlert())
+            setshowModalUplaod(true)}
+          }>
             <i className="fa-regular fa-plus fs-1"></i>
             {isShowFullSidebar && <span><br />New Document</span>}
           </button>
