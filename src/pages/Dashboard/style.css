@@ -190,12 +190,23 @@
   margin-right: -14px;
 }
 
+.main-content .icon-chat {
+  color: #26ADC9;
+  cursor: pointer;
+  margin-top: -10px;
+  position: absolute;
+}
+
 /* Risk content */
 .risk-content {
   background-color: #fff;
   padding: 10px;
   border-radius: 15px;
   height: 60vh;
+}
+
+.full-height {
+  height: 89vh;
 }
 
 .risk-content .title-risk {
@@ -268,6 +279,11 @@
   font-weight: 600;
   line-height: 28px;
   margin: 10px;
+}
+
+.chat-content .icon-close {
+  float: right;
+  cursor: pointer;
 }
 
 /* PDF Document */
