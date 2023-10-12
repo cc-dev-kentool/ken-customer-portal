@@ -22,6 +22,7 @@ export function Dashboard() {
 
   // The useState hook is used here to define state variables.
   const [isShowFullSidebar, setIsShowFullSidebar] = useState<boolean>(true);
+  const [isShowMaxHeight, setIsShowMaxHeight] = useState<boolean>(false);
   const [url, setUrl] = useState<string>("");
   const [showPdf, setShowPdf] = useState<boolean>(true);
   const [valueSearch, setValueSearch] = useState<string>("")
@@ -46,15 +47,21 @@ export function Dashboard() {
         <Navmenu isShowFullSidebar={isShowFullSidebar} toggleMenu={toggleMenu} />
 
         {!isLoading && (
-        <Row className="main-content">
-          <Col lg={url && showPdf ? 7 : 12} className={classNames("", { 'main-risk': url })}>
-            <RiskContent setValueSearch={setValueSearch} />
-            <ChatGPT />
-          </Col>
-          <Col lg={url && showPdf ? 5 : 0}>
-            {showPdf && <PdfDocument url={url} valueSearch={valueSearch} setShowPdf={setShowPdf} />}
-          </Col>
-        </Row>
+          <Row className="main-content">
+            <Col lg={url && showPdf ? 7 : 12} className={classNames("", { 'main-risk': url })}>
+              <RiskContent isShowMaxHeight={isShowMaxHeight} setValueSearch={setValueSearch} />
+              <ChatGPT isShowMaxHeight={isShowMaxHeight} setIsShowMaxHeight={setIsShowMaxHeight} />
+              {isShowMaxHeight &&
+                <i
+                  className="fa-solid fa-comment fa-2xl icon-chat"
+                  onClick={() => setIsShowMaxHeight(false)}
+                />
+              }
+            </Col>
+            <Col lg={url && showPdf ? 5 : 0}>
+              {showPdf && <PdfDocument url={url} valueSearch={valueSearch} setShowPdf={setShowPdf} />}
+            </Col>
+          </Row>
         )}
       </div>
     </div>
