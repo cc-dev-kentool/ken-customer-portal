@@ -1,16 +1,26 @@
 import { statusRisk } from "constants/riskAnalysis";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { useAppSelector } from "hooks";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { add as addAlert, remove as removeAlert } from "store/actions/alert"
+import { code } from "constants/error";
 
 // Define a function component named "RiskContent" and receive a single parameter called "props"
 export default function RiskContent(props) {
+  const dispatch = useAppDispatch();
   // Destructure the "url" and "setValueSearch" props from the "props" object
   const { setValueSearch } = props;
 
   const [dataAnalysis] = useAppSelector((state) => [
     state.analysis.dataAnalysis
   ]);
+
+  useEffect(() => {
+    if (!dataAnalysis) {
+      dispatch(addAlert(code["502"], "danger"))
+      setTimeout(() => dispatch(removeAlert()), 5000)
+    }
+  }, [dataAnalysis])
 
   // Define a state variable named "topic" using the useState hook with an initial value of an array of objects
   const [topic, setTopic] = useState<Array<object>>([
@@ -59,37 +69,37 @@ export default function RiskContent(props) {
       <p className="title-risk">Risk Analysis Data</p>
       {dataAnalysis &&
         <div className="table-content">
-          {dataAnalysis.map((item) => {
+          {Object.keys(dataAnalysis).map((key) => {
             return (
-              <div key={item.id} className="risk-content-item">
+              <div key={dataAnalysis[key].id} className="risk-content-item">
                 <Row className="risk-content-item-topic mb-4">
                   <Col sm="10">
-                    {item.topic}
+                    {dataAnalysis[key].topic}
                   </Col>
                   <Col sm="2" className="text-end">
-                    {getStatusRisk(item.status)}
+                    {getStatusRisk(dataAnalysis[key].status)}
                     <i
-                      className={`fa-solid fa-chevron-${getStatusShowTopic(item.topic) ? 'up' : 'down'}`}
-                      onClick={() => handleShowTopic(item.topic)}
+                      className={`fa-solid fa-chevron-${getStatusShowTopic(dataAnalysis[key].topic) ? 'up' : 'down'}`}
+                      onClick={() => handleShowTopic(dataAnalysis[key].topic)}
                     />
                   </Col>
                 </Row>
-                {getStatusShowTopic(item.topic) &&
+                {getStatusShowTopic(dataAnalysis[key].topic) &&
                   <>
                     <Row className="source-text m-0">
                       <Col sm="2" className="title-left p-0">Source Text</Col>
                       <Col sm="10" className="p-0">
                         <p
                           className="pt-2 mb-2 cursor-pointer source-text-item"
-                          onClick={() => handleSearch(item.source_text)}
+                          onClick={() => handleSearch(dataAnalysis[key].source_text)}
                         >
-                          {item.source_text}
+                          {dataAnalysis[key].source_text}
                         </p>
                       </Col>
                     </Row>
                     <Row className="mt-3 m-0">
                       <Col sm="2" className="title-left p-0">Comment</Col>
-                      <Col sm="10" className="p-0">{item.comment}</Col>
+                      <Col sm="10" className="p-0">{dataAnalysis[key].comment}</Col>
                     </Row>
                   </>}
               </div>
