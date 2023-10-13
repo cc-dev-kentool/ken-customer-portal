@@ -28,7 +28,7 @@ export default function RiskContent(props) {
     { name: 'Governing law', isShow: true },
     { name: 'Court jurisdiction', isShow: true },
     { name: 'Arbitration', isShow: true },
-    { name: 'Interaction between court jurisdiction and arbitration', isShow: true },
+    { name: 'Court jurisdiction and arbitration clause interaction', isShow: true },
     { name: 'War', isShow: true },
     { name: 'Communicable disease', isShow: true },
     { name: 'NCBR', isShow: true },
