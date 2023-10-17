@@ -15,6 +15,7 @@ export default function Sidebar(props) {
   const [showModalUplaod, setshowModalUplaod] = useState<boolean>(false);
   const [isShowFiles, setIsShowFiles] = useState<boolean>(true);
   const [file, setFile] = useState<File>();
+  const [isEnableBtnAnalyze, setEnableBtnAnalyze] = useState<boolean>(true);
 
   // Define an array of file names
   const fileNames = [
@@ -25,17 +26,29 @@ export default function Sidebar(props) {
 
   // Define a function called "getContentPopupArea" that returns some JSX
   const getContentPopupArea = () => {
-    return <UploadFile file={file} setFile={setFile} />
+    return (
+      <UploadFile 
+        file={file} 
+        setFile={setFile} 
+        setEnableBtnAnalyze={setEnableBtnAnalyze}
+      />
+    )
   }
 
   // Define a function called "handleSubmitPupopUpload" that updates the URL and state variables
   const handleSubmitPupopUpload = () => {
     if (file) {
-      file && setUrl(URL.createObjectURL(file));
+      setUrl(URL.createObjectURL(file));
       setshowModalUplaod(false);
       setShowPdf(true);
       dispatch(getAnalysisData(file));
     }
+  }
+
+  const handleClosePupopUpload = () => {
+    setEnableBtnAnalyze(true);
+    setshowModalUplaod(false);
+    dispatch(removeAlert());
   }
 
   // Define a function called "handleShowFiles" that toggles the value of "isShowFiles"
@@ -103,9 +116,9 @@ export default function Sidebar(props) {
         content={getContentPopupArea()}
         firstLabelButon={"Cancel"}
         seconLabelButton={"Analyze"}
-        handleFirstButtonCalback={() => setshowModalUplaod(false)}
+        handleFirstButtonCalback={handleClosePupopUpload}
         handleSeconButtonCalback={handleSubmitPupopUpload}
-        enableSecondButton={true}
+        enableSecondButton={isEnableBtnAnalyze}
       />
     </nav>
   );
