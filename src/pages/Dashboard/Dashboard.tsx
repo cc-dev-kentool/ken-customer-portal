@@ -41,16 +41,30 @@ export function Dashboard() {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Sidebar isShowFullSidebar={isShowFullSidebar} toggleMenu={toggleMenu} setUrl={setUrl} setShowPdf={setShowPdf} />
+      <Sidebar
+        isShowFullSidebar={isShowFullSidebar}
+        toggleMenu={toggleMenu}
+        setUrl={setUrl}
+        setShowPdf={setShowPdf}
+      />
 
       <div className="main">
-        <Navmenu isShowFullSidebar={isShowFullSidebar} toggleMenu={toggleMenu} />
+        <Navmenu
+          isShowFullSidebar={isShowFullSidebar}
+          toggleMenu={toggleMenu}
+        />
 
         {!isLoading && (
           <Row className="main-content">
             <Col lg={url && showPdf ? 7 : 12} className={classNames("", { 'main-risk': url })}>
-              <RiskContent isShowMaxHeight={isShowMaxHeight} setValueSearch={setValueSearch} />
-              <ChatGPT isShowMaxHeight={isShowMaxHeight} setIsShowMaxHeight={setIsShowMaxHeight} />
+              <RiskContent
+                isShowMaxHeight={isShowMaxHeight}
+                setValueSearch={setValueSearch}
+              />
+              <ChatGPT
+                isShowMaxHeight={isShowMaxHeight}
+                setIsShowMaxHeight={setIsShowMaxHeight}
+              />
               {isShowMaxHeight &&
                 <i
                   className="fa-solid fa-comment fa-2xl icon-chat"
@@ -59,7 +73,13 @@ export function Dashboard() {
               }
             </Col>
             <Col lg={url && showPdf ? 5 : 0}>
-              {showPdf && <PdfDocument url={url} valueSearch={valueSearch} setShowPdf={setShowPdf} />}
+              {showPdf &&
+                <PdfDocument
+                  url={url}
+                  valueSearch={valueSearch}
+                  setShowPdf={setShowPdf}
+                />
+              }
             </Col>
           </Row>
         )}

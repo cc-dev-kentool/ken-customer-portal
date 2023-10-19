@@ -82,8 +82,8 @@ export default function Sidebar(props) {
             dispatch(removeAlert())
             setshowModalUplaod(true)}
           }>
-            <i className="fa-regular fa-plus fs-1"></i>
-            {isShowFullSidebar && <span><br />New Document</span>}
+            <i className="fa-regular fa-plus fs-1"></i><br />
+            {isShowFullSidebar && <span>New Document</span>}
           </button>
           <div className={classNames("main-menu", { "main-menu-extended": (isShowFiles && !isShowFullSidebar) })}>
             <p>
@@ -91,7 +91,7 @@ export default function Sidebar(props) {
                 className={`fa-solid fa-chevron-${isShowFiles ? 'up' : 'down'}`}
                 onClick={handleShowFiles}
               />
-              <span className="m-2">Main</span>
+              <span className="m-2 main-menu-title">Main</span>
             </p>
             {isShowFiles &&
               <div className="m-2">

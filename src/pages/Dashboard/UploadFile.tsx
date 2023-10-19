@@ -1,6 +1,7 @@
 import { FileUploader } from "react-drag-drop-files";
 import { PDFDocument } from 'pdf-lib';
 import { useAppDispatch } from "hooks";
+import { labelDisplay } from "helpers/until";
 import { add as addAlert, remove as removeAlert } from "store/actions/alert"
 import image from "assets/icon/icon_image.svg";
 import warn from "assets/icon/icon_warning.svg";
@@ -50,7 +51,7 @@ export default function UploadFile(props) {
           <p>Drag and Drop Files here or</p>
           <button className="btn-upload">Browse File</button>
           <p className="file-type">Supported file types: *.pdf</p>
-          {file && <p className="file-name">File name: {file.name}</p>}
+          {file && <p className="file-name">File name: {labelDisplay(file.name, 40)}</p>}
         </FileUploader>
       </div>
       <div className="mt-3 mb-3">
