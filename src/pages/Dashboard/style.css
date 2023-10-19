@@ -6,7 +6,7 @@
 
 /* Side bar */
 .full-sidebar {
-  width: 300px;
+  width: 260px;
 }
 
 .small-sidebar {
@@ -48,7 +48,7 @@
   margin-right: -10px;
 }
 
-.btn-add-document {
+.sidebar .btn-add-document {
   background-color: #26ADC9;
   width: 100%;
   border-radius: 10px;
@@ -57,12 +57,12 @@
   font-size: 14px;
 }
 
-.btn-add-document:hover {
+.sidebar .btn-add-document:hover {
   background-color: #A8DEE9;
   border-color: #A8DEE9;
 }
 
-.main-menu {
+.sidebar .main-menu {
   background-color: #d4eff4;
   margin-top: 15px;
   border-radius: 10px;
@@ -70,24 +70,30 @@
   font-size: 16px;
 }
 
-.main-menu-title {
+.sidebar .main-menu-title {
   font-weight: bold;
 }
 
-.main-menu-extended {
+.sidebar .main-menu-extended {
   width: 270px;
   z-index: 2;
 }
 
-.active-file {
+.sidebar .active-file {
   background-color: #a8dee9;
   border-radius: 5px;
 }
 
-.icon-action {
+.sidebar .icon-action {
   float: right;
   padding-top: 10px;
   padding-right: 10px;
+}
+
+.sidebar .version {
+  position: absolute;
+  bottom: 0;
+  text-align: center;
 }
 
 /* Popup upload */
