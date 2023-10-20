@@ -25,7 +25,7 @@ export function Dashboard() {
   const [isShowMaxHeight, setIsShowMaxHeight] = useState<boolean>(false);
   const [url, setUrl] = useState<string>("");
   const [showPdf, setShowPdf] = useState<boolean>(true);
-  const [valueSearch, setValueSearch] = useState<string>("")
+  const [valueSearch, setValueSearch] = useState<string>("");
 
   // Define a function called "toggleMenu" that toggles the value of "isShowFullSidebar" when called.
   const toggleMenu = () => {
@@ -62,15 +62,9 @@ export function Dashboard() {
                 setValueSearch={setValueSearch}
               />
               <ChatGPT
-                isShowMaxHeight={isShowMaxHeight}
-                setIsShowMaxHeight={setIsShowMaxHeight}
+                isShowPDF={showPdf}
+                isShowFullSidebar={isShowFullSidebar}
               />
-              {isShowMaxHeight &&
-                <i
-                  className="fa-solid fa-comment fa-2xl icon-chat"
-                  onClick={() => setIsShowMaxHeight(false)}
-                />
-              }
             </Col>
             <Col lg={url && showPdf ? 5 : 0}>
               {showPdf &&
