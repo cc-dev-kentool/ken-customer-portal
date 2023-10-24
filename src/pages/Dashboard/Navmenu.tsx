@@ -20,7 +20,7 @@ export default function Navmenu(props) {
   // and redirects to the home page ("/")
   const onLogout = () => {
     dispatch(logout());
-    history.push("/");
+    history.push("/login");
   };
 
   // Return the following JSX

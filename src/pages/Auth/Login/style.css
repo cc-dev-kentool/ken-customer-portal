@@ -1,205 +1,59 @@
-.login-form .contain-remember-forgot {
-  font-size: 13px;
-  display: flex;
-  justify-content: space-between;
+.login-form {
+  padding: 5% 20%;
+  height: 100vh;
 }
 
-.login-form .remember-me {
-  color: #808080;
+.login-content {
+  background-color: #fff;
+  height: 100%;
+  color: #000;
 }
 
-.login-form .forgot-password {
-  color: #808080;
-  cursor: pointer;
-  margin-top: 2px;
-}
-
-.form-check {
-  position: relative;
-  display: block;
-  padding-left: 1.25rem;
-}
-
-.center_form .form-check-input {
-  float: left !important;
-  margin-left: -1.5em !important;
-}
-
-.login-form .btn-block {
-  display: block;
+.bg_login {
+  background-image: url('./../../../assets/images/bg-login.png');
+  background-size: cover;
+  height: 100%;
   width: 100%;
 }
-
-.login-form .remember-me {
-  float: left;
-  cursor: pointer;
-  margin-top: 2px;
-}
-
 
 .login-form .center_form {
   margin: 0 auto;
-  width: 80%
-    /* value of your choice which suits your alignment */
+  width: 70%;
+  top: 33%;
+  position: sticky;
 }
 
-.login-form .login-error p {
-  line-height: 10px;
+.center_form .title {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
 }
 
-.avatar-azure {
-  height: 25px;
-  width: 25px;
-}
-
-.btn-primary-login-azure {
-  background-color: #a1efff;
-  border-color: #a1efff;
-}
-
-.login-form {
-  min-height: 900px !important;
+.center_form .label-input {
   font-size: 16px;
-}
-
-.login-form .error {
-  margin-bottom: 1.5em;
-  font-size: 13px;
-}
-
-.login-form input[type="text"] {
-  font-size: 13px;
-}
-
-
-.gcaptcha>div>div>div>iframe {
-  -moz-transform: scale(1.1);
-  -ms-transform: scale(1.1);
-  -o-transform: scale(1.1);
-  -moz-transform-origin: 0;
-  -ms-transform-origin: 0;
-  -o-transform-origin: 0;
-  -webkit-transform: scale(1.1);
-  transform: scale(0.975);
-  -webkit-transform-origin: 0 0;
-  transform-origin: 0;
-  filter: progid:DXImageTransform.Microsoft.Matrix(M11=1.1, M12=0, M21=0, M22=1.1, SizingMethod='auto expand');
-}
-
-.rc-anchor-checkbox-label {
-  font-size: 9px !important;
-}
-
-.login-form .or {
-  font-size: 1em;
-  padding-top: 0.75em;
-  color: #808080;
-  display: flex;
-  flex-direction: column important;
-  justify-content: center;
-}
-
-.login-form .line1,
-.login-form .line2 {
-  margin: 0.75em 0.25em 0 0.25em;
-  height: 2px;
-  background: #808080;
-  width: 5em;
-}
-
-.login-form .back {
-  padding-top: 2em;
-  float: right;
-  cursor: pointer;
-}
-
-.login-form .title {
-  font-size: 30px;
-  line-height: 2em;
-  padding-bottom: 0.25em;
+  margin-bottom: 4px;
   font-weight: bold;
 }
 
-.login-form .container-left {
-  background-color: white;
-  width: 45%;
-  padding-left: 0;
-  padding-right: 0;
-  max-height: 740px;
+.center_form .form-control {
+  border-radius: 8px;
+  border: 1px solid #D0D5DD;
+  height: 45px;
+  font-size: 16px;
+  color: #999 !important;
 }
 
-.login-form .container-right {
-  width: 55%;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.login-form .container-right img{
-  max-width: 515px;
-  height: 740px;
-}
-
-.robot-invalid-feedback {
+.center_form .btn-login {
   width: 100%;
-  margin-top: 0.25rem;
-  font-size: 80%;
-  color: #dc3545;
+  border-radius: 8px;
+  height: 55px;
+  font-size: 16px;
+  color: #fff;
+  border: none;
+  background-color: #26ADC9;
+  margin-top: 10px;
 }
 
-.login-form .label-input {
-  font-weight: bold;
-  color: #4C4C4C;
-  font-size: 13px;
-}
-
-.login-form a:hover {
-  text-decoration: none !important;
-}
-
-.login-form input[type="checkbox"] {
-  cursor: pointer;
-}
-
-.form-check-input:checked {
-  background-color: #6c757d !important;
-  border-color: #6c757d !important;
-}
-
-.login-form .text {
-  font-style: italic;
-  font-size: 13px;
-  color: #808080;
-  margin-top: -8px;
-}
-
-/* Media query for tablet/ipad devices with min-width: 768px and max-width: 1024px */
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
-  .login-form .gcaptcha>div>div>div>iframe {
-    transform: scale(1.395);
-  }
-
-  .login-form .container-left {
-    width: 100%;
-  }
-  
-  .login-form .container-right {
-    width: 0%;
-  }
-
-  .login-form .bg_login {
-    display: none;
-  }
-
-  input[type='checkbox']:checked {
-    filter: grayscale(100%) contrast(100%);
-  }
-
-  .login-form .captcha {
-    margin-top: 30px;
-  }
-
-  .login-form .contain-remember-forgot {
-    margin-top: 20px;
-    margin-bottom: -10px;
-  }
+.error {
+  color: red;
 }
