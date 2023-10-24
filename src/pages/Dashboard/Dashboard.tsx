@@ -80,15 +80,9 @@ export function Dashboard() {
                 setIsJump={setIsJump}
               />
               <ChatGPT
-                isShowMaxHeight={isShowMaxHeight}
-                setIsShowMaxHeight={setIsShowMaxHeight}
+                isShowPDF={showPdf}
+                isShowFullSidebar={isShowFullSidebar}
               />
-              {isShowMaxHeight &&
-                <i
-                  className="fa-solid fa-comment fa-2xl icon-chat"
-                  onClick={() => setIsShowMaxHeight(false)}
-                />
-              }
             </Col>
             <Col lg={url && showPdf ? 5 : 0}>
               {showPdf &&
