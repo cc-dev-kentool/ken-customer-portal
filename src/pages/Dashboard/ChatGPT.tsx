@@ -15,10 +15,10 @@ export default function ChatGPT(props) {
       <i className="fa-solid fa-xmark icon-close" onClick={() => setIsShowMaxHeight(true)}></i>
       <p className="title-chat">Connect to ChatGPT</p>
       <langflow-chat
-        flow_id="90cabdee-c30c-4e0a-a4a9-9dbda30feb24"
+        flow_id={process.env.REACT_APP_LANGFLOW_ID}
         chat_inputs='{"input":""}'
         chat_input_field="input"
-        host_url="https://dev-kentool-langflow.azurewebsites.net/"
+        host_url={process.env.REACT_APP_LANGFLOW_HOST_URL}
         style={{ position: 'fixed', bottom: '10px', right: '20px', zIndex: 10 }}
       />
     </div>
