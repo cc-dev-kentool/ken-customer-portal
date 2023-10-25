@@ -10,7 +10,7 @@ import classNames from "classnames";
 export default function RiskContent(props) {
   const dispatch = useAppDispatch();
   // Destructure the "url" and "setValueSearch" props from the "props" object
-  const { isShowMaxHeight, setValueSearch } = props;
+  const { isShowMaxHeight, isJump, setValueSearch, setPageNumber, setIsJump } = props;
 
   const [dataAnalysis] = useAppSelector((state) => [
     state.analysis.dataAnalysis
@@ -61,6 +61,8 @@ export default function RiskContent(props) {
 
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
+    setIsJump(!isJump);
+    setPageNumber(5)
     setValueSearch(text)
   }
 

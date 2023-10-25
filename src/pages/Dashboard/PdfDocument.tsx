@@ -2,6 +2,7 @@ import { Worker, Viewer, ScrollMode } from "@react-pdf-viewer/core";
 import { searchPlugin } from "@react-pdf-viewer/search";
 import { ToolbarSlot, TransformToolbarSlot, toolbarPlugin } from "@react-pdf-viewer/toolbar";
 import { useEffect } from "react";
+import JumpToPagePlugin from '../../components/JumpToPagePlugin';
 import close from "assets/icon/icon_close.svg";
 import "@react-pdf-viewer/toolbar/lib/styles/index.css";
 import "@react-pdf-viewer/highlight/lib/styles/index.css";
@@ -10,7 +11,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 // Define a function component named "PdfDocument" and receive a single parameter called "props"
 export default function PdfDocument(props) {
   // Destructure the "url", "valueSearch", and "setShowPdf" props from the "props" object
-  const { url, valueSearch, setShowPdf } = props;
+  const { url, isJump, pageNumber, valueSearch, setShowPdf } = props;
 
   // Define a transform function for the TransformToolbarSlot type
   const transform: TransformToolbarSlot = (slot: ToolbarSlot) => {
@@ -35,8 +36,42 @@ export default function PdfDocument(props) {
   const searchPluginInstance = searchPlugin();
   const { highlight } = searchPluginInstance;
 
+  const jumpToPagePluginInstance = JumpToPagePlugin();
+  const { jumpToPage } = jumpToPagePluginInstance;
+
+  useEffect(() => {
+    jumpToPage(pageNumber)
+  }, [isJump])
+
   // Define an onHighlight function that takes a value to search for and highlights it
-  const onHighlight = (valueSearch) => {
+  const onHighlight = (searchText) => {
+    const pages = document.querySelectorAll('.rpv-core__page-layer');
+
+    let includedText = "";
+    let includeElements: any = [];
+    pages.forEach(page => {
+      const textLayer = page.querySelector('.rpv-core__text-layer');
+      if (textLayer) {
+        const paragraphs = textLayer.children;
+        let spanValue = "";
+
+        for (let i = 0; i < paragraphs.length; i++) {
+          let element = paragraphs[i];
+
+          if (element.tagName.toLocaleLowerCase() === 'br') {
+            spanValue += " ";
+          } else {
+            spanValue += element.innerHTML
+          }
+        }
+
+        if (spanValue.includes(searchText)) {
+          includeElements.push(textLayer.innerHTML);
+          includedText = spanValue;
+        }
+      }
+    });
+
     highlight([
       {
         keyword: valueSearch,
@@ -70,6 +105,7 @@ export default function PdfDocument(props) {
                 plugins={[
                   toolbarPluginInstance,
                   searchPluginInstance,
+                  jumpToPagePluginInstance
                 ]}
                 scrollMode={ScrollMode.Vertical}
               />

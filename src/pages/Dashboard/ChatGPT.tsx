@@ -33,11 +33,11 @@ export default function ChatGPT(props) {
   return (
     <div>
       <langflow-chat
-        window_title=""
-        flow_id="90cabdee-c30c-4e0a-a4a9-9dbda30feb24"
+        flow_id={process.env.REACT_APP_LANGFLOW_ID}
         chat_inputs='{"input":""}'
         chat_input_field="input"
-        host_url="https://dev-kentool-langflow.azurewebsites.net/"
+        host_url={process.env.REACT_APP_LANGFLOW_HOST_URL}
+        window_title=""
         style={{
           position: 'absolute',
           bottom: '10px',
