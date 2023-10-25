@@ -1,0 +1,106 @@
+/* List user */
+.user-managerment {
+    background-color: #fff;
+    min-height: 90vh;
+    width: 100%;
+    padding: 20px;
+}
+
+.user-managerment .title {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.user-managerment .add-user {
+    text-align: right;
+    font-size: 30px;
+}
+
+.user-managerment .add-user button {
+    background-color: #26ADC9;
+    padding: 0px 17px 5px 17px;
+    border-radius: 50%;
+    border: none;
+    color: #fff;
+}
+
+.user-managerment .add-user button:hover {
+    background-color: #A8DEE9;
+    border-color: #A8DEE9;
+}
+
+.user-managerment .add-user button:active {
+    background-color: #A8DEE9;
+    border: none;
+}
+
+.user-managerment .table-user {
+    margin-top: 20px;
+}
+
+.ant-table-thead tr th {
+    background-color: #A8DEE9 !important;
+    font-size: 16px;
+}
+
+.ant-table-cell-row-hover {
+    background: #d4eff4 !important;
+    cursor: pointer !important;
+}
+
+.ant-table-column-sorter-down.active, .ant-table-column-sorter-up.active  {
+    color: #26ADC9 !important;
+}
+
+.ant-pagination-item-active {
+    border-color: #A8DEE9 !important;
+    background: #A8DEE9 !important;
+}
+
+.st-enable, .st-disable {
+    padding: 5px 15px;
+    border-radius: 8px;
+    text-align: center;
+    width: fit-content;
+    margin-bottom: 0;
+}
+
+.st-enable {
+    background-color: #d4eff4;
+}
+
+.st-disable {
+    background-color: #eee;
+}
+
+/* Add new user, Edit user */
+
+.edit-user .titile-add {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.edit-user .center_form {
+    margin: 10px auto;
+    width: 80%;
+}
+
+.edit-user .label-input {
+    font-size: 16px !important;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.edit-user .btn-save {
+    margin-top: 30px;
+    width: 120px;
+    height: 35px;
+    border: none;
+    border-radius: 10px;
+    background-color: #26ADC9;
+    color: #fff;
+}
+
+.edit-user .btn-save:hover {
+    background: #A8DEE9;
+}

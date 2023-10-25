@@ -3,13 +3,13 @@ import { useState } from "react";
 import { useAppDispatch } from "hooks";
 import { getAnalysisData } from "store/actions/analysis";
 import { remove as removeAlert } from "store/actions/alert"
-import UploadFile from "./UploadFile";
+import UploadFile from "../../pages/Dashboard/UploadFile";
 import classNames from "classnames";
 
 // Define a function called "Sidebar" which receives a single parameter called "props"
 export default function Sidebar(props) {
   const dispatch = useAppDispatch();
-  const { isShowFullSidebar, toggleMenu, setUrl, setShowPdf } = props;
+  const { user, routeName, isShowFullSidebar, toggleMenu, setUrl, setShowPdf } = props;
 
   // Define state variables
   const [showModalUplaod, setshowModalUplaod] = useState<boolean>(false);
@@ -27,9 +27,9 @@ export default function Sidebar(props) {
   // Define a function called "getContentPopupArea" that returns some JSX
   const getContentPopupArea = () => {
     return (
-      <UploadFile 
-        file={file} 
-        setFile={setFile} 
+      <UploadFile
+        file={file}
+        setFile={setFile}
         setEnableBtnAnalyze={setEnableBtnAnalyze}
       />
     )
@@ -78,35 +78,56 @@ export default function Sidebar(props) {
           </span>
         </div>
         <div className="list-group">
-          <button className="btn-add-document" onClick={() => {
-            dispatch(removeAlert())
-            setshowModalUplaod(true)}
-          }>
-            <i className="fa-regular fa-plus fs-1"></i><br />
-            {isShowFullSidebar && <span>New Document</span>}
-          </button>
-          <div className={classNames("main-menu", { "main-menu-extended": (isShowFiles && !isShowFullSidebar) })}>
-            <p>
-              <i
-                className={`fa-solid fa-chevron-${isShowFiles ? 'up' : 'down'}`}
-                onClick={handleShowFiles}
-              />
-              <span className="m-2 main-menu-title">Main</span>
-            </p>
-            {isShowFiles &&
-              <div className="m-2">
-                {fileNames.map((item, index) => {
-                  return (
-                    <p className={classNames("", { "active-file": index === fileNames.length - 1 })} key={index}>
-                      <i className="fa-regular fa-file-lines m-2" style={{ color: "#26adc9" }}></i>
-                      <span>{item}</span>
-                      <i className="fa-solid fa-ellipsis icon-action"></i>
-                    </p>
-                  )
-                })}
-              </div>
+          {/* {user.role === "admin" && */}
+            <ul className="sidebar-nav text-left">
+              <li className={classNames('sidebar-item', {'active-sidebar': routeName === 'user'})}>
+                <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/user">
+                  <i className="fa-regular fa-user" style={{ color: "#26ADC9" }}></i>
+                  {isShowFullSidebar && <span>User Managerment</span>}
+                </a>
+              </li>
+              <li className={classNames('sidebar-item', {'active-sidebar': routeName === 'dashboard'})}>
+                <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/">
+                  <i className="fa-regular fa-comment" style={{ color: "#26ADC9" }}></i>
+                  {isShowFullSidebar && <span>Prompt Setting</span>}
+                </a>
+              </li>
+            </ul>
+          {/* } */}
+
+          {/* {user.role === "user" && <> */}
+            <button className="btn-add-document" onClick={() => {
+              dispatch(removeAlert())
+              setshowModalUplaod(true)
             }
-          </div>
+            }>
+              <i className="fa-regular fa-plus fs-1"></i><br />
+              {isShowFullSidebar && <span>New Document</span>}
+            </button>
+
+            <div className={classNames("main-menu", { "main-menu-extended": (isShowFiles && !isShowFullSidebar) })}>
+              <p>
+                <i
+                  className={`fa-solid fa-chevron-${isShowFiles ? 'up' : 'down'}`}
+                  onClick={handleShowFiles}
+                />
+                <span className="m-2 main-menu-title">Main</span>
+              </p>
+              {isShowFiles &&
+                <div className="m-2">
+                  {fileNames.map((item, index) => {
+                    return (
+                      <p className={classNames("", { "active-file": index === fileNames.length - 1 })} key={index}>
+                        <i className="fa-regular fa-file-lines m-2" style={{ color: "#26adc9" }}></i>
+                        <span>{item}</span>
+                        <i className="fa-solid fa-ellipsis icon-action"></i>
+                      </p>
+                    )
+                  })}
+                </div>
+              }
+            </div>
+          {/* </>} */}
         </div>
       </div>
 
