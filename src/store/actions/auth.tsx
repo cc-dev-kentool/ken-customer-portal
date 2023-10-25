@@ -10,22 +10,7 @@ export function login(data) {
   // Return an async function
   return async function (dispatch) {
     // Set loading state to true
-    console.log(data)
-    dispatch(setLoading(true));
-    localStorage.setItem("token", "demo");
-    localStorage.setItem("refresh_token", "demo");
-    localStorage.setItem("user", JSON.stringify(data));
-    dispatch({
-      type: authActionType.LOGIN_SUCCESS,
-      payload: true,
-    });
-    dispatch({
-      type: authActionType.REMEMBER_ME,
-    });
-    dispatch({
-      type: authActionType.ERROR_LOGIN,
-      payload: "",
-    });
+    window.location.href = "/"
   };
 }
 
