@@ -10,7 +10,9 @@ on:
   workflow_dispatch:
     
 env:
-  REACT_APP_API_ENDPOINT:  'https://dev-kentool-backend.azurewebsites.net/api'
+  REACT_APP_API_ENDPOINT:  ${{ secrets.REACT_APP_API_ENDPOINT }}
+  REACT_APP_LANGFLOW_HOST_URL:  ${{ secrets.REACT_APP_LANGFLOW_HOST_URL }}
+  REACT_APP_LANGFLOW_ID:  ${{ secrets.REACT_APP_LANGFLOW_ID }}
 
 jobs:
   build:
