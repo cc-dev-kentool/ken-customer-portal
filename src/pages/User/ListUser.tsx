@@ -3,6 +3,8 @@ import { Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from "react";
 import { PopupDialog } from "components/Modals/PopUpDialog";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { getListUser } from "store/actions/user";
 import AdminLayout from "layouts/Admin";
 import AddUser from "./AddUser";
 import EditUser from "./EditUser";
@@ -19,6 +21,20 @@ interface DataType {
 
 // Defines a React functional component called "List" that takes props as its parameter
 export default function ListUser(props) {
+  // Retrieves the Redux store's state and dispatch function
+  const dispatch = useAppDispatch();
+
+  const [listUser] = useAppSelector((state) => [
+    state.user.listUser,
+    state.user.getListUserSuccess,
+  ]);
+
+  // Sets up side effect using async `getListUserSetting()` action creator to fetch user settings from backend API
+  useEffect(() => {
+    dispatch(getListUser());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const data: DataType[] = [
     {
       email: 'admin@codecomplete.com',
