@@ -46,3 +46,8 @@ export const modalActionType = {
 export const analysisActionType = {
   GET_DATA_ANALYTICS: "GET_DATA_ANALYTICS",
 }
+
+export const userActionType = {
+  GET_LIST_USER: "GET_LIST_USER",
+  GET_LIST_USER_SUCCESS: "GET_LIST_USER_SUCCESS",
+}
