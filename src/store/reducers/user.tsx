@@ -4,6 +4,10 @@ import { userActionType } from "../actionTypes"
 const initialState = {
   listUser: [],
   getListUserSuccess: false,
+  user: {},
+  getUserSuccess: false,
+  createUserSuccess: false,
+  editUserSuccess: false,
 }
 
 // Declaring the modal reducer function
@@ -20,6 +24,18 @@ const getAnalysisData = (state = initialState, action) => {
       return {
         ...state,
         getListUserSuccess: action.payload,
+      }
+    // Case for GET_USER action type.
+    case userActionType.CREATE_USER_SUCCESS:
+      return {
+        ...state,
+        createUserSuccess: action.payload,
+      }
+    // Case for CREATE_USER_SUCCESS action type.
+    case userActionType.EDIT_USER_SUCCESS:
+      return {
+        ...state,
+        editUserSuccess: action.payload,
       }
     // Default fallback case returns the current state.
     default:

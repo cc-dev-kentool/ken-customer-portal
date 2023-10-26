@@ -1,9 +1,9 @@
 import { userActionType } from "store/actionTypes";
 import { setLoading } from "./app";
 import { onError } from "./base";
+import { add as addAlert } from 'store/actions/alert'
 import API from "service/api";
 
-// Define a function to change password my account
 export function getListUser() {
   return async function (dispatch) {
     dispatch(setLoading(true));
@@ -12,7 +12,7 @@ export function getListUser() {
         dispatch(setLoading(false));
         dispatch({
           type: userActionType.GET_LIST_USER,
-          payload: result.data,
+          payload: result.data.data,
         });
         dispatch({
           type: userActionType.GET_LIST_USER_SUCCESS,
@@ -28,4 +28,37 @@ export function getListUser() {
         dispatch(onError(err))
       });
   };
+}
+
+export function updateUser(data) {
+  return async function (dispatch) {
+    // Set loading state to true
+    dispatch(setLoading(true))
+    // Make PUT request to API to update user settings profile
+    await API({ url: "users/update-by-id", method: "put", data })
+      .then(() => {
+        // Dispatch alert indicating successful update
+        dispatch(addAlert("You have successfully updated password.", "success"))
+        // Set loading state to false
+        dispatch(setLoading(false))
+      })
+      .catch((err) => dispatch(onError(err)))
+  }
+}
+
+export function createUser(data) {
+  return async function (dispatch) {
+    // Set loading state to true
+    dispatch(setLoading(true))
+    // Make PUT request to API to update user settings profile
+    await API({ url: "users", method: "post", data })
+      .then(() => {
+        // Dispatch alert indicating successful update
+        dispatch(addAlert("You have successfully create user.", "success"))
+        // Set loading state to false
+        dispatch(setLoading(false))
+        dispatch(getListUser());
+      })
+      .catch((err) => dispatch(onError(err)))
+  }
 }

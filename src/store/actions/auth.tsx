@@ -20,10 +20,11 @@ export function login(data) {
       .then((result) => {
         // Set loading state to false
         dispatch(setLoading(false));
+
         // Otherwise, set user information in local storage and set login success state
-        // console.log("result", result);
-        // localStorage.setItem("token", result.data);
-        // localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("token", result.data.data.token);
+        localStorage.setItem("user", JSON.stringify(result.data.data.user));
+
         dispatch({
           type: authActionType.LOGIN_SUCCESS,
           payload: true,
@@ -32,7 +33,12 @@ export function login(data) {
           type: authActionType.ERROR_LOGIN,
           payload: "",
         });
-        window.location.href = "/";
+
+        if (result.data.data.user.role === "admin") {
+          window.location.href = "/users";
+        } else {
+          window.location.href = "/";
+        }
       })
       .catch((err) => {
         // If there is an error, set loading state to false and set error message
@@ -55,6 +61,16 @@ export function logout() {
     dispatch({
       type: authActionType.LOGOUT,
     });
+    await API({ url: "/logout", method: "post" })
+      .then(() => {
+        localStorage.clear();
+        dispatch(setLoading(false));
+        dispatch({
+          type: authActionType.LOGOUT,
+          payload: false,
+        });
+      })
+      .catch((err) => dispatch(onError(err)));
   };
 }
 
