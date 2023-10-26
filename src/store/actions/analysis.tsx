@@ -15,7 +15,11 @@ export function getAnalysisData(file) {
         dispatch(setLoading(false));
         dispatch({
           type: analysisActionType.GET_DATA_ANALYTICS,
-          payload: result.data.data,
+          payload: result.data.data.result,
+        });
+        dispatch({
+          type: analysisActionType.SET_FILE_PATH,
+          payload: result.data.data.file_path,
         });
       })
       .catch((err) => dispatch(onError(err)));

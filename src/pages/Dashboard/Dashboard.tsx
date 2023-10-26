@@ -6,11 +6,14 @@ import PdfDocument from "./PdfDocument";
 import ChatGPT from "./ChatGPT";
 import classNames from "classnames";
 import AdminLayout from "layouts/Admin";
+import { useAppDispatch, useAppSelector } from "hooks";
 import "./style.css";
 
 // Define a function component named "Dashboard" which does not receive any parameters.
 export function Dashboard(props) {
-
+  const [filePath] = useAppSelector((state) => [
+    state.analysis.filePath
+  ]);
   // The useState hook is used here to define state variables.
   const [url, setUrl] = useState<string>("");
   const [showPdf, setShowPdf] = useState<boolean>(true);

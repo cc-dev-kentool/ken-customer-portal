@@ -45,6 +45,7 @@ export const modalActionType = {
 
 export const analysisActionType = {
   GET_DATA_ANALYTICS: "GET_DATA_ANALYTICS",
+  SET_FILE_PATH: "SET_FILE_PATH"
 }
 
 export const userActionType = {
