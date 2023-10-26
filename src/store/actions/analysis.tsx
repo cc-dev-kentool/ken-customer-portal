@@ -15,7 +15,7 @@ export function getAnalysisData(file) {
         dispatch(setLoading(false));
         dispatch({
           type: analysisActionType.GET_DATA_ANALYTICS,
-          payload: result.data,
+          payload: result.data.data,
         });
       })
       .catch((err) => dispatch(onError(err)));

@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { LoginValidation } from "schema/auth";
-import { useAppDispatch } from "hooks";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { updateUser } from "store/actions/user";
+import { userEditValidation } from "schema/user";
+import { useState } from "react";
 
 // Defines a React functional component called "List" that takes props as its parameter
 export default function EditUser(props) {
@@ -18,16 +20,19 @@ export default function EditUser(props) {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(LoginValidation),
+    resolver: yupResolver(userEditValidation),
   });
+
+  const [isShowPassword, setIsShowPassword] = useState(false);
 
   // Function to handle form submission
   const onSubmit = async (data) => {
     const params = {
-      username: data.username,
+      user_id: currentUser.uuid,
+      email: data.username,
       password: data.password.trim()
     };
-    // dispatch(login(params));
+    dispatch(updateUser(params));
     setIsShowEdit(false);
   };
 
@@ -45,36 +50,26 @@ export default function EditUser(props) {
           </label>
           <input
             type="text"
-            {...register("username")}
-            onBlur={(e: any) =>
-              setValue(
-                "username",
-                e.target.value.replace(" ", "").trim()
-              )
-            }
-            className={`form-control ${errors.username ? "is-invalid" : ""
-              }`}
-            name="username"
-            placeholder="Your name"
-            onKeyDown={(evt) =>
-              evt.key === " " && evt.preventDefault()
-            }
+            className={`form-control ${errors.email ? "is-invalid" : ""}`}
+            name="email"
             value={currentUser?.email}
+            disabled
           />
           <div className="invalid-feedback">
-            {errors.username?.message}
+            {errors.email?.message}
           </div>
         </div>
         <div className="mb-3">
           <label className="label-input">Password</label>
           <input
-            type="text"
+            type={`${isShowPassword ? 'text' : 'password'}`}
             {...register("password")}
-            className={`form-control ${errors.password ? "is-invalid" : ""
-              }`}
+            className={`form-control ${errors.password ? "is-invalid" : ""}`}
             name="password"
-            value={currentUser?.password}
+            placeholder="********"
+            value={currentUser?.hashed_password}
           />
+          <i className="fa-regular fa-eye" onClick={() => setIsShowPassword(!isShowPassword)} />
           <div className="invalid-feedback">
             {errors.password?.message}
           </div>
@@ -82,12 +77,10 @@ export default function EditUser(props) {
         <div className="mb-3">
           <label className="label-input">Role</label>
           <input
-            type="role"
-            {...register("role")}
-            className={`form-control ${errors.role ? "is-invalid" : ""
-              }`}
+            type="text"
+            className={`form-control`}
             name="role"
-            value={"Normal User"}
+            value={currentUser?.role}
             disabled
           />
           <div className="invalid-feedback">

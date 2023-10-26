@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { LoginValidation } from "schema/auth";
 import { useAppDispatch } from "hooks";
-import { login } from "store/actions/auth";
+import { createUser } from "store/actions/user";
+import { userAddValidation } from "schema/user";
+import { useState } from "react";
 
 // Defines a React functional component called "List" that takes props as its parameter
 export default function AddUser(props) {
@@ -19,16 +20,18 @@ export default function AddUser(props) {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(LoginValidation),
+    resolver: yupResolver(userAddValidation),
   });
+
+  const [isShowPassword, setIsShowPassword] = useState(false);
 
   // Function to handle form submission
   const onSubmit = async (data) => {
     const params = {
-      username: data.username,
+      email: data.email,
       password: data.password.trim()
     };
-    // dispatch(login(params));
+    dispatch(createUser(params));
     setIsShowAdd(false)
   };
 
@@ -46,35 +49,36 @@ export default function AddUser(props) {
           </label>
           <input
             type="text"
-            {...register("username")}
+            {...register("email")}
             onBlur={(e: any) =>
               setValue(
-                "username",
+                "email",
                 e.target.value.replace(" ", "").trim()
               )
             }
-            className={`form-control ${errors.username ? "is-invalid" : ""
+            className={`form-control ${errors.email ? "is-invalid" : ""
               }`}
-            name="username"
+            name="email"
             placeholder="user@gmail.com"
             onKeyDown={(evt) =>
               evt.key === " " && evt.preventDefault()
             }
           />
           <div className="invalid-feedback">
-            {errors.username?.message}
+            {errors.email?.message}
           </div>
         </div>
         <div className="mb-3">
           <label className="label-input">Password</label>
           <input
-            type="text"
+            type={`${isShowPassword ? 'text' : 'password'}`}
             {...register("password")}
             className={`form-control ${errors.password ? "is-invalid" : ""
               }`}
             name="password"
             placeholder="Zxcv123456@"
           />
+          <i className="fa-regular fa-eye" onClick={() => setIsShowPassword(!isShowPassword)} />
           <div className="invalid-feedback">
             {errors.password?.message}
           </div>
@@ -87,7 +91,7 @@ export default function AddUser(props) {
             className={`form-control ${errors.role ? "is-invalid" : ""
               }`}
             name="role"
-            value={"Normal User"}
+            value={"Member"}
             disabled
           />
           <div className="invalid-feedback">

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import Progressbar from "components/ProgressBar";
-import Sidebar from "./Sidebar";
 import Navmenu from "./Navmenu";
+import Sidebar from "./Sidebar/Sidebar";
 import "assets/css/app.css";
 import "./style.css";
 
@@ -12,7 +12,6 @@ function AdminLayout(props) {
 
   const { routeName, showPdf, children, setUrl, setShowPdf, setpositionChat } = props;
 
-  const user = JSON.parse(localStorage.getItem('user') || '{}')
   const [isLoading] = useAppSelector((state) => [state.app.isLoading])
 
   const [isShowFullSidebar, setIsShowFullSidebar] = useState<boolean>(true);
@@ -36,7 +35,6 @@ function AdminLayout(props) {
     <div className="wrapper">
       <Sidebar
         routeName={routeName}
-        user={user}
         isShowFullSidebar={isShowFullSidebar}
         toggleMenu={toggleMenu}
         setUrl={setUrl}

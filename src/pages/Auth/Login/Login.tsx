@@ -83,7 +83,7 @@ export function Login(props) {
                   className={`form-control ${errors.username ? "is-invalid" : ""
                     }`}
                   name="username"
-                  placeholder="Your name"
+                  placeholder="Email Address"
                   onKeyDown={(evt) =>
                     evt.key === " " && evt.preventDefault()
                   }

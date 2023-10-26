@@ -50,4 +50,6 @@ export const analysisActionType = {
 export const userActionType = {
   GET_LIST_USER: "GET_LIST_USER",
   GET_LIST_USER_SUCCESS: "GET_LIST_USER_SUCCESS",
+  CREATE_USER_SUCCESS: "CREATE_USER_SUCCESS",
+  EDIT_USER_SUCCESS: "EDIT_USER_SUCCESS",
 }

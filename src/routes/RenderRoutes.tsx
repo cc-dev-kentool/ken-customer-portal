@@ -26,12 +26,12 @@ type routes = routeItem & {
 
 const ROUTES: routes[] = [
   {
-    path: "/user", // URL pattern for the login route
+    path: "/users", // URL pattern for the login route
     key: "ROOT", // Unique identifier for this component instance
     exact: true, // Exact match is required to load the component
     component: ListUser, // Component that will be loaded on this route
     routes: [], // Optional array of child routes if any
-    requiredAuth: false, // Indicates whether authentication is required or not
+    requiredAuth: true, // Indicates whether authentication is required or not
     name: "user", // Identifier for this route
     title: "User", // Title that will be displayed in the header
   },
@@ -52,7 +52,7 @@ const ROUTES: routes[] = [
     exact: true, // Exact match is required to load the component
     component: Dashboard, // Component that will be loaded on this route
     routes: [], // Optional array of child routes if any
-    requiredAuth: false, // Indicates whether authentication is required or not
+    requiredAuth: true, // Indicates whether authentication is required or not
     name: "dashboard", // Identifier for this route
     title: "Ken", // Title that will be displayed in the header
   }
@@ -103,11 +103,6 @@ function RouteWithSubRoutes(route: routes) {
           // If the user is not authenticated and the route requires authentication, redirect to the login page
           if (route.requiredAuth) {
             window.location.href = "/login?continue=" + encodeURIComponent(window.location.href);
-          }
-        } else {
-          // If the user is authenticated and the route does not require authentication, redirect to the dashboard
-          if (["/login", "/register", "/forgot-password"].includes(route.path)) {
-            window.location.href = "/dashboard"
           }
         }
 
