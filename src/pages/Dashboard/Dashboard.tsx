@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useAppSelector } from "hooks";
+import { useState } from "react";;
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
@@ -13,7 +12,6 @@ import "./style.css";
 export function Dashboard(props) {
 
   // The useState hook is used here to define state variables.
-  const [isShowMaxHeight, setIsShowMaxHeight] = useState<boolean>(false);
   const [url, setUrl] = useState<string>("");
   const [showPdf, setShowPdf] = useState<boolean>(true);
   const [valueSearch, setValueSearch] = useState<string>("");
@@ -23,16 +21,14 @@ export function Dashboard(props) {
   return (
     <AdminLayout
       routeName={props.routeName}
+      showPdf={showPdf}
       setUrl={setUrl}
       setShowPdf={setShowPdf}
       setpositionChat={setpositionChat}
     >
       <Row className="main-content">
         <Col lg={url && showPdf ? 7 : 12} className={classNames("", { 'main-risk': url })}>
-          <RiskContent
-            isShowMaxHeight={isShowMaxHeight}
-            setValueSearch={setValueSearch}
-          />
+          <RiskContent setValueSearch={setValueSearch} />
           <ChatGPT
             isShowPDF={showPdf}
             isShowFullSidebar={positionChat}

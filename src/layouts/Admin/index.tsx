@@ -1,7 +1,8 @@
 import { useAppSelector } from "hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import Progressbar from "components/ProgressBar";
 import Sidebar from "./Sidebar";
 import Navmenu from "./Navmenu";
 import "assets/css/app.css";
@@ -9,18 +10,27 @@ import "./style.css";
 
 function AdminLayout(props) {
 
-  const { routeName, children, setUrl, setShowPdf, setpositionChat } = props;
+  const { routeName, showPdf, children, setUrl, setShowPdf, setpositionChat } = props;
 
   const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const [isLoading] = useAppSelector((state) => [state.app.isLoading])
 
   const [isShowFullSidebar, setIsShowFullSidebar] = useState<boolean>(true);
-  const [isLoading] = useAppSelector((state) => [state.app.isLoading])
+  const [currentStatus, setCurrentStatus] = useState<string>("upload")
 
   // Define a function called "toggleMenu" that toggles the value of "isShowFullSidebar" when called.
   const toggleMenu = () => {
     setIsShowFullSidebar(!isShowFullSidebar);
     routeName == 'dashboard' && setpositionChat(!isShowFullSidebar)
   };
+
+  const status = ['upload', 'analytics', 'done'];
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCurrentStatus(status[2])
+    }, 5000)
+  })
 
   return (
     <div className="wrapper">
@@ -39,10 +49,12 @@ function AdminLayout(props) {
         />
         <main>
           <Backdrop
-            sx={{ color: '#fff', zIndex: 99999 }}
+            sx={{ color: '#fff', zIndex: 2 }}
             open={isLoading}
           >
-            <CircularProgress color="inherit" />
+            {showPdf ?
+              <Progressbar currentStatus={currentStatus} />
+              : <CircularProgress color="inherit" />}
           </Backdrop>
           {!isLoading && children}
         </main>

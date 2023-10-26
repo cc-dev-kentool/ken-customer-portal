@@ -4,13 +4,12 @@ import { Col, Row } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { add as addAlert, remove as removeAlert } from "store/actions/alert"
 import { code } from "constants/error";
-import classNames from "classnames";
 
 // Define a function component named "RiskContent" and receive a single parameter called "props"
 export default function RiskContent(props) {
   const dispatch = useAppDispatch();
   // Destructure the "url" and "setValueSearch" props from the "props" object
-  const { isShowMaxHeight, setValueSearch } = props;
+  const { setValueSearch } = props;
 
   const [dataAnalysis] = useAppSelector((state) => [
     state.analysis.dataAnalysis
@@ -66,7 +65,7 @@ export default function RiskContent(props) {
 
   // Return the following JSX
   return (
-    <div className={classNames("risk-content", {"full-height" : isShowMaxHeight})}>
+    <div className="risk-content">
       <p className="title-risk">Risk Analysis Data</p>
       {dataAnalysis &&
         <div className="table-content">
