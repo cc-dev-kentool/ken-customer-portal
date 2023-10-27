@@ -57,3 +57,10 @@
 .error {
   color: red;
 }
+
+.login-form .fa-eye {
+  float: right;
+  margin: -28px 5px 0 0;
+  cursor: pointer;
+  color: #26ADC9;
+}

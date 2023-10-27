@@ -1,7 +1,6 @@
 /* css for popup dialog */
 .modal-dialog {
     max-width: none !important;
-    margin: 0;
     color: #000;
 }
 
@@ -12,6 +11,8 @@
 
 .modal-instruction .modal-body {
     padding: 20px 30px;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .modalContent {
