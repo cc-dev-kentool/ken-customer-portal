@@ -1,4 +1,5 @@
 import { Col, Row } from "react-bootstrap";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginValidation } from "schema/auth";
@@ -12,13 +13,12 @@ Exporting the Login component as a named function
 @param props - the props passed to the component
 @returns - the rendered component
 */
-export function Login(props) {
+export function Login() {
   const dispatch = useAppDispatch();
   // Using the useAppSelector hook to get variables from the Redux store
-  const [error, isLoginSuccess] = useAppSelector(
+  const [error] = useAppSelector(
     (state) => [
       state.auth.errorLogin,
-      state.auth.isLoginSuccess
     ]
   );
 
@@ -35,6 +35,8 @@ export function Login(props) {
   } = useForm({
     resolver: yupResolver(LoginValidation),
   });
+
+  const [isShowPassword, setIsShowPassword] = useState(false);
 
   // Function to handle form submission
   const onSubmit = async (data) => {
@@ -95,13 +97,14 @@ export function Login(props) {
               <div className="mb-3">
                 <label className="label-input">Password</label>
                 <input
-                  type="password"
+                  type={`${isShowPassword ? 'text' : 'password'}`}
                   {...register("password")}
                   className={`form-control ${errors.password ? "is-invalid" : ""
                     }`}
                   name="password"
                   placeholder="***************"
                 />
+                <i className="fa-regular fa-eye" onClick={() => setIsShowPassword(!isShowPassword)} />
                 <div className="invalid-feedback">
                   {errors.password?.message}
                 </div>

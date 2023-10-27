@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom"
 import { remove } from "store/actions/alert"
 import { useAppDispatch } from "hooks"
 
+const ListPrompt = lazy(() => import("pages/Prompt/ListPrompt"))
 const ListUser = lazy(() => import("pages/User/ListUser"))
 const Login = lazy(() => import("pages/Auth/Login"))
 const Dashboard = lazy(() => import("pages/Dashboard"))
@@ -26,14 +27,24 @@ type routes = routeItem & {
 
 const ROUTES: routes[] = [
   {
+    path: "/prompts", // URL pattern for the login route
+    key: "ROOT", // Unique identifier for this component instance
+    exact: true, // Exact match is required to load the component
+    component: ListPrompt, // Component that will be loaded on this route
+    routes: [], // Optional array of child routes if any
+    requiredAuth: true, // Indicates whether authentication is required or not
+    name: "prompts", // Identifier for this route
+    title: "Prompts", // Title that will be displayed in the header
+  },
+  {
     path: "/users", // URL pattern for the login route
     key: "ROOT", // Unique identifier for this component instance
     exact: true, // Exact match is required to load the component
     component: ListUser, // Component that will be loaded on this route
     routes: [], // Optional array of child routes if any
     requiredAuth: true, // Indicates whether authentication is required or not
-    name: "user", // Identifier for this route
-    title: "User", // Title that will be displayed in the header
+    name: "users", // Identifier for this route
+    title: "Users", // Title that will be displayed in the header
   },
   {
     path: "/login", // URL pattern for the login route

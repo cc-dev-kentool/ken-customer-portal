@@ -59,6 +59,7 @@ export default function EditUser(props) {
             {errors.email?.message}
           </div>
         </div>
+
         <div className="mb-3">
           <label className="label-input">Password</label>
           <input
@@ -74,6 +75,7 @@ export default function EditUser(props) {
             {errors.password?.message}
           </div>
         </div>
+        
         <div className="mb-3">
           <label className="label-input">Role</label>
           <input
@@ -86,14 +88,15 @@ export default function EditUser(props) {
           <div className="invalid-feedback">
             {errors.role?.message}
           </div>
-          <div className="text-center">
-            <button
-              type="submit"
-              className="btn-save"
-            >
-              Save
-            </button>
-          </div>
+        </div>
+
+        <div className="text-center">
+          <button
+            type="submit"
+            className="btn-save"
+          >
+            Save
+          </button>
         </div>
       </form>
     </div>
