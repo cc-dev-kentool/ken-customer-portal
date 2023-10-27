@@ -1,10 +1,10 @@
 import { Col, Row } from "react-bootstrap";
-import { Table } from 'antd';
 import { useEffect, useState } from "react";
 import { PopupDialog } from "components/Modals/PopUpDialog";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { getListUser } from "store/actions/user";
 import { upperFistChar } from "helpers/until";
+import { ContentTable } from "components/Table/ContentTable";
 import type { ColumnsType } from 'antd/es/table';
 import moment from "moment";
 import AdminLayout from "layouts/Admin";
@@ -26,20 +26,12 @@ export default function ListUser(props) {
   const dispatch = useAppDispatch();
 
   const [listUser] = useAppSelector((state) => [
-    state.users.listUser,
-    state.users.getListUserSuccess,
+    state.userSetting.listUser,
   ]);
 
-  const [heightTable, setHeightTable] = useState<number>(window.innerHeight - 320);
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
   const [currentUser, setcurrentUser] = useState<Object>({});
-
-  useEffect(() => {
-    window.addEventListener('resize', function () {
-      setHeightTable(this.window.innerHeight - 320);
-    });
-  }, [])
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
@@ -69,14 +61,14 @@ export default function ListUser(props) {
         },
       },
       render: (_, { role }) => (
-        <>
-          <p className={
-            classNames("", {
-              "role-admin": role === "admin",
-              "role-member": role === "member"
-            })}
-          >{upperFistChar(role)}</p>
-        </>
+        <p className={
+          classNames("", {
+            "role-admin": role === "admin",
+            "role-member": role === "member"
+          })}
+        >
+          {upperFistChar(role)}
+        </p>
       ),
     },
     {
@@ -126,16 +118,10 @@ export default function ListUser(props) {
           <Col sm={10} className="title">Users Management</Col>
           <Col sm={2} className="add-user"><button onClick={() => setIsShowAdd(true)}>+</button></Col>
         </Row>
-        <Table
+        <ContentTable
           columns={columns}
-          dataSource={listUser}
-          className="table-user"
-          scroll={{ x: 600, y: heightTable }}
-          onRow={(user) => ({
-            onClick: () => {
-              handleShowPopupEdit(user)
-            }
-          })}
+          listUser={listUser}
+          handleShowPopupEdit={handleShowPopupEdit}
         />
 
         <PopupDialog

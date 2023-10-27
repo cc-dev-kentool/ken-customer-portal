@@ -11,7 +11,7 @@ const initialState = {
 }
 
 // Declaring the modal reducer function
-const getAnalysisData = (state = initialState, action) => {
+const userSetting = (state = initialState, action) => {
   switch (action.type) {
     // Case for GET_LIST_USER action type.
     case userActionType.GET_LIST_USER:
@@ -44,4 +44,4 @@ const getAnalysisData = (state = initialState, action) => {
 }
 
 // Exporting auth reducer function as default.
-export default getAnalysisData
+export default userSetting

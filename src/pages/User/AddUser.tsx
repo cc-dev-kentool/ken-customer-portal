@@ -68,6 +68,7 @@ export default function AddUser(props) {
             {errors.email?.message}
           </div>
         </div>
+        
         <div className="mb-3">
           <label className="label-input">Password</label>
           <input
@@ -83,6 +84,7 @@ export default function AddUser(props) {
             {errors.password?.message}
           </div>
         </div>
+
         <div className="mb-3">
           <label className="label-input">Role</label>
           <input
@@ -97,7 +99,9 @@ export default function AddUser(props) {
           <div className="invalid-feedback">
             {errors.role?.message}
           </div>
-          <div className="text-center">
+        </div>
+        
+        <div className="text-center">
             <button
               type="submit"
               className="btn-save"
@@ -105,7 +109,6 @@ export default function AddUser(props) {
               Save
             </button>
           </div>
-        </div>
       </form>
     </div>
   );

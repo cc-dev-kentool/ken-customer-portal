@@ -22,6 +22,10 @@ export const formatDateTime = (dateTime) => {
 
 // Function to display the label in shortened form with an ellipsis (...) after a certain length
 export const labelDisplay = (text, len): string =>
+  text && text.length > len ? text.substring(0, len) + "..." : text;
+
+// Function to display the label in shortened form with an ellipsis (...) after a certain length
+export const fileNameDisplay = (text, len): string =>
   text && text.length > len ? text.substring(0, len) + "... .pdf" : text;
 
 // Function that prevents non-numeric inputs in a float input field

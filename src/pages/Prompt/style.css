@@ -11,31 +11,21 @@
     font-weight: bold;
 }
 
-.user-managerment .add-user {
+.user-managerment .add-prompt {
     text-align: right;
     font-size: 30px;
 }
 
-.user-managerment .add-user button {
-    background-color: #26ADC9;
+.user-managerment .add-prompt button {
+    background-color: #ccc;
     padding: 0px 17px 5px 17px;
     border-radius: 50%;
     border: none;
     color: #fff;
 }
 
-.user-managerment .add-user button:hover {
-    background-color: #A8DEE9;
-    border-color: #A8DEE9;
-}
-
-.user-managerment .add-user button:active {
-    background-color: #A8DEE9;
-    border: none;
-}
-
-.date-update {
-    min-width: 300px !important;
+.user-managerment .table-user {
+    margin-top: 20px;
 }
 
 .role-admin,
