@@ -23,7 +23,7 @@ export default function ChatGPT(props) {
       "ChatOpenAI-0PCKA": {},
       "CombineDocsChain-YGAcN": {},
       "RetrievalQA-zoGLL": {
-        "return_source_documents": false
+        return_source_documents: false,
       },
       "PyPDFLoader-Uz4Cg": {
         "file_path": filePath
@@ -38,11 +38,11 @@ export default function ChatGPT(props) {
       setHeightChat(window.innerHeight / 100 * 50);
       setWidthChat(window.innerWidth / 100 * 40);
     });
-  }, [])
+  }, []);
 
   const sendIconStyle = {
-    stroke: "#26ADC9"
-  }
+    stroke: "#26ADC9",
+  };
 
   const chatWindowStyle = {
     backgroundColor: filePath ? "#26ADC9" : "#adb5bd",
@@ -71,7 +71,6 @@ export default function ChatGPT(props) {
         chat_position='top-right'
         send_icon_style={JSON.stringify(sendIconStyle)}
         chat_trigger_style={JSON.stringify(chatWindowStyle)}
-        // bot_message_style={JSON.stringify(chatWindowStyle)}
         user_message_style={JSON.stringify(chatWindowStyle)}
       />
     </div>
