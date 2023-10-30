@@ -45,34 +45,35 @@ export default function ChatGPT(props) {
   };
 
   const chatWindowStyle = {
-    backgroundColor: filePath ? "#26ADC9" : "#adb5bd",
-  }
-
-  const isDisableChat = () => filePath ? "auto" : "none"
+    backgroundColor: "#26ADC9",
+  };
 
   return (
-    <div style={{pointerEvents: isDisableChat()}}>
-      <langflow-chat
-        flow_id={process.env.REACT_APP_LANGFLOW_ID}
-        chat_inputs='{"input":""}'
-        chat_input_field="query"
-        tweaks= {JSON.stringify(getTweaks())}
-        chat_output_field="result"
-        host_url={process.env.REACT_APP_LANGFLOW_HOST_URL}
-        window_title=""
-        style={{
-          position: 'absolute',
-          bottom: '10px',
-          left: `${isShowFullSidebar ? '270px' : '140px'}`,
-          zIndex: 10,
-        }}
-        height={heightChat}
-        width={widthChat}
-        chat_position='top-right'
-        send_icon_style={JSON.stringify(sendIconStyle)}
-        chat_trigger_style={JSON.stringify(chatWindowStyle)}
-        user_message_style={JSON.stringify(chatWindowStyle)}
-      />
+    <div>
+      {filePath &&
+        (
+          <langflow-chat
+            flow_id={process.env.REACT_APP_LANGFLOW_ID}
+            chat_inputs='{"input":""}'
+            chat_input_field="query"
+            tweaks={JSON.stringify(getTweaks())}
+            chat_output_field="result"
+            host_url={process.env.REACT_APP_LANGFLOW_HOST_URL}
+            window_title=""
+            style={{
+              position: "absolute",
+              bottom: "10px",
+              left: `${isShowFullSidebar ? "270px" : "140px"}`,
+              zIndex: 10,
+            }}
+            height={heightChat}
+            width={widthChat}
+            chat_position="top-right"
+            send_icon_style={JSON.stringify(sendIconStyle)}
+            chat_trigger_style={JSON.stringify(chatWindowStyle)}
+            user_message_style={JSON.stringify(chatWindowStyle)}
+          />
+        )}
     </div>
-  );
+  )
 }
