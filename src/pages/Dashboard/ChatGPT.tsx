@@ -30,14 +30,13 @@ export default function ChatGPT(props) {
       }
     }
   }
-  const [heightChat, setHeightChat] = useState<number>(document.body.scrollHeight - 300);
-  const width = document.body.scrollWidth - 400
-  const [widthChat, setWidthChat] = useState<number>(width);
+  const [heightChat, setHeightChat] = useState<number>(window.innerHeight / 100 * 50);
+  const [widthChat, setWidthChat] = useState<number>(window.innerWidth / 100 * 40);
 
   useEffect(() => {
     window.addEventListener('resize', function () {
-      setHeightChat(document.body.scrollHeight - 300);
-      setWidthChat(document.body.scrollWidth -400);
+      setHeightChat(window.innerHeight / 100 * 50);
+      setWidthChat(window.innerWidth / 100 * 40);
     });
   }, [])
 
@@ -72,7 +71,7 @@ export default function ChatGPT(props) {
         chat_position='top-right'
         send_icon_style={JSON.stringify(sendIconStyle)}
         chat_trigger_style={JSON.stringify(chatWindowStyle)}
-        bot_message_style={JSON.stringify(chatWindowStyle)}
+        // bot_message_style={JSON.stringify(chatWindowStyle)}
         user_message_style={JSON.stringify(chatWindowStyle)}
       />
     </div>

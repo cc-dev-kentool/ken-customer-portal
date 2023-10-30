@@ -34,19 +34,19 @@ export function login(data) {
           payload: "",
         });
 
-        if (result.data.data.user.role === "admin") {
-          window.location.href = "/users";
-        } else {
-          window.location.href = "/";
-        }
+        window.location.href = "/";
       })
       .catch((err) => {
         // If there is an error, set loading state to false and set error message
         dispatch(setLoading(false));
+        let message = "The email or password you entered is incorrect. Please try again!"
+        window.addEventListener('offline', function() {
+          console.log("check");
+          message = "Please check your Internet connection and try again."
+        });
         dispatch({
           type: authActionType.ERROR_LOGIN,
-          payload:
-            "The email or password you entered is incorrect. Please try again!",
+          payload: message,
         });
       });
   };

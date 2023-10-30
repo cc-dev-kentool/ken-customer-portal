@@ -4,7 +4,7 @@ import classNames from "classnames";
 
 // Define a function called "Sidebar" which receives a single parameter called "props"
 export default function SidebarMember(props) {
-  const { isShowFiles, isShowFullSidebar, setshowModalUplaod, setIsShowFiles } = props;
+  const { routeName, isShowFiles, isShowFullSidebar, setshowModalUplaod, setIsShowFiles } = props;
 
   const dispatch = useAppDispatch();
 
@@ -23,11 +23,15 @@ export default function SidebarMember(props) {
   // Return the following JSX
   return (
     <>
-      <button className="btn-add-document" onClick={() => {
-        dispatch(removeAlert())
-        setshowModalUplaod(true)
-      }
-      }>
+      <button
+        // className="btn-add-document"
+        className={`btn-add-document ${routeName !== 'dashboard' && 'btn-disabled'}`}
+        onClick={() => {
+          dispatch(removeAlert())
+          setshowModalUplaod(true)
+        }}
+        disabled={routeName !== 'dashboard'}
+      >
         <i className="fa-regular fa-plus fs-1"></i><br />
         {isShowFullSidebar && <span>New Document</span>}
       </button>

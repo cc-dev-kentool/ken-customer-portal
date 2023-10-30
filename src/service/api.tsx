@@ -47,13 +47,13 @@ const handleErrorRequest = (err) => {
     // No response was received from the server
     return Promise.reject()
   }
-  else if (err.response?.status === 401) {
-    // Token expired or invalid, redirect to login page and clear localStorage
-    localStorage.clear()
-    localStorage.setItem("isTokenExpired", "true")
-    window.location.href = "/login?continue=" + encodeURIComponent(window.location.href); // Navigating to login page
-    return Promise.reject()
-  }
+  // else if (err.response?.status === 401) {
+  //   // Token expired or invalid, redirect to login page and clear localStorage
+  //   localStorage.clear()
+  //   localStorage.setItem("isTokenExpired", "true")
+  //   window.location.href = "/login?continue=" + encodeURIComponent(window.location.href); // Navigating to login page
+  //   return Promise.reject()
+  // }
   else if (err.response?.status === 406) {
     // User must change password before continuing, redirect to login page and clear localStorage
     localStorage.clear()

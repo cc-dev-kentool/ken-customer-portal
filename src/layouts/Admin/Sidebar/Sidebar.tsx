@@ -74,14 +74,13 @@ export default function Sidebar(props) {
             <SidebarAdmin routeName={routeName} isShowFullSidebar={isShowFullSidebar} />
           }
 
-          {user.role === "member" &&
-            <SidebarMember
-              isShowFiles={isShowFiles}
-              isShowFullSidebar={isShowFullSidebar}
-              setshowModalUplaod={setshowModalUplaod}
-              setIsShowFiles={setIsShowFiles}
-            />
-          }
+          <SidebarMember
+            routeName={routeName}
+            isShowFiles={isShowFiles}
+            isShowFullSidebar={isShowFullSidebar}
+            setshowModalUplaod={setshowModalUplaod}
+            setIsShowFiles={setIsShowFiles}
+          />
         </div>
       </div>
 

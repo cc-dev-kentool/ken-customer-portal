@@ -1,3 +1,7 @@
+.table-user {
+    margin-top: 20px;
+}
+
 .ant-table {
     border: 1px solid #E5E5E5 !important;
     border-radius: 8px !important;
@@ -40,16 +44,4 @@
 .ant-pagination-item-link {
     color: #000 !important;
     border-radius: 50% !important;
-}
-
-.popup-content {
-    background: #666666;
-    border-radius: 8px;
-    padding: 10px;
-    color: #fff;
-    margin: auto;
-}
-
-.popup-arrow {
-    opacity: 0%;
 }

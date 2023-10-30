@@ -75,7 +75,7 @@ export default function ListUser(props) {
       title: 'Created Date',
       dataIndex: 'created_at',
       width: '20%',
-      sortOrder: "descend",
+      defaultSortOrder: "descend",
       sorter: {
         compare: (a, b) => {
           return a.created_at > b.created_at ? 1 : -1;

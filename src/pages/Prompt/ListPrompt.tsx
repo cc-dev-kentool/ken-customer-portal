@@ -5,12 +5,12 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { ContentTable } from "components/Table/ContentTable";
 import { getListPrompt } from "store/actions/prompt";
 import { labelDisplay } from "helpers/until";
+import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import type { ColumnsType } from 'antd/es/table';
 import moment from "moment";
 import AdminLayout from "layouts/Admin";
 import EditPrompt from "./EditPrompt";
 import './style.css';
-import Popup from "reactjs-popup";
 
 interface DataType {
   uuid: string;
@@ -45,6 +45,7 @@ export default function ListPrompt(props) {
       title: 'Topic',
       dataIndex: 'topic_name',
       key: 'topic_name',
+      defaultSortOrder: 'descend',
       width: '15%',
       sorter: {
         compare: (a, b) => {
@@ -61,17 +62,17 @@ export default function ListPrompt(props) {
           return a.prompt_text_1 > b.prompt_text_1 ? 1 : -1;
         },
       },
-      render: (_, { prompt_text_1 }) => {
-        return <Popup
-          trigger={<span> {labelDisplay(prompt_text_1, 100)} </span>}
-          position="bottom center"
-          on="hover"
-          contentStyle={{maxWidth: window.innerWidth * 70 / 100}}
-        >
-          <p className="text-break">
-            {prompt_text_1}
+      render: (_, { prompt_text_1, uuid }) => {
+        return <>
+          <p data-tooltip-id={`tooltip-1-${uuid}`}>
+            {prompt_text_1?.length > 100 ? labelDisplay(prompt_text_1, 100) : prompt_text_1}
           </p>
-        </Popup>
+          {prompt_text_1?.length > 100 &&
+            <ReactTooltip
+              id={`tooltip-1-${uuid}`}
+              content={prompt_text_1}
+            />}
+        </>
       }
     },
     {
@@ -83,17 +84,17 @@ export default function ListPrompt(props) {
           return a.prompt_text_2 > b.prompt_text_2 ? 1 : -1;
         },
       },
-      render: (_, { prompt_text_2 }) => {
-        return <Popup
-          trigger={<span> {labelDisplay(prompt_text_2, 100)} </span>}
-          position="bottom center"
-          on="hover"
-          contentStyle={{maxWidth: window.innerWidth * 70 / 100}}
-        >
-          <p className="text-break">
-            {prompt_text_2}
+      render: (_, { prompt_text_2, uuid }) => {
+        return <>
+          <p data-tooltip-id={`tooltip-2-${uuid}`}>
+            {prompt_text_2?.length > 100 ? labelDisplay(prompt_text_2, 100) : prompt_text_2}
           </p>
-        </Popup>
+          {prompt_text_2?.length > 100 &&
+            <ReactTooltip
+              id={`tooltip-2-${uuid}`}
+              content={prompt_text_2}
+            />}
+        </>
       }
     },
     {
@@ -105,17 +106,17 @@ export default function ListPrompt(props) {
           return a.prompt_text_3 > b.prompt_text_3 ? 1 : -1;
         },
       },
-      render: (_, { prompt_text_3 }) => {
-        return <Popup
-          trigger={<span> {labelDisplay(prompt_text_3, 100)} </span>}
-          position="bottom center"
-          on="hover"
-          contentStyle={{maxWidth: window.innerWidth * 70 / 100}}
-        >
-          <p className="text-break">
-            {prompt_text_3}
+      render: (_, { prompt_text_3, uuid }) => {
+        return <>
+          <p data-tooltip-id={`tooltip-3-${uuid}`}>
+            {prompt_text_3?.length > 100 ? labelDisplay(prompt_text_3, 100) : prompt_text_3}
           </p>
-        </Popup>
+          {prompt_text_3?.length > 100 &&
+            <ReactTooltip
+              id={`tooltip-3-${uuid}`}
+              content={prompt_text_3}
+            />}
+        </>
       }
     },
     {
@@ -133,7 +134,6 @@ export default function ListPrompt(props) {
       title: 'Update Date',
       dataIndex: 'update_at',
       width: '11%',
-      sortOrder: "descend",
       sorter: {
         compare: (a, b) => {
           return a.update_at > b.update_at ? 1 : -1;
