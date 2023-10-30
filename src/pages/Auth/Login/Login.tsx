@@ -62,12 +62,12 @@ export function Login() {
               <p className="title">Login</p>
 
               <p className="error invalid-">{error}</p>
-              {/* {isTokenExpired && !error && (
+              {isTokenExpired && !error && (
                 <p className="error invalid-">
                   Your session has expired. Please login again to
                   continue!
                 </p>
-              )} */}
+              )}
 
               <div className="mb-3">
                 <label className="label-input">
