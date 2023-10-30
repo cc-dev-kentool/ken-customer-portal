@@ -16,7 +16,8 @@ export function login(data) {
       email: data.username,
       password: data.password,
     }
-    await API({ url: "/login", method: "POST", data })
+    if (navigator.onLine) {
+      await API({ url: "/login", method: "POST", data })
       .then((result) => {
         // Set loading state to false
         dispatch(setLoading(false));
@@ -39,16 +40,19 @@ export function login(data) {
       .catch((err) => {
         // If there is an error, set loading state to false and set error message
         dispatch(setLoading(false));
-        let message = "The email or password you entered is incorrect. Please try again!"
-        window.addEventListener('offline', function() {
-          console.log("check");
-          message = "Please check your Internet connection and try again."
-        });
         dispatch({
           type: authActionType.ERROR_LOGIN,
-          payload: message,
+          payload: "The email or password you entered is incorrect. Please try again!",
         });
       });
+    } else {
+      dispatch(setLoading(false));
+      dispatch({
+        type: authActionType.ERROR_LOGIN,
+        payload: "Please check your Internet connection and try again.",
+      });
+    }
+    
   };
 }
 
