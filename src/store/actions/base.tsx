@@ -9,7 +9,7 @@ export function onError(err) {
     // Calling the setLoading function with argument false to set loading to false
     dispatch(setLoading(false))
     // Checking if err.data.code exists in error constant
-    const msg = err?.data?.code in error ? error[err?.data?.code] : code["502"]
+    const msg = err?.data?.message in error ? error[err?.data?.message] : code["502"]
     // Calling the addAlert function with message and danger as arguments
     dispatch(addAlert(msg, "danger"))
     setTimeout(() => dispatch(removeAlert()), 5000)

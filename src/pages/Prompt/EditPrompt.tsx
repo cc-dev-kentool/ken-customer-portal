@@ -89,7 +89,7 @@ export default function EditPrompt(props) {
           <label className="label-input">Text 3</label>
           <textarea
             rows={4}
-            {...register("prompt_text_1")}
+            {...register("prompt_text_3")}
             className={`form-control ${errors.prompt_text_3 ? "is-invalid" : ""}`}
             name="prompt_text_3"
             defaultValue={currentPrompt?.prompt_text_3}

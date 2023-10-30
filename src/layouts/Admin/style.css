@@ -62,6 +62,11 @@
   border-color: #A8DEE9;
 }
 
+.sidebar .btn-disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+}
+
 .sidebar .sidebar-nav {
   margin-bottom: 15px;
   border-radius: 10px;
