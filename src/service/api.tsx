@@ -47,7 +47,7 @@ const handleErrorRequest = (err) => {
     // No response was received from the server
     return Promise.reject()
   }
-  else if (err.response?.status === 401) {
+  else if (err.response?.data?.data === "Signature has expired") {
     // Token expired or invalid, redirect to login page and clear localStorage
     localStorage.clear()
     localStorage.setItem("isTokenExpired", "true")

@@ -6,7 +6,7 @@ export default function SidebarAdmin(props) {
 
   // Return the following JSX
   return (
-    <ul className="sidebar-nav text-left">
+    <ul className="sidebar-nav text-left main-menu">
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'users' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/users">
           <i className="fa-solid fa-user-group" style={{ color: `${routeName === 'users' ? '#fff' : '#000'}` }}></i>
@@ -19,9 +19,9 @@ export default function SidebarAdmin(props) {
           {isShowFullSidebar && <span>Prompt Management</span>}
         </a>
       </li>
-      <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'dashboard' })}>
+      <li className={"sidebar-item"}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/">
-          <i className="fa-regular fa-file-lines" style={{ color: `${routeName === 'dashboard' ? '#fff' : '#000'}` }}></i>
+          <i className="fa-regular fa-file-lines" style={{ color: '#000' }}></i>
           {isShowFullSidebar && <span>Export Data </span>}
         </a>
       </li>

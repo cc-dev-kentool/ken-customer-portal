@@ -74,18 +74,17 @@ export default function Sidebar(props) {
             <SidebarAdmin routeName={routeName} isShowFullSidebar={isShowFullSidebar} />
           }
 
-          {user.role === "member" &&
-            <SidebarMember
-              isShowFiles={isShowFiles}
-              isShowFullSidebar={isShowFullSidebar}
-              setshowModalUplaod={setshowModalUplaod}
-              setIsShowFiles={setIsShowFiles}
-            />
-          }
+          <SidebarMember
+            routeName={routeName}
+            isShowFiles={isShowFiles}
+            isShowFullSidebar={isShowFullSidebar}
+            setshowModalUplaod={setshowModalUplaod}
+            setIsShowFiles={setIsShowFiles}
+          />
         </div>
       </div>
 
-      <p className={classNames("version", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}>KEN &copy; 1.0.0.5</p>
+      <p className={classNames("version", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}>KEN &copy; 1.0.0.6</p>
 
       <PopupDialog
         isShow={showModalUplaod}

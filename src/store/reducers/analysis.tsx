@@ -3,7 +3,7 @@ import { analysisActionType } from "../actionTypes"
 // Initial state of Modal
 const initialState = {
   dataAnalysis: [],
-  filePath: ""
+  filePath: "",
 }
 
 // Declaring the modal reducer function

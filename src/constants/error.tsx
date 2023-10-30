@@ -18,7 +18,9 @@ export const error = {
     "TestingServiceDoesNotBelongsToTheSameMaterial": "Wrong book test service. Please make sure the test service belong to the same material with the sample.",
     "PermissionDeniedAgsImport": "Cannot import this file. You don't have permission on this project.",
     "TestingRequestBelongsToAnotherProject": "Cannot import this file. The testing request already belongs to another project.",
-    "SampleBelongsToAnotherProject": "Cannot import this file. The sample already belongs to another project."
+    "SampleBelongsToAnotherProject": "Cannot import this file. The sample already belongs to another project.",
+    "TopicExistException": "Topic exist exception!",
+    "User exists, canot register again!": "User exists, canot register again!",
 
 }
 

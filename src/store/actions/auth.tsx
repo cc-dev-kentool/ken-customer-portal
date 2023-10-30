@@ -16,7 +16,8 @@ export function login(data) {
       email: data.username,
       password: data.password,
     }
-    await API({ url: "/login", method: "POST", data })
+    if (navigator.onLine) {
+      await API({ url: "/login", method: "POST", data })
       .then((result) => {
         // Set loading state to false
         dispatch(setLoading(false));
@@ -34,21 +35,24 @@ export function login(data) {
           payload: "",
         });
 
-        if (result.data.data.user.role === "admin") {
-          window.location.href = "/users";
-        } else {
-          window.location.href = "/";
-        }
+        window.location.href = "/";
       })
       .catch((err) => {
         // If there is an error, set loading state to false and set error message
         dispatch(setLoading(false));
         dispatch({
           type: authActionType.ERROR_LOGIN,
-          payload:
-            "The email or password you entered is incorrect. Please try again!",
+          payload: "The email or password you entered is incorrect. Please try again!",
         });
       });
+    } else {
+      dispatch(setLoading(false));
+      dispatch({
+        type: authActionType.ERROR_LOGIN,
+        payload: "Please check your Internet connection and try again.",
+      });
+    }
+    
   };
 }
 
