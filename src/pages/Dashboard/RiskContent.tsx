@@ -1,42 +1,13 @@
 import { statusRisk } from "constants/riskAnalysis";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
-import { useAppDispatch, useAppSelector } from "hooks";
-import { add as addAlert, remove as removeAlert } from "store/actions/alert"
-import { code } from "constants/error";
+import generatePDF, { Margin } from 'react-to-pdf';
 
 // Define a function component named "RiskContent" and receive a single parameter called "props"
 export default function RiskContent(props) {
-  const dispatch = useAppDispatch();
+
   // Destructure the "url" and "setValueSearch" props from the "props" object
-  const { setValueSearch } = props;
-
-  const [dataAnalysis] = useAppSelector((state) => [
-    state.analysis.dataAnalysis
-  ]);
-
-  useEffect(() => {
-    if (!dataAnalysis) {
-      dispatch(addAlert(code["502"], "danger"))
-      setTimeout(() => dispatch(removeAlert()), 5000)
-    }
-  }, [dataAnalysis])
-
-  // Define a state variable named "topic" using the useState hook with an initial value of an array of objects
-  const [topic, setTopic] = useState<Array<object>>([
-    { name: 'Governing law', isShow: true },
-    { name: 'Court jurisdiction', isShow: true },
-    { name: 'Arbitration', isShow: true },
-    { name: 'Court jurisdiction and arbitration clause interaction', isShow: true },
-    { name: 'War', isShow: true },
-    { name: 'Communicable disease', isShow: true },
-    { name: 'NCBR', isShow: true },
-    { name: 'Cyber', isShow: true },
-    { name: 'Sanctions', isShow: true },
-    { name: 'RUB', isShow: true },
-    { name: 'Unused definitions', isShow: true },
-    { name: 'Readability', isShow: true },
-  ]);
+  const { dataAnalysis, topic, isDowndLoad, setTopic, setIsDowndLoad, setValueSearch } = props;
 
   // Define a function named "getStatusRisk" that takes a "status" parameter and returns a value from the "statusRisk" array based on the label
   const getStatusRisk = (status) => {
@@ -63,10 +34,28 @@ export default function RiskContent(props) {
     setValueSearch(text)
   }
 
+  const exportPDf = () => {
+    setIsDowndLoad(true);
+  }
+
+  useEffect(() => {
+    if (isDowndLoad) {
+      const getTargetElement = () => document.getElementById('divToPrint');
+      generatePDF(getTargetElement, { filename: 'page.pdf', page: { margin: Margin.MEDIUM } })
+      setIsDowndLoad(false);
+    }
+  }, [isDowndLoad])
+
   // Return the following JSX
   return (
     <div className="risk-content">
       <p className="title-risk">Risk Analysis Data</p>
+      {Object.keys(dataAnalysis).length > 0 && (
+        <i
+          className="fa-regular fa-file-pdf fa-2xl"
+          style={{ color: "#26ADC9" }}
+          onClick={exportPDf}
+        />)}
       {dataAnalysis &&
         <div className="table-content">
           {Object.keys(dataAnalysis).map((key) => {
