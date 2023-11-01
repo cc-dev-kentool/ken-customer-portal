@@ -25,12 +25,11 @@ export default function SidebarMember(props) {
     <>
       <button
         // className="btn-add-document"
-        className={`btn-add-document ${routeName !== 'dashboard' && 'btn-disabled'}`}
+        className={`btn-add-document`}
         onClick={() => {
           dispatch(removeAlert())
           setshowModalUplaod(true)
         }}
-        disabled={routeName !== 'dashboard'}
       >
         <i className="fa-regular fa-plus fs-1"></i><br />
         {isShowFullSidebar && <span>New Document</span>}

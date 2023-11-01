@@ -4,7 +4,7 @@ import { useAppDispatch } from "hooks";
 import { getAnalysisData } from "store/actions/analysis";
 import { remove as removeAlert } from "store/actions/alert"
 import classNames from "classnames";
-import UploadFile from "pages/Dashboard/UploadFile";
+import UploadFile from "pages/Analyses/UploadFile";
 import SidebarAdmin from "./SidebarAdmin";
 import SidebarMember from "./SidebarMember";
 
@@ -74,13 +74,14 @@ export default function Sidebar(props) {
             <SidebarAdmin routeName={routeName} isShowFullSidebar={isShowFullSidebar} />
           }
 
+          {(user.role === "member" || (user.role === "admin" && routeName === "analyses")) && 
           <SidebarMember
             routeName={routeName}
             isShowFiles={isShowFiles}
             isShowFullSidebar={isShowFullSidebar}
             setshowModalUplaod={setshowModalUplaod}
             setIsShowFiles={setIsShowFiles}
-          />
+          />}
         </div>
       </div>
 
