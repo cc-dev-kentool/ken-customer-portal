@@ -35,6 +35,12 @@
   margin: 10px;
 }
 
+.risk-content .fa-file-pdf {
+  float: right;
+  margin: -23px 5px 0 0;
+  cursor: pointer;
+}
+
 .table-content {
   overflow-y: auto;
   overflow-x: hidden;
