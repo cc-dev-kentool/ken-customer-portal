@@ -2,7 +2,7 @@ import { useAppSelector } from "hooks";
 import { useEffect, useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import Progressbar from "components/ProgressBar";
+import Progressbar from "components/Progress/ProgressBar";
 import Navmenu from "./Navmenu";
 import Sidebar from "./Sidebar/Sidebar";
 import "assets/css/app.css";

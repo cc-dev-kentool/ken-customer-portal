@@ -11,7 +11,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 // Define a function component named "PdfDocument" and receive a single parameter called "props"
 export default function PdfDocument(props) {
   // Destructure the "url", "valueSearch", and "setShowPdf" props from the "props" object
-  const { url, isJump, pageNumber, valueSearch, setShowPdf } = props;
+  const { url, isJump, pageNumber, valueSearch, setShowPdf, setIsJump } = props;
 
   // Define a transform function for the TransformToolbarSlot type
   const transform: TransformToolbarSlot = (slot: ToolbarSlot) => {
@@ -23,7 +23,7 @@ export default function PdfDocument(props) {
       GoToPreviousPage: () => <></>,
       GoToNextPage: () => <></>,
       Open: () => <></>,
-      ShowSearchPopover: () => <></>,
+      // ShowSearchPopover: () => <></>,
       NumberOfPages: () => <span className="text-white">/ <NumberOfPages /></span>
     }
   }
@@ -40,7 +40,13 @@ export default function PdfDocument(props) {
   const { jumpToPage } = jumpToPagePluginInstance;
 
   useEffect(() => {
-    jumpToPage(pageNumber)
+    if (isJump) {
+      console.log("before", new Date());
+      jumpToPage(pageNumber)
+      setIsJump(false);
+      console.log("after", new Date());
+
+    }
   }, [isJump])
 
   // Define an onHighlight function that takes a value to search for and highlights it
