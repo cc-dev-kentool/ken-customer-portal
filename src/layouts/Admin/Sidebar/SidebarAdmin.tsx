@@ -19,6 +19,12 @@ export default function SidebarAdmin(props) {
           {isShowFullSidebar && <span>User Management</span>}
         </a>
       </li>
+      <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'contracts' })}>
+        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/contracts">
+          <i className="fa-solid fa-user-group" style={{ color: `${routeName === 'contracts' ? '#fff' : '#000'}` }}></i>
+          {isShowFullSidebar && <span>Contracts History</span>}
+        </a>
+      </li>
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'prompts' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/prompts">
           <i className="fa-regular fa-comment" style={{ color: `${routeName === 'prompts' ? '#fff' : '#000'}` }}></i>

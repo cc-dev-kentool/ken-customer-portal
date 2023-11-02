@@ -35,7 +35,11 @@ export function login(data) {
           payload: "",
         });
 
-        window.location.href = "/";
+        if (result.data.data.user.role === "admin") {
+          window.location.href = "/";
+        } else {
+          window.location.href = "/analyses";
+        }
       })
       .catch((err) => {
         // If there is an error, set loading state to false and set error message

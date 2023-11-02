@@ -19,7 +19,6 @@
 
 .ant-table-cell-row-hover {
     background: #f4fbfc !important;
-    cursor: pointer !important;
 }
 
 .ant-table-column-sorter-down.active,

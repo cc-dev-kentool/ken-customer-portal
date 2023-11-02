@@ -18,10 +18,10 @@ export function Dashboard(props) {
             <div className="left-content">
               <Row>
                 <Col>
-                  <p className="icon-users">
+                  <a href="/users" className="icon-users">
                     <i className="fa-solid fa-user-clock fa-2xl"></i>
                     <span className="label">Users</span>
-                  </p>
+                  </a>
                 </Col>
                 <Col>
                   <p className="icon-rotata"><i className="fa-solid fa-rotate fa-2xl"></i></p>
@@ -58,10 +58,10 @@ export function Dashboard(props) {
             <div className="right-content">
               <Row >
                 <Col>
-                  <p className="icon-users">
+                  <a href="/contracts" className="icon-users">
                     <i className="fa-solid fa-file-contract fa-2xl"></i>
                     <span className="label">Contracts</span>
-                  </p>
+                  </a>
                 </Col>
                 <Col>
                   <p className="icon-rotata"><i className="fa-solid fa-rotate fa-2xl"></i></p>

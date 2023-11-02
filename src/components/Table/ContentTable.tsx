@@ -11,11 +11,10 @@ type Props = {
   listUser: object[];
   currentHeight?: number;
   currentWidth?: number;
-  handleShowPopupEdit?: any;
 }
 
 export function ContentTable(props: Props) {
-  const { columns, listUser, currentHeight, currentWidth, handleShowPopupEdit } = props
+  const { columns, listUser, currentHeight, currentWidth } = props
 
   const [heightTable, setHeightTable] = useState<number>(window.innerHeight - 310);
 
@@ -35,11 +34,6 @@ export function ContentTable(props: Props) {
       dataSource={listUser}
       className="table-user"
       scroll={{ x: Width, y: height }}
-      onRow={(data) => ({
-        onClick: () => {
-          handleShowPopupEdit(data)
-        }
-      })}
     />
   )
 }

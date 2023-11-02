@@ -10,6 +10,7 @@ import moment from "moment";
 import AdminLayout from "layouts/Admin";
 import AddUser from "./AddUser";
 import EditUser from "./EditUser";
+import LoginHistory from "./LoginHistory";
 import classNames from "classnames";
 import './style.css';
 
@@ -18,6 +19,8 @@ interface DataType {
   email: string;
   role: string;
   created_at: string;
+  login: string;
+  contracts: number;
 }
 
 // Defines a React functional component called "List" that takes props as its parameter
@@ -31,7 +34,9 @@ export default function ListUser(props) {
 
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
+  const [isShowHistory, setIsShowHistory] = useState<boolean>(false);
   const [currentUser, setcurrentUser] = useState<Object>({});
+  const [currentEmail, setCurrentEmail] = useState<string>();
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
@@ -51,10 +56,54 @@ export default function ListUser(props) {
       },
     },
     {
+      title: 'Last login',
+      dataIndex: 'login',
+      key: 'login',
+      sorter: {
+        compare: (a, b) => {
+          return a.login > b.login ? 1 : -1;
+        },
+      },
+      width: '25%',
+      render: (_, { login, email }) => (
+        <Row className="last-login">
+          <Col sm="10" className="last-login-item-left">
+            <ul>
+              <li>Last logined: 3 days 2 hours ago</li>
+              <li>Duration: 50 minutes</li>
+            </ul>
+          </Col>
+          <Col sm="2" className="pl-0 last-login-item-right">
+            <p className="icon-action">
+              <i
+                className="fa-solid fa-ellipsis"
+                onClick={() => handleShowPopupHistory(email)}
+              />
+            </p>
+          </Col>
+        </Row>
+
+      ),
+    },
+    {
+      title: 'Num Of Contract',
+      dataIndex: 'contracts',
+      key: 'contracts',
+      width: '15%',
+      sorter: {
+        compare: (a, b) => {
+          return a > b ? 1 : -1;
+        },
+      },
+      render: (_, { contracts }) => (
+        <p>30</p>
+      ),
+    },
+    {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
-      width: '20%',
+      width: '15%',
       sorter: {
         compare: (a, b) => {
           return a.role > b.role ? 1 : -1;
@@ -74,7 +123,7 @@ export default function ListUser(props) {
     {
       title: 'Created Date',
       dataIndex: 'created_at',
-      width: '20%',
+      width: '18%',
       defaultSortOrder: "descend",
       sorter: {
         compare: (a, b) => {
@@ -87,11 +136,13 @@ export default function ListUser(props) {
     },
     {
       title: 'Action',
-      width: '10%',
-      render: () => (
-        <p>
-          <i className="fa-solid fa-pen" style={{ color: "#26ADC9" }}></i>
-        </p>
+      width: '11%',
+      render: (user) => (
+        <i
+          className="fa-solid fa-pen"
+          style={{ color: "#26ADC9", cursor: "pointer" }}
+          onClick={() => handleShowPopupEdit(user)}
+        ></i>
       ),
     },
   ];
@@ -109,6 +160,15 @@ export default function ListUser(props) {
     return <EditUser currentUser={currentUser} setIsShowEdit={setIsShowEdit} />;
   }
 
+  const handleShowPopupHistory = (email) => {
+    setCurrentEmail(email)
+    setIsShowHistory(true);
+  }
+
+  const getContentPopupHistory = () => {
+    return <LoginHistory email={currentEmail} />;
+  }
+
   // Returns JSX for rendering component on the page
   return (
     // Renders an AdminLayout component with a prop called `routeName`
@@ -121,7 +181,6 @@ export default function ListUser(props) {
         <ContentTable
           columns={columns}
           listUser={listUser}
-          handleShowPopupEdit={handleShowPopupEdit}
         />
 
         <PopupDialog
@@ -141,6 +200,16 @@ export default function ListUser(props) {
           seconLabelButton={""}
           handleFirstButtonCalback={() => setIsShowEdit(false)}
           handleSeconButtonCalback={""}
+        />
+        <PopupDialog
+          isShow={isShowHistory}
+          title={"Login History"}
+          content={getContentPopupHistory()}
+          firstLabelButon={""}
+          seconLabelButton={""}
+          handleFirstButtonCalback={() => setIsShowHistory(false)}
+          handleSeconButtonCalback={""}
+          modalContentClass="modal-history"
         />
       </div>
     </AdminLayout>

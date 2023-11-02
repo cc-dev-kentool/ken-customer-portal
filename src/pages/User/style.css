@@ -34,8 +34,9 @@
     border: none;
 }
 
-.date-update {
-    min-width: 300px !important;
+.user-managerment p, .user-managerment ul {
+    margin-bottom: 0;
+    padding: 7px;
 }
 
 .role-admin,
@@ -43,7 +44,7 @@
     padding: 3px;
     border-radius: 8px;
     text-align: center;
-    width: 100px;
+    width: 75px;
     margin-bottom: 0;
 }
 
@@ -54,6 +55,26 @@
 
 .role-member {
     background-color: #e5e5e5;
+}
+
+.last-login {
+    min-width: 145px;
+}
+
+.last-login .last-login-item-left,
+.last-login .last-login-item-right {
+    padding-right: 0;
+}
+
+.last-login .last-login-item-right {
+    display: grid;
+    align-items: center;
+    padding-left: 0;
+    text-align: right;
+}
+
+.last-login-item-right .icon-action {
+    cursor: pointer;
 }
 
 /* Add new user, Edit user */
@@ -97,4 +118,12 @@
 
 .fa-pen {
     margin-right: 5px;
+}
+
+
+/* Modal history */
+
+.modal-history {
+    width: 80%;
+    left: 10%;
 }

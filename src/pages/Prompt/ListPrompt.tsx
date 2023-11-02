@@ -147,10 +147,12 @@ export default function ListPrompt(props) {
     {
       title: 'Action',
       width: '7%',
-      render: () => (
-        <p>
-          <i className="fa-solid fa-pen" style={{ color: "#26ADC9" }}></i>
-        </p>
+      render: (prompt) => (
+        <i
+          className="fa-solid fa-pen"
+          style={{ color: "#26ADC9", cursor: "pointer" }}
+          onClick={() => handleShowPopupEdit(prompt)}
+        ></i>
       ),
     },
   ];
@@ -178,7 +180,6 @@ export default function ListPrompt(props) {
           columns={columns}
           listUser={listPrompt}
           currentWidth={900}
-          handleShowPopupEdit={handleShowPopupEdit}
         />
 
         <PopupDialog
