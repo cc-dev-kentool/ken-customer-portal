@@ -17,7 +17,13 @@
 }
 
 .content-db .icon-users {
-    margin: 20px 0 0 20px;
+    margin-left: 20px;
+    text-decoration: none;
+    color: #61696d;
+}
+
+.content-db .icon-users i {
+    margin-top: 28px;
 }
 
 .content-db .icon-rotata {

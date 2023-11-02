@@ -1,0 +1,46 @@
+.contracts-history {
+    background-color: #fff;
+    min-height: 90vh;
+    width: 100%;
+    padding: 20px;
+}
+
+.contracts-history .title {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.contracts-history .total {
+    font-weight: bold;
+}
+
+.contracts-history .total span {
+    float: right;
+    margin-right: 2px;
+}
+
+.contracts-history .usage-num,
+.contracts-history .usage-str,
+.contracts-history .question {
+    width: 50px;
+    text-align: center;
+}
+
+.contracts-history .usage-str {
+    background-color: #fff1c7;
+    border: 1px solid #dfba4c;
+}
+
+.contracts-history .usage-num {
+    background-color: #d0e9d2;
+    border: 1px solid #73b55c;
+}
+
+.contracts-history .question {
+    color: #fff;
+    background-color: #fa0000;
+}
+
+.contracts-history p {
+    margin-bottom: 0;
+}
