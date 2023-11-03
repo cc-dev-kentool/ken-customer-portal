@@ -8,16 +8,17 @@ import { Tooltip } from "react-tooltip";
 type Props = {
   id: string;
   content: string;
+  widthTooltip?: number;
 }
 
 export function ReactTooltip(props: Props) {
-  const { id, content } = props
+  const { id, content, widthTooltip } = props
 
-  const [widthTooltip, setWidthTooltip] = useState<number>(window.innerWidth - 500);
+  const [currentWidth, setCurrentWidth] = useState<number>(window.innerWidth - 500);
 
   useEffect(() => {
     window.addEventListener('resize', function () {
-      setWidthTooltip(this.window.innerWidth - 500);
+      setCurrentWidth(this.window.innerWidth - 500);
     });
   }, [])
 
@@ -30,7 +31,7 @@ export function ReactTooltip(props: Props) {
       content={content}
       className="table-tooltip"
       style={{ 
-        width: `${widthTooltip}px`,
+        width: `${widthTooltip ?? currentWidth}px`,
         zIndex: 10,
       }}
     />

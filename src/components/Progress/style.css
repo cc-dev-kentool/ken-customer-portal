@@ -58,4 +58,7 @@
     font-weight: bold;
     text-align: center;
     margin-right: 25%;
+    height: 40px;
+    margin-top: 10px;
+    vertical-align: middle;
 }

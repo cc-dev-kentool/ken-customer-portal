@@ -23,7 +23,7 @@ export default function Analysis(props) {
   const [url, setUrl] = useState<string>("");
   const [showPdf, setShowPdf] = useState<boolean>(true);
   const [valueSearch, setValueSearch] = useState<string>("");
-  const [positionChat, setpositionChat] = useState<boolean>(true);
+  const [positionChat, setPositionChat] = useState<boolean>(true);
   const [isDowndLoad, setIsDowndLoad] = useState<boolean>(false);
   const [isJump, setIsJump] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(0)
@@ -67,10 +67,10 @@ export default function Analysis(props) {
       showPdf={showPdf}
       setUrl={setUrl}
       setShowPdf={setShowPdf}
-      setpositionChat={setpositionChat}
+      setPositionChat={setPositionChat}
     >
       <Row className="main-content">
-        <Col lg={url && showPdf ? 7 : 12} className={classNames("", { 'main-risk': url })}>
+        <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
           {/* <button onClick={handleJump}>Jump to page</button> */}
           <RiskContent
             dataAnalysis={dataAnalysis}
