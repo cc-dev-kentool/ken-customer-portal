@@ -10,7 +10,7 @@ import "./style.css";
 
 function AdminLayout(props) {
 
-  const { routeName, showPdf, children, setUrl, setShowPdf, setpositionChat } = props;
+  const { routeName, showPdf, children, setUrl, setShowPdf, setPositionChat } = props;
 
   const [isLoading] = useAppSelector((state) => [state.app.isLoading])
 
@@ -20,7 +20,7 @@ function AdminLayout(props) {
   // Define a function called "toggleMenu" that toggles the value of "isShowFullSidebar" when called.
   const toggleMenu = () => {
     setIsShowFullSidebar(!isShowFullSidebar);
-    routeName == 'dashboard' && setpositionChat(!isShowFullSidebar)
+    routeName == 'analytics' && setPositionChat(!isShowFullSidebar)
   };
 
   const status = ['upload', 'analytics', 'done'];

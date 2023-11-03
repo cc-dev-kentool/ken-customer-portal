@@ -1,13 +1,16 @@
 import { statusRisk } from "constants/riskAnalysis";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import generatePDF, { Margin } from 'react-to-pdf';
+import AnalysisProgress from "./AnalysisProgress";
 
 // Define a function component named "RiskContent" and receive a single parameter called "props"
 export default function RiskContent(props) {
 
   // Destructure the "url" and "setValueSearch" props from the "props" object
   const { dataAnalysis, topic, isDowndLoad, setTopic, setIsDowndLoad, setValueSearch } = props;
+
+  const [isShowProgressBar, setIsShowProgressBar] = useState<boolean>(true);
 
   // Define a function named "getStatusRisk" that takes a "status" parameter and returns a value from the "statusRisk" array based on the label
   const getStatusRisk = (status) => {
@@ -55,9 +58,25 @@ export default function RiskContent(props) {
           className="fa-regular fa-file-pdf fa-2xl"
           style={{ color: "#26ADC9" }}
           onClick={exportPDf}
-        />)}
+        />
+      )}
+      <div className='analysis-progress'>
+        <Row className="risk-content-item-topic m-2">
+          <Col sm={10}>
+            Progress bar
+          </Col>
+          <Col sm={2} className="text-end">
+            <i
+              className={`fa-solid fa-chevron-${isShowProgressBar ? 'up' : 'down'}`}
+              onClick={() => setIsShowProgressBar(!isShowProgressBar)}
+            />
+          </Col>
+        </Row>
+        <p className="text-right"></p>
+        {isShowProgressBar && <AnalysisProgress />}
+      </div>
       {dataAnalysis &&
-        <div className="table-content">
+        <div className="table-content" style={{height: `${isShowProgressBar ? '65%' : '88%'}`}}>
           {Object.keys(dataAnalysis).map((key) => {
             return (
               <div key={dataAnalysis[key].id} className="risk-content-item">

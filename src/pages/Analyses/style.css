@@ -4,6 +4,10 @@
   background-color: #F2F2F2;
 }
 
+.default-risk {
+  margin-bottom: 10px;
+}
+
 .main-risk {
   margin-right: -14px;
 }
@@ -13,6 +17,12 @@
   cursor: pointer;
   margin-top: -10px;
   position: absolute;
+}
+
+/* Progress Aanalysis */
+
+.analysis-progress {
+  padding-top: 10px;
 }
 
 /* Risk content */
@@ -44,7 +54,6 @@
 .table-content {
   overflow-y: auto;
   overflow-x: hidden;
-  height: 91%;
 }
 
 .risk-content-item {

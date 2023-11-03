@@ -37,12 +37,6 @@ export default function SidebarAdmin(props) {
           {isShowFullSidebar && <span>Analyses</span>}
         </a>
       </li>
-      <li className={"sidebar-item"}>
-        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/">
-          <i className="fa-regular fa-file-lines" style={{ color: '#000' }}></i>
-          {isShowFullSidebar && <span>Export Data </span>}
-        </a>
-      </li>
     </ul>
   );
 }
