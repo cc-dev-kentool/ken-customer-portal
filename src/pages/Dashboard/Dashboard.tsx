@@ -1,4 +1,6 @@
-import { useAppDispatch } from "hooks";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { useEffect, useState } from "react";
+import { getStatisticsContract, getStatisticsEmber, getStatisticsUser } from "store/actions/master";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import AdminLayout from "layouts/Admin";
@@ -10,29 +12,55 @@ import "./style.css";
 export function Dashboard(props) {
   const dispatch = useAppDispatch();
 
-  const labels = [
-    'Court jurisdiction',
-    'Governing law',
-    'Arbitration',
-    'War',
-    'Unused definitions',
-    'Sanctions',
-    'Readability',
-    'RUB',
-    'Interaction between court jurisdiction and arbitration',
-    'Cyber',
-    'Communicable disease',
-    'CBR',
-  ];
+  const [statisticsUser, statisticsContract, statisticsQuestionmark] = useAppSelector((state) => [
+    state.masterData.statisticsUser,
+    state.masterData.statisticsContract,
+    state.masterData.statisticsQuestionmark,
+  ]);
 
-  const values = [35, 3, 13, 5, 7, 2, 1, 3, 7, 9, 12, 3];
+  const [labelsChart, setLabelsChart] = useState<string[]>([])
+  const [valuesChart, setValuesChart] = useState<number[]>([])
+
+  // Sets up side effect using async `getMasterdata()` action creator to fetch user settings from backend API
+  useEffect(() => {
+    dispatch(getStatisticsUser());    
+    dispatch(getStatisticsContract());
+    dispatch(getStatisticsEmber());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (statisticsQuestionmark?.length > 0) {
+      let labels: string[] = [];
+      let values: number[] = [];
+      statisticsQuestionmark.map((item) => {
+        labels.push(item?.topic.name);
+        values.push(item?.count);
+      })
+      setLabelsChart(labels);
+      setValuesChart(values);
+    };
+
+  }, [statisticsQuestionmark]);
 
   const colors = ['#26adc9', '#BD13AC', '#5cc200', '#F21D0B', '#a8dee9', '#ccc', '#F3FD43', '#0EDC9F', '#E293D9', '#A9CD8D', '#F4952C', '#3915D7'];
 
   const options = {
     colors: colors,
-    labels: labels,
+    labels: labelsChart,
   };
+
+  const resetStatisticsUser = () => {
+    dispatch(getStatisticsUser());
+  }
+
+  const resetStatisticsContract = () => {
+    dispatch(getStatisticsContract());
+  }
+
+  const resetStatisticsEmber = () => {
+    dispatch(getStatisticsEmber());
+  }
 
   // Return JSX elements to render the dashboard.
   return (
@@ -49,13 +77,18 @@ export function Dashboard(props) {
                   </a>
                 </Col>
                 <Col>
-                  <p className="icon-rotata"><i className="fa-solid fa-rotate fa-2xl"></i></p>
+                  <p className="icon-rotata">
+                    <i 
+                      className="fa-solid fa-rotate fa-2xl"
+                      onClick={resetStatisticsUser}
+                    />
+                  </p>
                 </Col>
               </Row>
               <Row>
                 <Col sm={6}>
                   <ProgressCircle
-                    progress={85}
+                    progress={Math.round(statisticsUser.total_user_login_number / statisticsUser.total_user_number * 100)}
                     strokeColor="#5cc200"
                     classIndicator="indicator-left"
                     label="Logined User"
@@ -63,7 +96,7 @@ export function Dashboard(props) {
                 </Col>
                 <Col sm={6}>
                   <ProgressCircle
-                    progress={60}
+                    progress={Math.round(statisticsUser.total_user_upload_number / statisticsUser.total_user_number * 100)}
                     strokeColor="#5cc200"
                     classIndicator="indicator-left"
                     label="Analyzed Document User"
@@ -72,11 +105,11 @@ export function Dashboard(props) {
               </Row>
             </div>
             <div className="tt-report">
-              <p>Total Users <span className="value-report">1000</span></p>
+              <p>Total Users <span className="value-report">{statisticsUser.total_user_number}</span></p>
             </div>
             <div className="tt-report">
-              <p>Logined <span className="value-report">850</span></p>
-              <p>Analyzed <span className="value-report">600</span></p>
+              <p>Logined <span className="value-report">{statisticsUser.total_user_login_number}</span></p>
+              <p>Analyzed <span className="value-report">{statisticsUser.total_user_upload_number}</span></p>
             </div>
           </Col>
           <Col lg={6}>
@@ -89,13 +122,18 @@ export function Dashboard(props) {
                   </a>
                 </Col>
                 <Col>
-                  <p className="icon-rotata"><i className="fa-solid fa-rotate fa-2xl"></i></p>
+                  <p className="icon-rotata">
+                    <i 
+                      className="fa-solid fa-rotate fa-2xl"
+                      onClick={resetStatisticsContract}
+                    />
+                  </p>
                 </Col>
               </Row>
               <Row>
                 <Col sm={6}>
                   <ProgressCircle
-                    progress={50}
+                    progress={Math.round(statisticsContract.total_chat_usage_number / statisticsContract.total_contract_number * 100)}
                     strokeColor="#ff543a"
                     classIndicator="indicator-right"
                     label="Chat usage"
@@ -103,7 +141,7 @@ export function Dashboard(props) {
                 </Col>
                 <Col sm={6}>
                   <ProgressCircle
-                    progress={10}
+                    progress={statisticsContract.total_questionmark_number}
                     strokeColor="#ff543a"
                     classIndicator="indicator-right"
                     label="Question mark"
@@ -112,18 +150,24 @@ export function Dashboard(props) {
               </Row>
             </div>
             <div className="tt-report">
-              <p>Total Contracts <span className="value-report">2000</span></p>
+              <p>Total Contracts <span className="value-report">{statisticsContract.total_contract_number}</span></p>
             </div>
             <div className="tt-report">
-              <p>Chat usage <span className="value-report">1000</span></p>
-              <p>Question mark <span className="value-report">200</span></p>
+              <p>Chat usage <span className="value-report">{statisticsContract.total_chat_usage_number}</span></p>
+              <p>Question mark <span className="value-report">{statisticsContract.total_questionmark_number}</span></p>
             </div>
           </Col>
         </Row>
         <Row className="content-chart">
+          <p className="icon-rotata">
+            <i 
+              className="fa-solid fa-rotate fa-2xl"
+              onClick={resetStatisticsEmber}
+            />
+          </p>
           <ReactApexChart
             options={options}
-            series={values}
+            series={valuesChart}
             type="pie"
             width={700}
           />
@@ -131,20 +175,18 @@ export function Dashboard(props) {
         </Row>
         <Row className="content-detail-chart">
           <Col className="detail-chart-left">
-            <p>Court jurisdiction <span className="value-report">80</span></p>
-            <p>Governing law <span className="value-report">2</span></p>
-            <p>Arbitration <span className="value-report">7</span></p>
-            <p>War <span className="value-report">6</span></p>
-            <p>Unused definitions <span className="value-report">12</span></p>
-            <p>Sanctions <span className="value-report">80</span></p>
+            {labelsChart.map((label, index) => {
+              if (index < labelsChart.length / 2) {
+                return <p key={label}>{label} <span className="value-report">{valuesChart[index]}</span></p>
+              }
+            })}
           </Col>
           <Col>
-            <p>Readability <span className="value-report">5</span></p>
-            <p>RUB <span className="value-report">20</span></p>
-            <p>Interaction between court jurisdiction and arbitration <span className="value-report">4</span></p>
-            <p>Cyber <span className="value-report">5</span></p>
-            <p>Communicable disease <span className="value-report">9</span></p>
-            <p>CBR <span className="value-report">12</span></p>
+            {labelsChart.map((label, index) => {
+              if (index >= labelsChart.length / 2) {
+                return <p key={label}>{label} <span className="value-report">{valuesChart[index]}</span></p>
+              }
+            })}
           </Col>
         </Row>
       </div>

@@ -41,11 +41,8 @@ export default function PdfDocument(props) {
 
   useEffect(() => {
     if (isJump) {
-      console.log("before", new Date());
       jumpToPage(pageNumber)
       setIsJump(false);
-      console.log("after", new Date());
-
     }
   }, [isJump])
 

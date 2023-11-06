@@ -72,6 +72,13 @@ export default function Analysis(props) {
       <Row className="main-content">
         <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
           {/* <button onClick={handleJump}>Jump to page</button> */}
+          {!showPdf &&
+            <i
+              className="fa-regular fa-file-pdf fa-2xl icon-show-pdf"
+              style={{ color: "#26ADC9" }}
+              onClick={() => setShowPdf(true)}
+            />
+          }
           <RiskContent
             dataAnalysis={dataAnalysis}
             topic={topic}

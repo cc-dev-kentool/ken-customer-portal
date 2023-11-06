@@ -4,14 +4,18 @@ import app from "./app"
 import alert from "./alert"
 import modal from "./modal"
 import analysis from "./analysis"
-import userSetting from "./user"
-import promptSetting from "./prompt"
+import users from "./user"
+import prompts from "./prompt"
+import masterData from "./master"
+import contracts from "./contract"
 export default combineReducers({
   auth,
   app,
   alert,
   modal,
   analysis,
-  userSetting,
-  promptSetting,
+  users,
+  prompts,
+  masterData,
+  contracts,
 })

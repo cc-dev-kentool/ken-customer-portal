@@ -10,7 +10,7 @@ export default function RiskContent(props) {
   // Destructure the "url" and "setValueSearch" props from the "props" object
   const { dataAnalysis, topic, isDowndLoad, setTopic, setIsDowndLoad, setValueSearch } = props;
 
-  const [isShowProgressBar, setIsShowProgressBar] = useState<boolean>(true);
+  const [isShowProgressBar, setIsShowProgressBar] = useState<boolean>(false);
 
   // Define a function named "getStatusRisk" that takes a "status" parameter and returns a value from the "statusRisk" array based on the label
   const getStatusRisk = (status) => {
@@ -55,7 +55,7 @@ export default function RiskContent(props) {
       <p className="title-risk">Risk Analysis Data</p>
       {Object.keys(dataAnalysis).length > 0 && (
         <i
-          className="fa-regular fa-file-pdf fa-2xl"
+          className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
           style={{ color: "#26ADC9" }}
           onClick={exportPDf}
         />
