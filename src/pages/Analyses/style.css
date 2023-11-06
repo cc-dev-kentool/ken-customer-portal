@@ -19,6 +19,12 @@
   position: absolute;
 }
 
+.main-content .icon-show-pdf {
+  float: right;
+  margin: 35px 10px 0 0;
+  cursor: pointer;
+}
+
 /* Progress Aanalysis */
 
 .analysis-progress {
@@ -45,8 +51,8 @@
   margin: 10px;
 }
 
-.risk-content .fa-file-pdf {
-  float: right;
+.risk-content .icon-download-pdf {
+  float: left;
   margin: -23px 5px 0 0;
   cursor: pointer;
 }

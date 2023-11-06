@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { getListUser } from "store/actions/user";
+import { getLoginHistory } from "store/actions/user";
 import { ContentTable } from "components/Table/ContentTable";
 import type { ColumnsType } from 'antd/es/table';
 import moment from "moment";
@@ -17,19 +17,19 @@ interface DataType {
 // Defines a React functional component called "List" that takes props as its parameter
 export default function LoginHistory(props) {
   // Retrieves the Redux store's state and dispatch function
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const { email } = props;
 
-  // const [listUser] = useAppSelector((state) => [
-  //   state.userSetting.listUser,
-  // ]);
+  const [loginHistory] = useAppSelector((state) => [
+    state.users.loginHistory,
+  ]);
 
-  // // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
-  // useEffect(() => {
-  //   dispatch(getListUser());
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
+  useEffect(() => {
+    dispatch(getLoginHistory());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const loginHistorys = [
     {

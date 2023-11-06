@@ -29,7 +29,9 @@
 }
 
 .content-db .icon-rotata {
-    margin: 20px 0 0 20px;
+    margin: 20px 20px 0 20px;
+    float: right;
+    cursor: pointer;
 }
 
 .content-db .label {
@@ -76,4 +78,9 @@
 
 .detail-chart-left {
     padding-right: 100px;
+}
+
+.content-chart .icon-rotata {
+    cursor: pointer;
+    text-align: end;
 }

@@ -29,13 +29,13 @@ export default function ListUser(props) {
   const dispatch = useAppDispatch();
 
   const [listUser] = useAppSelector((state) => [
-    state.userSetting.listUser,
+    state.users.listUser,
   ]);
 
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
   const [isShowHistory, setIsShowHistory] = useState<boolean>(false);
-  const [currentUser, setcurrentUser] = useState<Object>({});
+  const [currentUser, setCurrentUser] = useState<Object>({});
   const [currentEmail, setCurrentEmail] = useState<string>();
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
@@ -152,7 +152,7 @@ export default function ListUser(props) {
   }
 
   const handleShowPopupEdit = (user) => {
-    setcurrentUser(user)
+    setCurrentUser(user)
     setIsShowEdit(true);
   }
 

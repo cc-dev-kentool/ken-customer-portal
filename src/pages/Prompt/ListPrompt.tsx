@@ -28,11 +28,11 @@ export default function ListPrompt(props) {
   const dispatch = useAppDispatch();
 
   const [listPrompt] = useAppSelector((state) => [
-    state.promptSetting.listPrompt,
+    state.prompts.listPrompt,
   ]);
 
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
-  const [currentPrompt, setcurrentPrompt] = useState<Object>({});
+  const [currentPrompt, setCurrentPrompt] = useState<Object>({});
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
@@ -158,8 +158,7 @@ export default function ListPrompt(props) {
   ];
 
   const handleShowPopupEdit = (prompt) => {
-    console.log("prompt", prompt);
-    setcurrentPrompt(prompt)
+    setCurrentPrompt(prompt)
     setIsShowEdit(true);
   }
 

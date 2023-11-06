@@ -1,7 +1,7 @@
 import { Col, Row } from "react-bootstrap";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { getListUser } from "store/actions/user";
+import { getContracts } from "store/actions/contract";
 import { ContentTable } from "components/Table/ContentTable";
 import type { ColumnsType } from 'antd/es/table';
 import moment from "moment";
@@ -25,12 +25,12 @@ export default function ContractHistory(props) {
   const dispatch = useAppDispatch();
 
   const [contract] = useAppSelector((state) => [
-    state.userSetting.listUser,
+    state.contracts.contracts,
   ]);
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
-    dispatch(getListUser());
+    dispatch(getContracts());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

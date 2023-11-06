@@ -8,6 +8,8 @@ const initialState = {
   getUserSuccess: false,
   createUserSuccess: false,
   editUserSuccess: false,
+  loginHistory: [],
+  getLoginHistorySuccess: false,
 }
 
 // Declaring the modal reducer function
@@ -36,6 +38,18 @@ const userSetting = (state = initialState, action) => {
       return {
         ...state,
         editUserSuccess: action.payload,
+      }
+    // Case for GET_LIST_USER action type.
+    case userActionType.GET_LOGIN_HISTORY:
+      return {
+        ...state,
+        loginHistory: action.payload
+      }
+    // Case for GET_LIST_USER_SUCCESS action type.
+    case userActionType.GET_LOGIN_HISTORY_SUCCESS:
+      return {
+        ...state,
+        getLoginHistorySuccess: action.payload,
       }
     // Default fallback case returns the current state.
     default:
