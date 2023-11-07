@@ -77,6 +77,12 @@
     cursor: pointer;
 }
 
+.last-login-item-right .icon-action span {
+    border: 1px solid #000;
+    border-radius: 50%;
+    padding: 0 3px;
+}
+
 /* Add new user, Edit user */
 
 .edit-user .titile-add {

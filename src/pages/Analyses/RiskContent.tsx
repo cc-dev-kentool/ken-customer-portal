@@ -8,9 +8,26 @@ import AnalysisProgress from "./AnalysisProgress";
 export default function RiskContent(props) {
 
   // Destructure the "url" and "setValueSearch" props from the "props" object
-  const { dataAnalysis, topic, isDowndLoad, setTopic, setIsDowndLoad, setValueSearch } = props;
+  const { dataAnalysis, currentStatus, isDowndLoad, setIsDowndLoad, setValueSearch } = props;
 
   const [isShowProgressBar, setIsShowProgressBar] = useState<boolean>(false);
+
+  // Define a state variable named "topic" using the useState hook with an initial value of an array of objects
+  const [topic, setTopic] = useState<Array<object>>([
+    { name: 'Governing law', isShow: true },
+    { name: 'Court jurisdiction', isShow: true },
+    { name: 'Arbitration', isShow: true },
+    { name: 'Court jurisdiction and arbitration clause interaction', isShow: true },
+    { name: 'War', isShow: true },
+    { name: 'Communicable disease', isShow: true },
+    { name: 'NCBR', isShow: true },
+    { name: 'Cyber', isShow: true },
+    { name: 'Sanctions', isShow: true },
+    { name: 'RUB', isShow: true },
+    { name: 'Unused definitions', isShow: true },
+    { name: 'Readability', isShow: true },
+  ]);
+
 
   // Define a function named "getStatusRisk" that takes a "status" parameter and returns a value from the "statusRisk" array based on the label
   const getStatusRisk = (status) => {
@@ -48,6 +65,12 @@ export default function RiskContent(props) {
       setIsDowndLoad(false);
     }
   }, [isDowndLoad])
+
+  useEffect(() => {
+    if (currentStatus === 'running') {
+      setIsShowProgressBar(true)
+    }
+  }, [currentStatus])
 
   // Return the following JSX
   return (

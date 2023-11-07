@@ -6,7 +6,7 @@ import API from "service/api";
 export function getContracts() {
   return async function (dispatch) {
     dispatch(setLoading(true));
-    await API({ url: "/contracts", method: "GET" })
+    await API({ url: "/statistic/contracts", method: "GET" })
       .then((result) => {
         dispatch(setLoading(false));
         dispatch({

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { getContracts } from "store/actions/contract";
 import { ContentTable } from "components/Table/ContentTable";
+import { getStatisticsContract } from "store/actions/master";
 import type { ColumnsType } from 'antd/es/table';
 import moment from "moment";
 import AdminLayout from "layouts/Admin";
@@ -12,10 +13,10 @@ import './style.css';
 interface DataType {
   uuid: string;
   file_name: string;
-  size: number;
-  time: number;
+  pages: number;
+  executed_time: number;
   usage: string;
-  question: string;
+  num_of_questionmark: string;
   uploaded_at: string;
 }
 
@@ -24,45 +25,17 @@ export default function ContractHistory(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
 
-  const [contract] = useAppSelector((state) => [
+  const [contracts, statisticsContract] = useAppSelector((state) => [
     state.contracts.contracts,
+    state.masterData.statisticsContract,
   ]);
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
     dispatch(getContracts());
+    dispatch(getStatisticsContract());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const contracts = [
-    {
-      file_name: "TerrorismForSimon.pdf",
-      size: 30,
-      time: 35,
-      usage: 200,
-      question: 10,
-      uploaded_at: "2023/11/2",
-    },
-    {
-      file_name: "TravelForSimon.pdf",
-      size: 10,
-      time: 30,
-      usage: "No",
-      question: 5,
-      uploaded_at: "2023/10/30",
-    },
-  ]
-
-  for (let i = 0; i <= 10; i++) {
-    contracts.push({
-      file_name: `TradeCreditForSimon.pdf_${i + 1}`,
-      size: 80,
-      time: 20,
-      usage: `${i % 2 == 0 ? 10 : "No"}`,
-      question: 2 + i,
-      uploaded_at: `2023/10/${i + 1}`,
-    })
-  }
 
   const columns: ColumnsType<DataType> = [
     {
@@ -77,8 +50,8 @@ export default function ContractHistory(props) {
     },
     {
       title: 'Size Of Contract (page)',
-      dataIndex: 'size',
-      key: 'size',
+      dataIndex: 'pages',
+      key: 'pages',
       width: '15%',
       sorter: {
         compare: (a, b) => {
@@ -88,8 +61,8 @@ export default function ContractHistory(props) {
     },
     {
       title: 'Time Of analysis (seconds)',
-      dataIndex: 'time',
-      key: 'time',
+      dataIndex: 'executed_time',
+      key: 'executed_time',
       width: '15%',
       sorter: {
         compare: (a, b) => {
@@ -112,22 +85,22 @@ export default function ContractHistory(props) {
           "usage-str": isNaN(Number(usage)),
           "usage-num": !isNaN(Number(usage)),
         })}>
-          {usage}
+          {10}
         </p>
       ),
     },
     {
       title: 'Question Mark',
-      dataIndex: 'question',
-      key: 'question',
+      dataIndex: 'num_of_questionmark',
+      key: 'num_of_questionmark',
       width: '15%',
       sorter: {
         compare: (a, b) => {
-          return a.question > b.question ? 1 : -1;
+          return a.num_of_questionmark > b.num_of_questionmark ? 1 : -1;
         },
       },
-      render: (_, { question }) => (
-        <p className="question">{question}</p>
+      render: (_, { num_of_questionmark }) => (
+        <p className="question">{num_of_questionmark}</p>
       ),
     },
     {
@@ -155,9 +128,9 @@ export default function ContractHistory(props) {
         <Row>
           <Col sm={8} className="title">Contracts History</Col>
           <Col sm={4} className="total">
-            <p>Total <span>2000</span></p>
-            <p>Usage Chat <span>1000</span></p>
-            <p>Has Question Mark <span>200</span></p>
+            <p>Total <span>{statisticsContract.total_contract_number}</span></p>
+            <p>Usage Chat <span>{statisticsContract.total_chat_usage_number}</span></p>
+            <p>Has Question Mark <span>{statisticsContract.total_questionmark_number}</span></p>
           </Col>
         </Row>
         <ContentTable

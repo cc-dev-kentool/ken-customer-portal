@@ -2,8 +2,8 @@ import { Col, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { PopupDialog } from "components/Modals/PopUpDialog";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { getListUser } from "store/actions/user";
-import { upperFistChar } from "helpers/until";
+import { getListUser, getLoginHistory } from "store/actions/user";
+import { getDateDiff, upperFistChar } from "helpers/until";
 import { ContentTable } from "components/Table/ContentTable";
 import type { ColumnsType } from 'antd/es/table';
 import moment from "moment";
@@ -19,8 +19,9 @@ interface DataType {
   email: string;
   role: string;
   created_at: string;
-  login: string;
-  contracts: number;
+  last_access_time: string;
+  number_of_contracts: number;
+  logout_time: string;
 }
 
 // Defines a React functional component called "List" that takes props as its parameter
@@ -36,13 +37,21 @@ export default function ListUser(props) {
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
   const [isShowHistory, setIsShowHistory] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Object>({});
-  const [currentEmail, setCurrentEmail] = useState<string>();
+  const [currentData, setCurrentData] = useState([]);
+  const [currentTime, setCurrentTime] = useState<string>();
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
     dispatch(getListUser());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (listUser) {
+      setCurrentTime(listUser.currentTime);
+      setCurrentData(listUser.data);
+    }
+  }, [listUser])
 
   const columns: ColumnsType<DataType> = [
     {
@@ -61,24 +70,24 @@ export default function ListUser(props) {
       key: 'login',
       sorter: {
         compare: (a, b) => {
-          return a.login > b.login ? 1 : -1;
+          return a.last_access_time > b.last_access_time ? 1 : -1;
         },
       },
       width: '25%',
-      render: (_, { login, email }) => (
+      render: (_, { last_access_time, logout_time, email, uuid }) => (
         <Row className="last-login">
           <Col sm="10" className="last-login-item-left">
             <ul>
-              <li>Last logined: 3 days 2 hours ago</li>
-              <li>Duration: 50 minutes</li>
+              <li>Last logined: {last_access_time ? getDateDiff(last_access_time, currentTime, true) : 'N/A'}</li>
+              <li>Duration: {logout_time ? getDateDiff(last_access_time, logout_time, false) : 'N/A'}</li>
             </ul>
           </Col>
           <Col sm="2" className="pl-0 last-login-item-right">
             <p className="icon-action">
-              <i
+              <span><i
                 className="fa-solid fa-ellipsis"
-                onClick={() => handleShowPopupHistory(email)}
-              />
+                onClick={() => handleShowPopupHistory(uuid)}
+              /></span>
             </p>
           </Col>
         </Row>
@@ -87,17 +96,14 @@ export default function ListUser(props) {
     },
     {
       title: 'Num Of Contract',
-      dataIndex: 'contracts',
-      key: 'contracts',
+      dataIndex: 'number_of_contracts',
+      key: 'number_of_contracts',
       width: '15%',
       sorter: {
         compare: (a, b) => {
           return a > b ? 1 : -1;
         },
-      },
-      render: (_, { contracts }) => (
-        <p>30</p>
-      ),
+      }
     },
     {
       title: 'Role',
@@ -160,13 +166,13 @@ export default function ListUser(props) {
     return <EditUser currentUser={currentUser} setIsShowEdit={setIsShowEdit} />;
   }
 
-  const handleShowPopupHistory = (email) => {
-    setCurrentEmail(email)
+  const handleShowPopupHistory = (uuid) => {
     setIsShowHistory(true);
+    dispatch(getLoginHistory(uuid));
   }
 
   const getContentPopupHistory = () => {
-    return <LoginHistory email={currentEmail} />;
+    return <LoginHistory />;
   }
 
   // Returns JSX for rendering component on the page
@@ -180,7 +186,7 @@ export default function ListUser(props) {
         </Row>
         <ContentTable
           columns={columns}
-          listUser={listUser}
+          listUser={currentData}
         />
 
         <PopupDialog

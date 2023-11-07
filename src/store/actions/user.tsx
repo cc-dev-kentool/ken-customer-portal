@@ -63,10 +63,10 @@ export function createUser(data) {
   }
 }
 
-export function getLoginHistory() {
+export function getLoginHistory(user_id) {
   return async function (dispatch) {
     dispatch(setLoading(true));
-    await API({ url: "/login_history", method: "GET" })
+    await API({ url: `/users/${user_id}/login_histories`, method: "GET" })
       .then((result) => {
         dispatch(setLoading(false));
         dispatch({

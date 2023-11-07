@@ -20,6 +20,23 @@ export const formatDateTime = (dateTime) => {
   return moment.utc(dateTime).local().format("DD-MM-YYYY");
 };
 
+export const getDateDiff = (time1, time2, isCheckWithNow) => {
+  const startDate = moment.utc(time1);
+  const timeEnd = moment.utc(time2);
+  const diff = timeEnd.diff(startDate);
+  const diffDuration = moment.duration(diff);
+
+  const years = diffDuration.years() > 0 ? `${diffDuration.years()} years` : '';
+  const months = diffDuration.months() > 0 ? `${diffDuration.months()} months` : '';
+  const weeks = diffDuration.weeks() > 0 ? `${diffDuration.weeks()} weeks` : '';
+  const days = diffDuration.days() > 0 ? `${diffDuration.days()} days` : '';
+  const hours = diffDuration.hours() > 0 ? `${diffDuration.hours()} hours` : '';
+  const minutes = diffDuration.minutes() > 0 ? `${diffDuration.minutes()} minutes` : '';
+  const seconds = diffDuration.seconds() > 0 ? `${diffDuration.seconds()} seconds` : '';
+
+  return `${years} ${months} ${weeks} ${days} ${hours} ${minutes} ${seconds} ${isCheckWithNow ? 'ago' : ''}`;
+}
+
 // Function to display the label in shortened form with an ellipsis (...) after a certain length
 export const labelDisplay = (text, len): string =>
   text && text.length > len ? text.substring(0, len) + "..." : text;

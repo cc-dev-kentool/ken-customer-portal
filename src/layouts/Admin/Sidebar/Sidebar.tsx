@@ -1,7 +1,7 @@
 import { PopupDialog } from "components/Modals/PopUpDialog";
 import { useState } from "react";
 import { useAppDispatch } from "hooks";
-import { getAnalysisData } from "store/actions/analysis";
+import { uploadPdf } from "store/actions/analysis";
 import { remove as removeAlert } from "store/actions/alert"
 import classNames from "classnames";
 import UploadFile from "pages/Analyses/UploadFile";
@@ -16,10 +16,10 @@ export default function Sidebar(props) {
   const user = JSON.parse(localStorage.getItem('user') || '{}')
 
   // Define state variables
-  const [showModalUplaod, setshowModalUplaod] = useState<boolean>(false);
+  const [showModalUplaod, setShowModalUplaod] = useState<boolean>(false);
   const [isShowFiles, setIsShowFiles] = useState<boolean>(true);
   const [file, setFile] = useState<File>();
-  const [isEnableBtnAnalyze, setEnableBtnAnalyze] = useState<boolean>(true);
+  const [isEnableBtnAnalyze, setIsEnableBtnAnalyze] = useState<boolean>(true);
 
   // Define a function called "getContentPopupArea" that returns some JSX
   const getContentPopupArea = () => {
@@ -27,7 +27,7 @@ export default function Sidebar(props) {
       <UploadFile
         file={file}
         setFile={setFile}
-        setEnableBtnAnalyze={setEnableBtnAnalyze}
+        setEnableBtnAnalyze={setIsEnableBtnAnalyze}
       />
     )
   }
@@ -36,15 +36,15 @@ export default function Sidebar(props) {
   const handleSubmitPupopUpload = () => {
     if (file) {
       setUrl(URL.createObjectURL(file));
-      setshowModalUplaod(false);
+      setShowModalUplaod(false);
       setShowPdf(true);
-      dispatch(getAnalysisData(file));
+      dispatch(uploadPdf(file));
     }
   }
 
   const handleClosePupopUpload = () => {
-    setEnableBtnAnalyze(true);
-    setshowModalUplaod(false);
+    setIsEnableBtnAnalyze(true);
+    setShowModalUplaod(false);
     dispatch(removeAlert());
   }
 
@@ -79,7 +79,7 @@ export default function Sidebar(props) {
             routeName={routeName}
             isShowFiles={isShowFiles}
             isShowFullSidebar={isShowFullSidebar}
-            setshowModalUplaod={setshowModalUplaod}
+            setshowModalUplaod={setShowModalUplaod}
             setIsShowFiles={setIsShowFiles}
           />}
         </div>

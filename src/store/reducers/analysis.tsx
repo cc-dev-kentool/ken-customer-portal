@@ -4,6 +4,8 @@ import { analysisActionType } from "../actionTypes"
 const initialState = {
   dataAnalysis: [],
   filePath: "",
+  uploadPdf: "",
+  uploadPdfSuccess: false,
 }
 
 // Declaring the modal reducer function
@@ -20,6 +22,16 @@ const getAnalysisData = (state = initialState, action) => {
       return {
         ...state,
         filePath: action.payload
+      }
+    case analysisActionType.UPLOAD_PDF:
+      return {
+        ...state,
+        uploadPdf: action.payload
+      }
+    case analysisActionType.UPLOAD_PDF_SUCCESS:
+      return {
+        ...state,
+        uploadPdfSuccess: action.payload
       }
     default:
       return state
