@@ -45,6 +45,8 @@ export const modalActionType = {
 
 export const analysisActionType = {
   GET_DATA_ANALYTICS: "GET_DATA_ANALYTICS",
+  UPLOAD_PDF: "UPLOAD_PDF",
+  UPLOAD_PDF_SUCCESS: "UPLOAD_PDF_SUCCESS",
   SET_FILE_PATH: "SET_FILE_PATH"
 }
 

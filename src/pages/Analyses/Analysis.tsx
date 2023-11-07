@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { add as addAlert, remove as removeAlert } from "store/actions/alert"
 import { code } from "constants/error";
+import { getAnalysisData } from "store/actions/analysis";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
@@ -16,9 +17,6 @@ import "./style.css";
 export default function Analysis(props) {
   const dispatch = useAppDispatch();
 
-  const [filePath] = useAppSelector((state) => [
-    state.analysis.filePath
-  ]);
   // The useState hook is used here to define state variables.
   const [url, setUrl] = useState<string>("");
   const [showPdf, setShowPdf] = useState<boolean>(true);
@@ -27,38 +25,38 @@ export default function Analysis(props) {
   const [isDowndLoad, setIsDowndLoad] = useState<boolean>(false);
   const [isJump, setIsJump] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(0)
+  const [fileUploadId, setFileUploadId] = useState<string>("");
+  const [currentStatus, setCurrentStatus] = useState<string>("");
 
-  // Define a state variable named "topic" using the useState hook with an initial value of an array of objects
-  const [topic, setTopic] = useState<Array<object>>([
-    { name: 'Governing law', isShow: true },
-    { name: 'Court jurisdiction', isShow: true },
-    { name: 'Arbitration', isShow: true },
-    { name: 'Court jurisdiction and arbitration clause interaction', isShow: true },
-    { name: 'War', isShow: true },
-    { name: 'Communicable disease', isShow: true },
-    { name: 'NCBR', isShow: true },
-    { name: 'Cyber', isShow: true },
-    { name: 'Sanctions', isShow: true },
-    { name: 'RUB', isShow: true },
-    { name: 'Unused definitions', isShow: true },
-    { name: 'Readability', isShow: true },
-  ]);
-
-  const [dataAnalysis] = useAppSelector((state) => [
-    state.analysis.dataAnalysis
+  const [uploadPdf, dataAnaly] = useAppSelector((state) => [
+    state.analysis.uploadPdf,
+    state.analysis.dataAnalysis,
   ]);
 
   useEffect(() => {
-    if (!dataAnalysis) {
-      dispatch(addAlert(code["502"], "danger"))
-      setTimeout(() => dispatch(removeAlert()), 5000)
+    if (uploadPdf) {
+      setFileUploadId(uploadPdf)
     }
-  }, [dataAnalysis])
+  }, [uploadPdf])
+
+  console.log("dataAnaly", dataAnaly)
+  useEffect(() => {
+    if (dataAnaly?.uuid) {
+      setCurrentStatus(dataAnaly?.topic_executions?.[0].status)
+      // if (dataAnaly?.topic_executions?.[0].status === 'running') {
+      //   setTimeout(() => {
+      //     dispatch(getAnalysisData(fileUploadId));
+      //   }, 5000);
+      // }
+    }
+  }, [dataAnaly])
 
   const handleJump = () => {
     setIsJump(true)
     setPageNumber(5)
   }
+
+  const dataAnalysis = [];
 
   // Return JSX elements to render the dashboard.
   return (
@@ -81,9 +79,8 @@ export default function Analysis(props) {
           }
           <RiskContent
             dataAnalysis={dataAnalysis}
-            topic={topic}
+            currentStatus={currentStatus}
             isDowndLoad={isDowndLoad}
-            setTopic={setTopic}
             setIsDowndLoad={setIsDowndLoad}
             setValueSearch={setValueSearch}
           />
@@ -106,7 +103,7 @@ export default function Analysis(props) {
         </Col>
       </Row>
       {isDowndLoad &&
-        <ExportPdf topic={topic} dataAnalysis={dataAnalysis} />
+        <ExportPdf dataAnalysis={dataAnalysis} />
       }
     </AdminLayout>
   );

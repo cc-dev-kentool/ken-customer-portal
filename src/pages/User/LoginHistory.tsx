@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "hooks";
-import { getLoginHistory } from "store/actions/user";
+import { useEffect, useState } from "react";
+import { useAppSelector } from "hooks";
+import { getDateDiff } from "helpers/until";
 import { ContentTable } from "components/Table/ContentTable";
 import type { ColumnsType } from 'antd/es/table';
 import moment from "moment";
@@ -9,51 +9,24 @@ import './style.css';
 interface DataType {
   uuid: string;
   email: string;
-  duration: string;
-  login_time: string;
-  logout: string;
+  last_access_time: string;
+  logout_time: string;
 }
 
 // Defines a React functional component called "List" that takes props as its parameter
-export default function LoginHistory(props) {
-  // Retrieves the Redux store's state and dispatch function
-  const dispatch = useAppDispatch();
+export default function LoginHistory() {
 
-  const { email } = props;
-
-  const [loginHistory] = useAppSelector((state) => [
+  const [histories] = useAppSelector((state) => [
     state.users.loginHistory,
   ]);
 
-  // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
+  const [loginHistories, setLoginHistories] = useState([])
+
   useEffect(() => {
-    dispatch(getLoginHistory());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const loginHistorys = [
-    {
-      email: email,
-      duration: '25 minutes',
-      login_time: '2023/11/2 8:00 am',
-      logout: '',
-    },
-    {
-      email: email,
-      duration: '10 minutes 30 seconds',
-      login_time: '2023/11/1 9:00 pm',
-      logout: '2023/11/1 10:00 pm',
-    },
-  ]
-
-  for (let i = 1; i <= 15; i++) {
-    loginHistorys.push({
-      email: email,
-      duration: `${5+i} minutes ${10+i} seconds`,
-      login_time: `2023/10/${i + 1} ${8 + i}:00`,
-      logout: `2023/10/${i + 1} ${9 + i}:00`,
-    })
-  }
+    if (loginHistories) {
+      setLoginHistories(histories.data);
+    }
+  }, [loginHistories])
 
   const columns: ColumnsType<DataType> = [
     {
@@ -70,13 +43,8 @@ export default function LoginHistory(props) {
       title: 'Duration',
       dataIndex: 'duration',
       key: 'duration',
-      sorter: {
-        compare: (a, b) => {
-          return a.duration > b.duration ? 1 : -1;
-        },
-      },
-      render: (_, { duration }) => (
-        <>{duration}</>
+      render: (_, { last_access_time, logout_time }) => (
+        <p>{logout_time ? getDateDiff(last_access_time, logout_time, false): 'N/A'}</p>
       ),
     },
     {
@@ -88,8 +56,8 @@ export default function LoginHistory(props) {
           return a > b ? 1 : -1;
         },
       },
-      render: (_, { login_time }) => (
-        <p>{moment(login_time).format('lll')}</p>
+      render: (_, { last_access_time }) => (
+        <p>{moment.utc(last_access_time).local().format('lll')}</p>
       ),
     },
     {
@@ -98,11 +66,11 @@ export default function LoginHistory(props) {
       key: 'logout',
       sorter: {
         compare: (a, b) => {
-          return a.logout > b.logout ? 1 : -1;
+          return a.logout_time > b.logout_time ? 1 : -1;
         },
       },
-      render: (_, { logout }) => (
-        <p>{logout ? moment(logout).format('lll') : 'N/A'}</p>
+      render: (_, { logout_time }) => (
+        <p>{logout_time ? moment.utc(logout_time).local().format('lll')  : 'N/A'}</p>
       )
     },
   ];
@@ -112,7 +80,7 @@ export default function LoginHistory(props) {
     <div className="login-history-page">
       <ContentTable
         columns={columns}
-        listUser={loginHistorys}
+        listUser={loginHistories}
       />
     </div>
   );
