@@ -3,68 +3,33 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import { styled } from '@mui/material/styles';
 import { StepIconProps } from '@mui/material/StepIcon';
-import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { labelDisplay } from 'helpers/until';
 import { ReactTooltip } from 'components/Tooltip/ReactTooltip';
+import { useAppSelector } from 'hooks';
+import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import "./style.css"
 
 
 export default function AnalysisProgress(props) {
+  const { dataTopics } = props;
 
-  const topics = [
-    {
-      topic: 'War',
-      status: 'success'
-    },
-    {
-      topic: 'Unused definitions',
-      status: 'error'
-    },
-    {
-      topic: 'Sanctions',
-      status: 'success'
-    },
-    {
-      topic: 'Readability',
-      status: 'success'
-    },
-    {
-      topic: 'RUB',
-      status: 'success'
-    },
-    {
-      topic: 'Interaction between court jurisdiction and arbitration',
-      status: 'success'
-    },
-    {
-      topic: 'Governing law',
-      status: 'success'
-    },
-    {
-      topic: 'Cyber',
-      status: 'success'
-    },
-    {
-      topic: 'Court jurisdiction',
-      status: 'open'
-    },
-    {
-      topic: 'Communicable disease',
-      status: ''
-    },
-    {
-      topic: 'CBR',
-      status: ''
-    },
-    {
-      topic: 'Arbitration',
-      status: ''
-    },
-  ]
+  const [listPrompt] = useAppSelector((state) => [
+    state.prompts.listPrompt,
+  ]);
+
+  listPrompt.sort(function (a, b) {
+    if (a.topic_order < b.topic_order) {
+      return -1;
+    }
+    if (a.topic_order > b.topic_order) {
+      return 1;
+    }
+    return 0;
+  });
 
   const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
-      top: 20,
+      top: 16,
     },
     [`&.${stepConnectorClasses.active}`]: {
       [`& .${stepConnectorClasses.line}`]: {
@@ -93,8 +58,8 @@ export default function AnalysisProgress(props) {
     backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[700] : '#ccc',
     zIndex: 1,
     color: '#fff',
-    width: 40,
-    height: 40,
+    width: 34,
+    height: 34,
     display: 'flex',
     borderRadius: '50%',
     justifyContent: 'center',
@@ -113,7 +78,7 @@ export default function AnalysisProgress(props) {
 
     return (
       <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
-        <i className="fa-solid fa-ellipsis fa-2xl" style={{ color: "#F4952C" }}></i>
+        <i className="fa-solid fa-ellipsis fa-xl" style={{ color: "#F4952C" }}></i>
       </ColorlibStepIconRoot>
     );
   }
@@ -123,7 +88,7 @@ export default function AnalysisProgress(props) {
 
     return (
       <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
-        <i className="fa-solid fa-circle-check fa-2xl" style={{ color: "#5cc200" }}></i>
+        <i className="fa-solid fa-circle-check fa-xl" style={{ color: "#5cc200" }}></i>
       </ColorlibStepIconRoot>
     );
   }
@@ -133,7 +98,7 @@ export default function AnalysisProgress(props) {
 
     return (
       <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
-        <i className="fa-solid fa-circle-xmark fa-2xl" style={{ color: "#ff543a" }}></i>
+        <i className="fa-solid fa-circle-xmark fa-xl" style={{ color: "#ff543a" }}></i>
       </ColorlibStepIconRoot>
     );
   }
@@ -147,32 +112,37 @@ export default function AnalysisProgress(props) {
     );
   }
 
-  const contentStep = (topic) => {
-    let icon;
-    switch (topic.status) {
-      case 'success':
-        icon = iconSuccess;
-        break;
-      case 'error':
-        icon = iconError;
-        break;
-      case 'open':
-        icon = iconOpen;
-        break;
-      default:
-        icon = iconNone;
-        break;
+  const contentStep = (prompt) => {
+    let icon = iconNone;
+
+    const findTopic = dataTopics.find(topic => topic.topic === prompt.topic_id)
+
+    if (findTopic) {
+      switch (findTopic.executed_status) {
+        case 'success':
+          icon = iconSuccess;
+          break;
+        case 'error':
+          icon = iconError;
+          break;
+        case 'running':
+          icon = iconOpen;
+          break;
+        default:
+          icon = iconNone;
+          break;
+      }
     }
 
     return (
       <StepLabel StepIconComponent={icon}>
-        <p data-tooltip-id={`tooltip-${topic.topic}`}>
-          {topic.topic.length > 5 ? labelDisplay(topic.topic, 5) : topic.topic}
+        <p data-tooltip-id={`tooltip-${prompt.uuid}`} style={{ cursor: "pointer" }}>
+          {prompt?.topic_name.length > 5 ? labelDisplay(prompt?.topic_name, 5) : prompt?.topic_name}
         </p>
-        {topic.topic.length > 5 &&
+        {prompt?.topic_name.length > 5 &&
           <ReactTooltip
-            id={`tooltip-${topic.topic}`}
-            content={topic.topic}
+            id={`tooltip-${prompt?.uuid}`}
+            content={prompt?.topic_name}
             widthTooltip={200}
           />}
       </StepLabel>
@@ -183,17 +153,17 @@ export default function AnalysisProgress(props) {
   return (
     <div>
       <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
-        {topics.map((topic, index) => (
-          (index < 6) && (<Step key={index}>
-            {contentStep(topic)}
+        {listPrompt.map((prompt, index) => (
+          (index < 6) && (<Step key={prompt.uuid}>
+            {contentStep(prompt)}
           </Step>)
 
         ))}
       </Stepper>
-      <Stepper alternativeLabel activeStep={2} connector={<ColorlibConnector />}>
-        {topics.map((topic, index) => (
-          (index >= 6) && (<Step key={index}>
-            {contentStep(topic)}
+      <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
+        {listPrompt.map((prompt, index) => (
+          (index >= 6) && (<Step key={prompt.uuid}>
+            {contentStep(prompt)}
           </Step>)
 
         ))}

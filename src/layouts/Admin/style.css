@@ -31,6 +31,7 @@
 
 .sidebar .list-group {
   padding: 0 10px;
+  margin-top: -20px;
 }
 
 .sidebar .sidebar-toggle {
@@ -74,7 +75,6 @@
 }
 
 .sidebar .sidebar-item {
-  margin: 10px;
   border-radius: 8px;
 }
 
@@ -101,7 +101,7 @@
   background-color: #d4eff4;
   margin-top: 15px;
   border-radius: 10px;
-  padding: 10px 10px 0 5px;
+  padding: 10px;
   font-size: 16px;
 }
 
@@ -112,6 +112,14 @@
 .sidebar .main-menu-extended {
   width: 270px;
   z-index: 2;
+}
+
+.sidebar .list-file {
+  overflow-y: auto;
+}
+
+.sidebar .list-file p {
+  cursor: pointer;
 }
 
 .sidebar .active-file {
@@ -129,6 +137,9 @@
   position: fixed;
   bottom: 0;
   text-align: center;
+  background-color: #fff;
+  margin: 0;
+  padding: 13px 0;
 }
 
 /* Popup upload */

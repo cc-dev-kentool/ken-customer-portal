@@ -29,10 +29,10 @@ export function ReactTooltip(props: Props) {
       id={id}
       place="bottom"
       content={content}
-      className="table-tooltip"
       style={{ 
         width: `${widthTooltip ?? currentWidth}px`,
         zIndex: 10,
+        wordBreak: "break-word"
       }}
     />
   )

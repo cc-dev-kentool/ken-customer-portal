@@ -6,7 +6,7 @@ export default function SidebarAdmin(props) {
 
   // Return the following JSX
   return (
-    <ul className="sidebar-nav text-left main-menu">
+    <ul className="sidebar-nav text-left mt-0">
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'dashboard' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/">
           <i className="fa-solid fa-house" style={{ color: `${routeName === 'dashboard' ? '#fff' : '#000'}` }}></i>

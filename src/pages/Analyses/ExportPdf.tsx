@@ -15,30 +15,32 @@ export default function ExportPdf(props) {
   return (
     <div id="divToPrint" style={{ overflow: "hidden", marginTop: "30px" }}>
       <h2 className="text-center">Data Analysis</h2>
-      {dataAnalysis &&
+      {dataAnalysis?.length > 0 &&
         <div className="table-content">
-          {Object.keys(dataAnalysis).map((key) => {
+          {dataAnalysis.map((data) => {
             return (
-              <div key={dataAnalysis[key].id} className="risk-content-item">
+              <div key={data.uuid} className="risk-content-item">
                 <Row className="risk-content-item-topic mb-4">
                   <Col sm="10">
-                    {dataAnalysis[key].topic}
+                    {data.analysis_result?.topic}
                   </Col>
                   <Col sm="2" className="text-end">
-                    {getStatusRisk(dataAnalysis[key].status)}
+                    {getStatusRisk(data.analysis_status)}
                   </Col>
                 </Row>
                 <Row className="source-text m-0">
                   <Col sm="2" className="title-left p-0">Source Text</Col>
                   <Col sm="10" className="p-0">
-                    <p className="pt-2 mb-2 cursor-pointer source-text-item" >
-                      {dataAnalysis[key].source_text}
+                    <p
+                      className="pt-2 mb-2 cursor-pointer source-text-item"
+                    >
+                      {data.analysis_result?.source_text}
                     </p>
                   </Col>
                 </Row>
                 <Row className="mt-3 m-0">
                   <Col sm="2" className="title-left p-0">Comment</Col>
-                  <Col sm="10" className="p-0">{dataAnalysis[key].comment}</Col>
+                  <Col sm="10" className="p-0">{data.analysis_result?.comment}</Col>
                 </Row>
               </div>
             )

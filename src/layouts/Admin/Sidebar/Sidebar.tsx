@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAppDispatch } from "hooks";
 import { uploadPdf } from "store/actions/analysis";
 import { remove as removeAlert } from "store/actions/alert"
+import { getListPrompt } from "store/actions/prompt";
 import classNames from "classnames";
 import UploadFile from "pages/Analyses/UploadFile";
 import SidebarAdmin from "./SidebarAdmin";
@@ -11,7 +12,7 @@ import SidebarMember from "./SidebarMember";
 // Define a function called "Sidebar" which receives a single parameter called "props"
 export default function Sidebar(props) {
   const dispatch = useAppDispatch();
-  const { routeName, isShowFullSidebar, toggleMenu, setUrl, setShowPdf } = props;
+  const { routeName, isShowFullSidebar, toggleMenu, setUrl, setShowPdf, setDataAnalys } = props;
 
   const user = JSON.parse(localStorage.getItem('user') || '{}')
 
@@ -38,6 +39,7 @@ export default function Sidebar(props) {
       setUrl(URL.createObjectURL(file));
       setShowModalUplaod(false);
       setShowPdf(true);
+      dispatch(getListPrompt());
       dispatch(uploadPdf(file));
     }
   }
@@ -81,6 +83,7 @@ export default function Sidebar(props) {
             isShowFullSidebar={isShowFullSidebar}
             setshowModalUplaod={setShowModalUplaod}
             setIsShowFiles={setIsShowFiles}
+            setDataAnalys={setDataAnalys}
           />}
         </div>
       </div>
