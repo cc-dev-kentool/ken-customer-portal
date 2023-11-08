@@ -6,6 +6,8 @@ const initialState = {
   filePath: "",
   uploadPdf: "",
   uploadPdfSuccess: false,
+  listFile: [],
+  getListFileSuccess: false,
 }
 
 // Declaring the modal reducer function
@@ -32,6 +34,16 @@ const getAnalysisData = (state = initialState, action) => {
       return {
         ...state,
         uploadPdfSuccess: action.payload
+      }
+    case analysisActionType.GET_LIST_FILE:
+      return {
+        ...state,
+        listFile: action.payload
+      }
+    case analysisActionType.GET_LIST_FILE_SUCCESS:
+      return {
+        ...state,
+        getListFileSuccess: action.payload,
       }
     default:
       return state

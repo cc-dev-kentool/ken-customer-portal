@@ -8,26 +8,44 @@ import AnalysisProgress from "./AnalysisProgress";
 export default function RiskContent(props) {
 
   // Destructure the "url" and "setValueSearch" props from the "props" object
-  const { dataAnalysis, currentStatus, isDowndLoad, setIsDowndLoad, setValueSearch } = props;
+  const {
+    uploadPdfSuccess,
+    dataAnalysis,
+    currentStatus,
+    isDowndLoad,
+    setIsDowndLoad,
+    setValueSearch,
+    setPageNumber,
+    setIsJump
+  } = props;
 
   const [isShowProgressBar, setIsShowProgressBar] = useState<boolean>(false);
 
   // Define a state variable named "topic" using the useState hook with an initial value of an array of objects
   const [topic, setTopic] = useState<Array<object>>([
+    { name: 'RUB', isShow: true },
+    { name: 'Sanctions', isShow: true },
+    { name: 'Cyber', isShow: true },
+    { name: 'NCBR', isShow: true },
+    { name: 'Communicable disease', isShow: true },
+    { name: 'War', isShow: true },
     { name: 'Governing law', isShow: true },
+    { name: 'Unused definitions', isShow: true },
     { name: 'Court jurisdiction', isShow: true },
     { name: 'Arbitration', isShow: true },
     { name: 'Court jurisdiction and arbitration clause interaction', isShow: true },
-    { name: 'War', isShow: true },
-    { name: 'Communicable disease', isShow: true },
-    { name: 'NCBR', isShow: true },
-    { name: 'Cyber', isShow: true },
-    { name: 'Sanctions', isShow: true },
-    { name: 'RUB', isShow: true },
-    { name: 'Unused definitions', isShow: true },
     { name: 'Readability', isShow: true },
   ]);
 
+  dataAnalysis.sort(function (a, b) {
+    if (a.topic_order < b.topic_order) {
+      return -1;
+    }
+    if (a.topic_order > b.topic_order) {
+      return 1;
+    }
+    return 0;
+  });
 
   // Define a function named "getStatusRisk" that takes a "status" parameter and returns a value from the "statusRisk" array based on the label
   const getStatusRisk = (status) => {
@@ -52,6 +70,8 @@ export default function RiskContent(props) {
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
     setValueSearch(text)
+    setIsJump(true)
+    setPageNumber(5)
   }
 
   const exportPDf = () => {
@@ -68,75 +88,84 @@ export default function RiskContent(props) {
 
   useEffect(() => {
     if (currentStatus === 'running') {
-      setIsShowProgressBar(true)
+      setIsShowProgressBar(true);
     }
+    if (currentStatus === 'done') {
+      setIsShowProgressBar(false);
+    }
+
   }, [currentStatus])
 
   // Return the following JSX
   return (
     <div className="risk-content">
       <p className="title-risk">Risk Analysis Data</p>
-      {Object.keys(dataAnalysis).length > 0 && (
+      {dataAnalysis?.length > 0 && (
         <i
           className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
           style={{ color: "#26ADC9" }}
           onClick={exportPDf}
         />
       )}
-      <div className='analysis-progress'>
-        <Row className="risk-content-item-topic m-2">
-          <Col sm={10}>
-            Progress bar
-          </Col>
-          <Col sm={2} className="text-end">
-            <i
-              className={`fa-solid fa-chevron-${isShowProgressBar ? 'up' : 'down'}`}
-              onClick={() => setIsShowProgressBar(!isShowProgressBar)}
-            />
-          </Col>
-        </Row>
-        <p className="text-right"></p>
-        {isShowProgressBar && <AnalysisProgress />}
-      </div>
-      {dataAnalysis &&
-        <div className="table-content" style={{height: `${isShowProgressBar ? '65%' : '88%'}`}}>
-          {Object.keys(dataAnalysis).map((key) => {
-            return (
-              <div key={dataAnalysis[key].id} className="risk-content-item">
-                <Row className="risk-content-item-topic mb-4">
-                  <Col sm="10">
-                    {dataAnalysis[key].topic}
-                  </Col>
-                  <Col sm="2" className="text-end">
-                    {getStatusRisk(dataAnalysis[key].status)}
-                    <i
-                      className={`fa-solid fa-chevron-${getStatusShowTopic(dataAnalysis[key].topic) ? 'up' : 'down'}`}
-                      onClick={() => handleShowTopic(dataAnalysis[key].topic)}
-                    />
-                  </Col>
-                </Row>
-                {getStatusShowTopic(dataAnalysis[key].topic) &&
-                  <>
-                    <Row className="source-text m-0">
-                      <Col sm="2" className="title-left p-0">Source Text</Col>
-                      <Col sm="10" className="p-0">
-                        <p
-                          className="pt-2 mb-2 cursor-pointer source-text-item"
-                          onClick={() => handleSearch(dataAnalysis[key].source_text)}
-                        >
-                          {dataAnalysis[key].source_text}
-                        </p>
+
+      {dataAnalysis?.length > 0 &&
+        <>
+          <div className='analysis-progress'>
+            <Row className="risk-content-item-topic m-2">
+              <Col sm={10}>
+                Progress bar
+              </Col>
+              <Col sm={2} className="text-end">
+                <i
+                  className={`fa-solid fa-chevron-${isShowProgressBar ? 'up' : 'down'}`}
+                  onClick={() => setIsShowProgressBar(!isShowProgressBar)}
+                />
+              </Col>
+            </Row>
+            <p className="text-right"></p>
+            {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} />}
+          </div>
+          <div className="table-content" style={{ height: `${isShowProgressBar ? '64%' : '87%'}` }}>
+            {dataAnalysis.map((data) => {
+              if (data.executed_status !== 'running' && data.executed_status !== 'wait_to_run') {
+                return (
+                  <div key={data.uuid} className="risk-content-item">
+                    <Row className="risk-content-item-topic mb-4">
+                      <Col sm="10">
+                        {data.analysis_result?.topic}
+                      </Col>
+                      <Col sm="2" className="text-end">
+                        {getStatusRisk(data.analysis_status)}
+                        <i
+                          className={`fa-solid fa-chevron-${getStatusShowTopic(data.analysis_result?.topic) ? 'up' : 'down'}`}
+                          onClick={() => handleShowTopic(data.analysis_result?.topic)}
+                        />
                       </Col>
                     </Row>
-                    <Row className="mt-3 m-0">
-                      <Col sm="2" className="title-left p-0">Comment</Col>
-                      <Col sm="10" className="p-0">{dataAnalysis[key].comment}</Col>
-                    </Row>
-                  </>}
-              </div>
-            )
-          })}
-        </div>
+                    {getStatusShowTopic(data.analysis_result?.topic) &&
+                      <>
+                        <Row className="source-text m-0">
+                          <Col sm="2" className="title-left p-0">Source Text</Col>
+                          <Col sm="10" className="p-0">
+                            <p
+                              className="pt-2 mb-2 cursor-pointer source-text-item"
+                              onClick={() => handleSearch(data.analysis_result?.source_text)}
+                            >
+                              {data.analysis_result?.source_text}
+                            </p>
+                          </Col>
+                        </Row>
+                        <Row className="mt-3 m-0">
+                          <Col sm="2" className="title-left p-0">Comment</Col>
+                          <Col sm="10" className="p-0">{data.analysis_result?.comment}</Col>
+                        </Row>
+                      </>}
+                  </div>
+                )
+              }
+            })}
+          </div>
+        </>
       }
     </div>
   );

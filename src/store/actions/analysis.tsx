@@ -31,6 +31,7 @@ export function uploadPdf(file) {
           type: analysisActionType.UPLOAD_PDF,
           payload: result.data.data.file_upload_id,
         });
+        dispatch(getListFile(false));
         dispatch(getAnalysisData(result.data.data.file_upload_id))
         dispatch({
           type: analysisActionType.UPLOAD_PDF_SUCCESS,
@@ -43,6 +44,32 @@ export function uploadPdf(file) {
           type: analysisActionType.UPLOAD_PDF_SUCCESS,
           payload: false,
         });
+      });
+  };
+}
+
+export function getListFile(isLoading=true) {
+  return async function (dispatch) {
+    isLoading && dispatch(setLoading(true));
+    await API({ url: "/analysises", method: "GET" })
+      .then((result) => {
+        isLoading && dispatch(setLoading(false));
+        dispatch({
+          type: analysisActionType.GET_LIST_FILE,
+          payload: result.data.data,
+        });
+        dispatch({
+          type: analysisActionType.GET_LIST_FILE_SUCCESS,
+          payload: true,
+        });
+      })
+      .catch((err) => {
+        isLoading && dispatch(setLoading(false));
+        dispatch({
+          type: analysisActionType.GET_LIST_FILE_SUCCESS,
+          payload: false,
+        });
+        dispatch(onError(err))
       });
   };
 }

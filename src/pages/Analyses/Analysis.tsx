@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { add as addAlert, remove as removeAlert } from "store/actions/alert"
-import { code } from "constants/error";
 import { getAnalysisData } from "store/actions/analysis";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -27,10 +25,13 @@ export default function Analysis(props) {
   const [pageNumber, setPageNumber] = useState<number>(0)
   const [fileUploadId, setFileUploadId] = useState<string>("");
   const [currentStatus, setCurrentStatus] = useState<string>("");
+  const [dataAnalysis, setDataAnalysis] = useState([]);
+  const [dataAnalys, setDataAnalys] = useState();
 
-  const [uploadPdf, dataAnaly] = useAppSelector((state) => [
+  const [uploadPdf, dataAnaly, uploadPdfSuccess] = useAppSelector((state) => [
     state.analysis.uploadPdf,
     state.analysis.dataAnalysis,
+    state.analysis.uploadPdfSuccess
   ]);
 
   useEffect(() => {
@@ -39,15 +40,15 @@ export default function Analysis(props) {
     }
   }, [uploadPdf])
 
-  console.log("dataAnaly", dataAnaly)
   useEffect(() => {
     if (dataAnaly?.uuid) {
       setCurrentStatus(dataAnaly?.topic_executions?.[0].status)
-      // if (dataAnaly?.topic_executions?.[0].status === 'running') {
-      //   setTimeout(() => {
-      //     dispatch(getAnalysisData(fileUploadId));
-      //   }, 5000);
-      // }
+      if (dataAnaly?.topic_executions?.[0].status === 'running') {
+        setTimeout(() => {
+          dispatch(getAnalysisData(fileUploadId));
+        }, 5000);
+      }
+      setDataAnalysis(dataAnaly?.topic_executions?.[0].execution_details)
     }
   }, [dataAnaly])
 
@@ -56,16 +57,14 @@ export default function Analysis(props) {
     setPageNumber(5)
   }
 
-  const dataAnalysis = [];
-
   // Return JSX elements to render the dashboard.
   return (
     <AdminLayout
       routeName={props.routeName}
-      showPdf={showPdf}
       setUrl={setUrl}
       setShowPdf={setShowPdf}
       setPositionChat={setPositionChat}
+      setDataAnalys={setDataAnalys}
     >
       <Row className="main-content">
         <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
@@ -78,11 +77,15 @@ export default function Analysis(props) {
             />
           }
           <RiskContent
+            uploadPdfSuccess={uploadPdfSuccess}
             dataAnalysis={dataAnalysis}
+            dataAnalys={dataAnalys}
             currentStatus={currentStatus}
             isDowndLoad={isDowndLoad}
             setIsDowndLoad={setIsDowndLoad}
             setValueSearch={setValueSearch}
+            setPageNumber={setPageNumber}
+            setIsJump={setIsJump}
           />
           <ChatGPT
             isShowPDF={showPdf}
