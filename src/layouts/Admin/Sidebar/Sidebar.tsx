@@ -86,7 +86,7 @@ export default function Sidebar(props) {
             <SidebarAdmin routeName={routeName} isShowFullSidebar={isShowFullSidebar} />
           }
 
-          {(user.role === "member" || (user.role === "admin" && routeName === "analyses")) &&
+          {(user.role === "member" || (["admin", "super-admin"].includes(user.role) && routeName === "analyses")) &&
             <SidebarMember
               role={user.role}
               routeName={routeName}
