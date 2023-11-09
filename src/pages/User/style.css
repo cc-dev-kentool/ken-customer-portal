@@ -133,3 +133,8 @@
     width: 80%;
     left: 10%;
 }
+
+.ant-btn-primary {
+    margin-right: 10px;
+    background-color: #26ADC9;
+}
