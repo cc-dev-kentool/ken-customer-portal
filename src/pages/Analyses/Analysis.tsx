@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { getAnalysisData } from "store/actions/analysis";
+import { getAnalysisData, getListFile } from "store/actions/analysis";
+import { getConversation } from "store/actions/chatGpt";
+import { Splitter, SplitterPanel } from 'primereact/splitter';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
@@ -18,20 +20,19 @@ export default function Analysis(props) {
   // The useState hook is used here to define state variables.
   const [url, setUrl] = useState<string>("");
   const [showPdf, setShowPdf] = useState<boolean>(true);
+  const [showChat, setShowChat] = useState<boolean>(false);
   const [valueSearch, setValueSearch] = useState<string>("");
-  const [positionChat, setPositionChat] = useState<boolean>(true);
   const [isDowndLoad, setIsDowndLoad] = useState<boolean>(false);
   const [isJump, setIsJump] = useState<boolean>(false);
   const [pageNumber, setPageNumber] = useState<number>(0)
   const [fileUploadId, setFileUploadId] = useState<string>("");
   const [currentStatus, setCurrentStatus] = useState<string>("");
   const [dataAnalysis, setDataAnalysis] = useState([]);
-  const [dataAnalys, setDataAnalys] = useState();
 
-  const [uploadPdf, dataAnaly, uploadPdfSuccess] = useAppSelector((state) => [
+  const [uploadPdf, dataAnaly, conversation] = useAppSelector((state) => [
     state.analysis.uploadPdf,
     state.analysis.dataAnalysis,
-    state.analysis.uploadPdfSuccess
+    state.conversation.conversation,
   ]);
 
   useEffect(() => {
@@ -48,6 +49,11 @@ export default function Analysis(props) {
           dispatch(getAnalysisData(fileUploadId));
         }, 5000);
       }
+      if (dataAnaly?.topic_executions?.[0].status === 'done') {
+        setFileUploadId(dataAnaly.uuid);
+        url !== dataAnaly.path && setUrl(dataAnaly.path)
+        dispatch(getListFile())
+      }
       setDataAnalysis(dataAnaly?.topic_executions?.[0].execution_details)
     }
   }, [dataAnaly])
@@ -57,14 +63,19 @@ export default function Analysis(props) {
     setPageNumber(5)
   }
 
+  const handleShowChat = () => {
+    setShowChat(true);
+    dispatch(getConversation(fileUploadId))
+  }
+
   // Return JSX elements to render the dashboard.
   return (
     <AdminLayout
       routeName={props.routeName}
       setUrl={setUrl}
       setShowPdf={setShowPdf}
-      setPositionChat={setPositionChat}
-      setDataAnalys={setDataAnalys}
+      setDataAnalysis={setDataAnalysis}
+      setShowChat={setShowChat}
     >
       <Row className="main-content">
         <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
@@ -76,21 +87,34 @@ export default function Analysis(props) {
               onClick={() => setShowPdf(true)}
             />
           }
+          {/*
+            <Splitter style={{ height: '89vh' }} layout="vertical">
+              <SplitterPanel className="flex align-items-center justify-content-center mb-2 bg-white">Panel 1</SplitterPanel>
+              <SplitterPanel className="flex align-items-center justify-content-center bg-white">Panel 2</SplitterPanel>
+            </Splitter>
+          */}
           <RiskContent
-            uploadPdfSuccess={uploadPdfSuccess}
+            fileUploadId={fileUploadId}
+            showChat={showChat}
             dataAnalysis={dataAnalysis}
-            dataAnalys={dataAnalys}
             currentStatus={currentStatus}
             isDowndLoad={isDowndLoad}
             setIsDowndLoad={setIsDowndLoad}
             setValueSearch={setValueSearch}
-            setPageNumber={setPageNumber}
-            setIsJump={setIsJump}
           />
-          <ChatGPT
-            isShowPDF={showPdf}
-            isShowFullSidebar={positionChat}
-          />
+          {currentStatus && currentStatus !== 'running' && <>
+            {!showChat
+              ? <i
+                className="fa-solid fa-message fa-2xl icon-chat"
+                onClick={handleShowChat}
+              />
+              : <ChatGPT
+                showChat={showPdf}
+                fileUploadId={fileUploadId}
+                setShowChat={setShowChat}
+              />
+            }
+          </>}
         </Col>
         <Col lg={url && showPdf ? 5 : 0}>
           {showPdf &&
@@ -106,7 +130,7 @@ export default function Analysis(props) {
         </Col>
       </Row>
       {isDowndLoad &&
-        <ExportPdf dataAnalysis={dataAnalysis} />
+        <ExportPdf dataAnalysis={dataAnalysis} conversation={conversation} />
       }
     </AdminLayout>
   );

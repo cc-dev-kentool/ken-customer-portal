@@ -1,22 +1,25 @@
 import { statusRisk } from "constants/riskAnalysis";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
+import { useAppDispatch } from "hooks";
+import { getConversation } from "store/actions/chatGpt";
 import generatePDF, { Margin } from 'react-to-pdf';
 import AnalysisProgress from "./AnalysisProgress";
+import classNames from "classnames";
 
 // Define a function component named "RiskContent" and receive a single parameter called "props"
 export default function RiskContent(props) {
+  const dispatch = useAppDispatch();
 
   // Destructure the "url" and "setValueSearch" props from the "props" object
   const {
-    uploadPdfSuccess,
+    fileUploadId,
+    showChat,
     dataAnalysis,
     currentStatus,
     isDowndLoad,
     setIsDowndLoad,
     setValueSearch,
-    setPageNumber,
-    setIsJump
   } = props;
 
   const [isShowProgressBar, setIsShowProgressBar] = useState<boolean>(false);
@@ -70,11 +73,10 @@ export default function RiskContent(props) {
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
     setValueSearch(text)
-    setIsJump(true)
-    setPageNumber(5)
   }
 
   const exportPDf = () => {
+    dispatch(getConversation(fileUploadId))
     setIsDowndLoad(true);
   }
 
@@ -98,7 +100,7 @@ export default function RiskContent(props) {
 
   // Return the following JSX
   return (
-    <div className="risk-content">
+    <div className={classNames("risk-content", {"full-height" : !showChat})}>
       <p className="title-risk">Risk Analysis Data</p>
       {dataAnalysis?.length > 0 && (
         <i
@@ -107,7 +109,7 @@ export default function RiskContent(props) {
           onClick={exportPDf}
         />
       )}
-
+      
       {dataAnalysis?.length > 0 &&
         <>
           <div className='analysis-progress'>
@@ -125,7 +127,7 @@ export default function RiskContent(props) {
             <p className="text-right"></p>
             {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} />}
           </div>
-          <div className="table-content" style={{ height: `${isShowProgressBar ? '64%' : '87%'}` }}>
+          <div className="table-content" style={{ height: `${isShowProgressBar ? '56%' : '83%'}` }}>
             {dataAnalysis.map((data) => {
               if (data.executed_status !== 'running' && data.executed_status !== 'wait_to_run') {
                 return (

@@ -36,7 +36,7 @@
   background-color: #fff;
   padding: 10px;
   border-radius: 15px;
-  height: 89vh;
+  height: 68vh; 
 }
 
 .full-height {
@@ -107,9 +107,8 @@
   background-color: #fff;
   padding: 10px;
   border-radius: 15px;
-  height: 28vh;
+  height: 20vh;
   margin-top: 10px;
-  margin-bottom: 10px;
 }
 
 .chat-content .title-chat {
@@ -123,6 +122,93 @@
 .chat-content .icon-close {
   float: right;
   cursor: pointer;
+}
+
+.conversation {
+  height: 64%;
+  overflow: auto;
+  margin-top: 20px;
+}
+
+.conversation .question {
+  color: #fff;
+  text-align: right;
+  padding-right: 5px;
+  margin-left: 10%;
+}
+
+.question .question-content {
+  background-color: #26ADC9;
+  padding: 10px;
+  border-radius: 8px;
+  height: max-content;
+  width: fit-content;
+  text-align: left;
+}
+
+.conversation .answer .answer-content {
+  background-color: #ccc;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.field-input {
+  width: 99%;
+  background-color: #f4fbfc;
+  border: none !important;
+  border-radius: 10px;
+  height: 40px;
+  margin-right: 3px;
+  padding-left: 10px;
+}
+
+.iconSend {
+  position: relative;
+  background: none;
+  border: none !important;
+  float: right;
+  margin: 15px 10px -35px 0;
+  z-index: 10;
+}
+
+@keyframes dot-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.dot-container {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  height: 35px;
+  padding: 10px;
+  background-color: #ccc;
+  width: fit-content;
+  border-radius: 10px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  background-color: #0d3c46;
+  border-radius: 50%;
+  margin: 0 5px;
+  animation: dot-pulse 1.5s infinite ease-in-out;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
 }
 
 /* PDF Document */

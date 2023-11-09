@@ -4,12 +4,22 @@ import { labelDisplay } from "helpers/until";
 import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import { useEffect, useState } from "react";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
-import { getListPrompt } from "store/actions/prompt"
-import classNames from "classnames";;
+import { getListPrompt } from "store/actions/prompt";
+import icon_success from "assets/icon/icon_success.svg";
+import icon_error from "assets/icon/icon_error.svg";
+import icon_loading from "assets/icon/icon_loading.svg";
+import classNames from "classnames";
 
 // Define a function called "Sidebar" which receives a single parameter called "props"
 export default function SidebarMember(props) {
-  const { isShowFiles, isShowFullSidebar, setshowModalUplaod, setIsShowFiles, setDataAnalys } = props;
+  const {
+    role,
+    isShowFiles,
+    isShowFullSidebar,
+    setshowModalUplaod,
+    setIsShowFiles,
+    setShowChat,
+  } = props;
 
   const dispatch = useAppDispatch();
 
@@ -23,7 +33,8 @@ export default function SidebarMember(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [heightMenu, setHeightMenu] = useState<number>(window.innerHeight - 440)
+  const defaultValue = role === 'admin' ? 440 : 210
+  const [heightMenu, setHeightMenu] = useState<number>(window.innerHeight - defaultValue)
   const [activeFile, setActiveFile] = useState<number>();
 
   // Define a function called "handleShowFiles" that toggles the value of "isShowFiles"
@@ -33,31 +44,55 @@ export default function SidebarMember(props) {
 
   useEffect(() => {
     window.addEventListener('resize', function () {
-      setHeightMenu(window.innerHeight - 440);
+      setHeightMenu(window.innerHeight - defaultValue);
     });
   }, []);
 
   const showDetailFile = (fileId) => {
-    dispatch(getListPrompt());
+    setShowChat(false);
+    setActiveFile(fileId)
+    dispatch(getListPrompt(false));
     dispatch(getAnalysisData(fileId));
+  }
+
+  const getStatusFile = (status) => {
+    let icon;
+    switch (status) {
+      case 'done':
+        icon = icon_success;
+        break;
+      case 'error':
+        icon = icon_error;
+        break;
+      case 'running':
+        icon = icon_loading;
+        break;
+      default: return null;
+    }
+    return icon;
+  }
+
+  const disableBtnNew = () => {
+    const findIndex = files.findIndex(item  => item.analysis_status === 'running');
+    return findIndex >= 0;
   }
 
   // Return the following JSX
   return (
     <>
       <button
-        // className="btn-add-document"
-        className={`btn-add-document`}
+        className={classNames('btn-add-document', {'btn-disabled': disableBtnNew()})}
         onClick={() => {
           dispatch(removeAlert())
           setshowModalUplaod(true)
         }}
+        disabled={disableBtnNew()}
       >
         <i className="fa-regular fa-plus fs-1"></i><br />
         {isShowFullSidebar && <span>New Document</span>}
       </button>
 
-      <div
+      {files?.length > 0 && <div
         className={
           classNames("main-menu pr-0",
             { "main-menu-extended": (isShowFiles && !isShowFullSidebar) }
@@ -77,11 +112,15 @@ export default function SidebarMember(props) {
             className="list-file"
             style={{ height: '84%' }}
           >
-            {files.map((file, index) => {
+            {files.map((file) => {
               return (
-                <p className={classNames("mb-2", {"active-file" : index === activeFile})} key={file.uuid}>
+                <p 
+                  className={classNames("mb-2", { "active-file": file.uuid === activeFile })} 
+                  key={file.uuid}
+                  onClick={() => showDetailFile(file.uuid)}
+                >
                   <i className="fa-regular fa-file-lines m-2" style={{ color: "#26adc9" }}></i>
-                  <span data-tooltip-id={`tooltip-1-${file.uuid}`} onClick={() => showDetailFile(file.uuid)}>
+                  <span data-tooltip-id={`tooltip-1-${file.uuid}`}>
                     {file.file_name?.length > 16 ? labelDisplay(file.file_name, 16) : file.file_name}
                   </span>
                   {file.file_name?.length > 16 &&
@@ -90,13 +129,13 @@ export default function SidebarMember(props) {
                       content={file.file_name}
                       widthTooltip={220}
                     />}
-                  <i className="fa-solid fa-ellipsis icon-action"></i>
+                  <img src={getStatusFile(file.analysis_status)} className="icon-action" alt="" width="20px" />
                 </p>
               )
             })}
           </div>
         }
-      </div>
+      </div>}
     </>
   );
 }

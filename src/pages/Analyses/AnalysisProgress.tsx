@@ -7,6 +7,9 @@ import { labelDisplay } from 'helpers/until';
 import { ReactTooltip } from 'components/Tooltip/ReactTooltip';
 import { useAppSelector } from 'hooks';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
+import icon_success from "assets/icon/icon_success.svg";
+import icon_error from "assets/icon/icon_error.svg";
+import icon_loading from "assets/icon/icon_loading.svg";
 import "./style.css"
 
 
@@ -73,12 +76,12 @@ export default function AnalysisProgress(props) {
     }),
   }));
 
-  const iconOpen = (props: StepIconProps) => {
+  const iconLoading = (props: StepIconProps) => {
     const { active, completed, className } = props;
 
     return (
       <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
-        <i className="fa-solid fa-ellipsis fa-xl" style={{ color: "#F4952C" }}></i>
+        <img src={icon_loading} alt="" width="20px"/>
       </ColorlibStepIconRoot>
     );
   }
@@ -88,7 +91,7 @@ export default function AnalysisProgress(props) {
 
     return (
       <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
-        <i className="fa-solid fa-circle-check fa-xl" style={{ color: "#5cc200" }}></i>
+        <img src={icon_success} alt="" />
       </ColorlibStepIconRoot>
     );
   }
@@ -98,7 +101,7 @@ export default function AnalysisProgress(props) {
 
     return (
       <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
-        <i className="fa-solid fa-circle-xmark fa-xl" style={{ color: "#ff543a" }}></i>
+        <img src={icon_error} alt="" />
       </ColorlibStepIconRoot>
     );
   }
@@ -126,7 +129,7 @@ export default function AnalysisProgress(props) {
           icon = iconError;
           break;
         case 'running':
-          icon = iconOpen;
+          icon = iconLoading;
           break;
         default:
           icon = iconNone;

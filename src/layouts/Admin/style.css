@@ -68,6 +68,11 @@
   border-color: #ccc;
 }
 
+.sidebar .btn-disabled:hover {
+  background-color: #ccc;
+  border-color: #ccc;
+}
+
 .sidebar .sidebar-nav {
   margin-bottom: 15px;
   border-radius: 10px;
@@ -129,8 +134,7 @@
 
 .sidebar .icon-action {
   float: right;
-  padding-top: 10px;
-  padding-right: 10px;
+  margin-top: 7px;
 }
 
 .sidebar .version {

@@ -12,7 +12,15 @@ import SidebarMember from "./SidebarMember";
 // Define a function called "Sidebar" which receives a single parameter called "props"
 export default function Sidebar(props) {
   const dispatch = useAppDispatch();
-  const { routeName, isShowFullSidebar, toggleMenu, setUrl, setShowPdf, setDataAnalys } = props;
+  const {
+    routeName,
+    isShowFullSidebar,
+    toggleMenu,
+    setUrl,
+    setShowPdf,
+    setDataAnalysis,
+    setShowChat,
+  } = props;
 
   const user = JSON.parse(localStorage.getItem('user') || '{}')
 
@@ -39,6 +47,8 @@ export default function Sidebar(props) {
       setUrl(URL.createObjectURL(file));
       setShowModalUplaod(false);
       setShowPdf(true);
+      setShowChat(false);
+      setDataAnalysis([]);
       dispatch(getListPrompt());
       dispatch(uploadPdf(file));
     }
@@ -76,15 +86,16 @@ export default function Sidebar(props) {
             <SidebarAdmin routeName={routeName} isShowFullSidebar={isShowFullSidebar} />
           }
 
-          {(user.role === "member" || (user.role === "admin" && routeName === "analyses")) && 
-          <SidebarMember
-            routeName={routeName}
-            isShowFiles={isShowFiles}
-            isShowFullSidebar={isShowFullSidebar}
-            setshowModalUplaod={setShowModalUplaod}
-            setIsShowFiles={setIsShowFiles}
-            setDataAnalys={setDataAnalys}
-          />}
+          {(user.role === "member" || (user.role === "admin" && routeName === "analyses")) &&
+            <SidebarMember
+              role={user.role}
+              routeName={routeName}
+              isShowFiles={isShowFiles}
+              isShowFullSidebar={isShowFullSidebar}
+              setshowModalUplaod={setShowModalUplaod}
+              setIsShowFiles={setIsShowFiles}
+              setShowChat={setShowChat}
+            />}
         </div>
       </div>
 
