@@ -4,17 +4,21 @@ import { onError } from "./base";
 import API from "service/api";
 
 // Define a function to change password my account
-export function getAnalysisData(id) {
+export function getAnalysisData(id, isLoading = false) {
   return async function (dispatch) {
+    isLoading && dispatch(setLoading(true));
     await API({ url: `/analysis/${id}`, method: "get" })
       .then((result) => {
-        dispatch(setLoading(false));
+        isLoading && dispatch(setLoading(false));
         dispatch({
           type: analysisActionType.GET_DATA_ANALYTICS,
           payload: result.data.data,
         });
       })
-      .catch((err) => dispatch(onError(err)));
+      .catch((err) => {
+        isLoading && dispatch(setLoading(false));
+        dispatch(onError(err));
+      });
   };
 }
 
@@ -51,6 +55,10 @@ export function uploadPdf(file) {
 export function getListFile(isLoading=true) {
   return async function (dispatch) {
     isLoading && dispatch(setLoading(true));
+    dispatch({
+      type: analysisActionType.GET_LIST_FILE_SUCCESS,
+      payload: false,
+    });
     await API({ url: "/analysises", method: "GET" })
       .then((result) => {
         isLoading && dispatch(setLoading(false));

@@ -1,8 +1,9 @@
 import { Worker, Viewer, ScrollMode } from "@react-pdf-viewer/core";
 import { searchPlugin } from "@react-pdf-viewer/search";
 import { ToolbarSlot, TransformToolbarSlot, toolbarPlugin } from "@react-pdf-viewer/toolbar";
-import { useEffect } from "react";
-import JumpToPagePlugin from '../../components/JumpToPagePlugin';
+import { useEffect, useState } from "react";
+import { add as addAlert, remove } from "store/actions/alert";
+import { useAppDispatch } from "hooks";
 import close from "assets/icon/icon_close.svg";
 import "@react-pdf-viewer/toolbar/lib/styles/index.css";
 import "@react-pdf-viewer/highlight/lib/styles/index.css";
@@ -10,8 +11,9 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 
 // Define a function component named "PdfDocument" and receive a single parameter called "props"
 export default function PdfDocument(props) {
+  const dispatch = useAppDispatch();
   // Destructure the "url", "valueSearch", and "setShowPdf" props from the "props" object
-  const { url, isJump, pageNumber, valueSearch, setShowPdf, setIsJump } = props;
+  const { url, valueSearch, setShowPdf } = props;
 
   // Define a transform function for the TransformToolbarSlot type
   const transform: TransformToolbarSlot = (slot: ToolbarSlot) => {
@@ -23,7 +25,7 @@ export default function PdfDocument(props) {
       GoToPreviousPage: () => <></>,
       GoToNextPage: () => <></>,
       Open: () => <></>,
-      // ShowSearchPopover: () => <></>,
+      ShowSearchPopover: () => <></>,
       NumberOfPages: () => <span className="text-white">/ <NumberOfPages /></span>
     }
   }
@@ -34,54 +36,63 @@ export default function PdfDocument(props) {
 
   // Create an instance of the search plugin and get the highlight method
   const searchPluginInstance = searchPlugin();
-  const { highlight } = searchPluginInstance;
+  const { highlight, clearHighlights } = searchPluginInstance;
 
-  const jumpToPagePluginInstance = JumpToPagePlugin();
-  const { jumpToPage } = jumpToPagePluginInstance;
-
-  useEffect(() => {
-    if (isJump) {
-      jumpToPage(pageNumber)
-      setIsJump(false);
-    }
-  }, [isJump])
+  const [contentPdf, setContentPdf] = useState<any>([])
 
   // Define an onHighlight function that takes a value to search for and highlights it
   const onHighlight = (searchText) => {
-    const pages = document.querySelectorAll('.rpv-core__page-layer');
 
-    let includedText = "";
-    let includeElements: any = [];
-    pages.forEach(page => {
-      const textLayer = page.querySelector('.rpv-core__text-layer');
-      if (textLayer) {
-        const paragraphs = textLayer.children;
-        let spanValue = "";
+    // Make a regex from the needle...
+    let regex = "";
 
-        for (let i = 0; i < paragraphs.length; i++) {
-          let element = paragraphs[i];
+    // ..split the needle into words...
+    const words = searchText.split(/\s+/);
 
-          if (element.tagName.toLocaleLowerCase() === 'br') {
-            spanValue += " ";
-          } else {
-            spanValue += element.innerHTML
-          }
-        }
+    function getRightChar(charVal) {
+      const specialChars = ['(', ')']
+      return specialChars.find(p => p === charVal) ? "\\" + charVal : charVal
+    }
 
-        if (spanValue.includes(searchText)) {
-          includeElements.push(textLayer.innerHTML);
-          includedText = spanValue;
-        }
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i];
+
+      // ...allow HTML tags after each character except the last one in a word...
+      for (let i = 0; i < word.length; i++) {
+        regex += getRightChar(word.charAt(i)) + "((<.+?>|[ .()\n<>,;])?)*";
+      }
+
+      // ...allow a mixture of whitespace and HTML tags after each word except the last one
+      if (i < words.length - 1) regex += "(([ .()\n<>,;])?)+";
+    }
+
+
+    let isFounded = false
+    contentPdf.forEach(pageText => {
+      const matches = pageText.match(regex);
+
+      if (matches && matches.length > 0) {
+        highlight([
+          {
+            keyword: matches[0],
+            matchCase: true,
+          },
+        ]);
+
+        isFounded = true
       }
     });
 
-    highlight([
-      {
-        keyword: valueSearch,
-        matchCase: true,
-      },
-    ]);
-  };
+    if (!isFounded) {
+      clearHighlights();
+      dispatch(
+        addAlert("The sentence is not found in the document!", "danger")
+      );
+      setTimeout(() => {
+        dispatch(remove())
+      }, 5000);
+    }
+  }
 
   // Use the useEffect hook to perform the highlight when the valueSearch changes
   useEffect(() => {
@@ -89,6 +100,40 @@ export default function PdfDocument(props) {
       onHighlight(valueSearch);
     }
   }, [valueSearch])
+
+  const onDocumentLoadSuccess = async (doc) => {
+    const totalNumPages = doc.doc.numPages;
+
+    let pdfContent: any = [];
+
+    const pdfDoc = doc.doc;
+
+    const render_options = {
+      //replaces all occurrences of whitespace with standard spaces (0x20). The default value is `false`.
+      normalizeWhitespace: false,
+      //do not attempt to combine same line TextItem's. The default value is `false`.
+      disableCombineTextItems: false
+    };
+
+    // Loop through each page of the document
+    for (let i = 0; i < totalNumPages; i++) {
+      let pageText = '';
+
+      const page = await pdfDoc.getPage(i + 1);
+
+      // Extract text content from each page
+      const textContent = await page.getTextContent(render_options);
+
+      textContent.items.forEach((item) => {
+        pageText += item.str; // Concatenate text content
+      });
+
+      pdfContent.push(pageText)
+
+    }
+
+    setContentPdf(pdfContent)
+  }
 
   // Return the following JSX
   return (
@@ -108,9 +153,9 @@ export default function PdfDocument(props) {
                 plugins={[
                   toolbarPluginInstance,
                   searchPluginInstance,
-                  jumpToPagePluginInstance
                 ]}
                 scrollMode={ScrollMode.Vertical}
+                onDocumentLoad={onDocumentLoadSuccess}
               />
             </div>
           </div>

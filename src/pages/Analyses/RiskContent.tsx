@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useAppDispatch } from "hooks";
 import { getConversation } from "store/actions/chatGpt";
+import { remove } from "store/actions/alert";
 import generatePDF, { Margin } from 'react-to-pdf';
 import AnalysisProgress from "./AnalysisProgress";
 import classNames from "classnames";
@@ -72,7 +73,8 @@ export default function RiskContent(props) {
 
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
-    setValueSearch(text)
+    setValueSearch(text);
+    dispatch(remove());
   }
 
   const exportPDf = () => {
@@ -102,7 +104,7 @@ export default function RiskContent(props) {
   return (
     <div className={classNames("risk-content", {"full-height" : !showChat})}>
       <p className="title-risk">Risk Analysis Data</p>
-      {dataAnalysis?.length > 0 && (
+      {dataAnalysis?.length > 0 && currentStatus === 'done' && (
         <i
           className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
           style={{ color: "#26ADC9" }}
