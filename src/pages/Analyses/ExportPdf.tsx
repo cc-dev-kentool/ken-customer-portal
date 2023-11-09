@@ -4,7 +4,7 @@ import { Col, Row } from "react-bootstrap";
 // Define a function component named "RiskContent" and receive a single parameter called "props"
 export default function ExportPdf(props) {
 
-  const { dataAnalysis } = props;
+  const { dataAnalysis, conversation } = props;
 
   // Define a function named "getStatusRisk" that takes a "status" parameter and returns a value from the "statusRisk" array based on the label
   const getStatusRisk = (status) => {
@@ -47,6 +47,21 @@ export default function ExportPdf(props) {
           })}
         </div>
       }
+      <h2 className="text-center mt-5">Data Chat</h2>
+      <div className="conversation">
+        {conversation?.map(item => {
+          return (
+            <div key={item.uuid}>
+              <p className="question">
+                <label className="question-content">{item.question}</label>
+              </p>
+              <p className="answer">
+                <label className="answer-content">{item.answer}</label>
+              </p>
+            </div>
+          )
+        })}
+      </div>
     </div>
   );
 }

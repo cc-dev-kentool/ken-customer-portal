@@ -94,7 +94,7 @@ export default function PdfDocument(props) {
   return (
     <div>
       {url && (
-        <Worker workerUrl="assets/js/pdf.worker.min.js">
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
           <div className="component-pdf">
             <div className="header-pdf" >
               <Toolbar>{renderDefaultToolbar(transform)}</Toolbar><br />

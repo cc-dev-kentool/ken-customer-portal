@@ -8,6 +8,7 @@ import users from "./user"
 import prompts from "./prompt"
 import masterData from "./master"
 import contracts from "./contract"
+import conversation from "./chatGpt"
 export default combineReducers({
   auth,
   app,
@@ -18,4 +19,5 @@ export default combineReducers({
   prompts,
   masterData,
   contracts,
+  conversation,
 })

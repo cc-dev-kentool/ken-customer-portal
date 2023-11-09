@@ -1,84 +1,86 @@
 import { useEffect, useState } from "react";
-import { useAppSelector } from "hooks";
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      "langflow-chat": any;
-    }
-  }
-}
+import { useAppDispatch, useAppSelector } from "hooks";
+import { postConversation } from "store/actions/chatGpt";
+import icon_send from "assets/icon/icon_send.svg";
 
 export default function ChatGPT(props) {
-  const { isShowFullSidebar } = props;
-  const [filePath] = useAppSelector((state) => [
-    state.analysis.filePath
+  // Retrieves the Redux store's state and dispatch function
+  const dispatch = useAppDispatch();
+  const { showChat, fileUploadId, setShowChat } = props;
+
+  const [message, setMessage] = useState<string>("")
+  const [showLoading, setShowLoading] = useState<boolean>(false);
+
+  const [conversation] = useAppSelector((state) => [
+    state.conversation.conversation,
   ]);
 
-  //Move to env variable later
-  const getTweaks = () => {
-    return {
-      "RecursiveCharacterTextSplitter-2h57a": {},
-      "OpenAIEmbeddings-NgnlA": {},
-      "Chroma-5fJPZ": {},
-      "ChatOpenAI-0PCKA": {},
-      "CombineDocsChain-YGAcN": {},
-      "RetrievalQA-zoGLL": {
-        return_source_documents: false,
-      },
-      "PyPDFLoader-Uz4Cg": {
-        "file_path": filePath
-      }
-    }
-  }
-  const [heightChat, setHeightChat] = useState<number>(window.innerHeight / 100 * 50);
-  const [widthChat, setWidthChat] = useState<number>(window.innerWidth / 100 * 40);
-
   useEffect(() => {
-    window.addEventListener('resize', function () {
-      setHeightChat(window.innerHeight / 100 * 50);
-      setWidthChat(window.innerWidth / 100 * 40);
-    });
-  }, []);
+    setShowLoading(false);
+    setMessage("")
+  }, [conversation])
 
-  const sendIconStyle = {
-    stroke: "#26ADC9",
-  };
+  const handleCloseChat = () => {
+    setShowChat(false);
+  }
 
-  const chatTriggerStyle = {
-    backgroundColor: "#26ADC9",
-  };
-
-  const userMessageStyle = {
-    backgroundColor: "#26ADC9",
-    textAlign: "left",
+  const handleSendMessage = () => {
+    setShowLoading(true);
+    dispatch(postConversation(fileUploadId, message.trim()));
   }
 
   return (
-    <div>
-      {filePath &&
-        (
-          <langflow-chat
-            flow_id={process.env.REACT_APP_LANGFLOW_ID}
-            chat_inputs='{"input":""}'
-            chat_input_field="query"
-            tweaks={JSON.stringify(getTweaks())}
-            chat_output_field="result"
-            host_url={process.env.REACT_APP_LANGFLOW_HOST_URL}
-            window_title=""
-            style={{
-              position: "absolute",
-              bottom: "10px",
-              left: `${isShowFullSidebar ? "270px" : "140px"}`,
-              zIndex: 10,
-            }}
-            height={heightChat}
-            width={widthChat}
-            chat_position="top-right"
-            send_icon_style={JSON.stringify(sendIconStyle)}
-            chat_trigger_style={JSON.stringify(chatTriggerStyle)}
-            user_message_style={JSON.stringify(userMessageStyle)}
-          />
-        )}
+    <div className="chat-content">
+      <i
+        className="fa fa-times icon-close"
+        aria-hidden="true"
+        onClick={handleCloseChat}
+      ></i>
+      <div className="conversation">
+        {conversation?.map(item => {
+          return (
+            <div key={item.uuid}>
+              <p className="question">
+                <label className="question-content">{item.question}</label>
+              </p>
+              <p className="answer">
+                <label className="answer-content">{item.answer}</label>
+              </p>
+            </div>
+          )
+        })}
+        {showChat && showLoading &&
+          <>
+            <p className="question">
+              <label className="question-content">{message}</label>
+            </p>
+            <div className="dot-container">
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+            </div>
+          </>
+        }
+      </div>
+      <div className="area-input">
+        <button
+          type="submit"
+          onClick={handleSendMessage}
+          className="iconSend"
+          disabled={props.isDisabled}
+        >
+          <img src={icon_send} alt="" />
+        </button>
+        <input
+          type="text"
+          className="field-input form-control"
+          value={showLoading ? "" : message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(event) => {
+            event.key === 'Enter' && handleSendMessage()
+          }}
+        />
+      </div>
     </div>
   )
 }

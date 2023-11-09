@@ -4,12 +4,12 @@ import { onError } from "./base";
 import { add as addAlert } from 'store/actions/alert'
 import API from "service/api";
 
-export function getListPrompt() {
+export function getListPrompt(isLoading = true) {
   return async function (dispatch) {
-    dispatch(setLoading(true));
+    isLoading && dispatch(setLoading(true));
     await API({ url: "/prompts", method: "GET" })
       .then((result) => {
-        dispatch(setLoading(false));
+        isLoading && dispatch(setLoading(false));
         dispatch({
           type: promptActionType.GET_LIST_PROMPT,
           payload: result.data.data,
@@ -20,7 +20,7 @@ export function getListPrompt() {
         });
       })
       .catch((err) => {
-        dispatch(setLoading(false));
+        isLoading && dispatch(setLoading(false));
         dispatch({
           type: promptActionType.GET_LIST_PROMPT_SUCCESS,
           payload: false,
