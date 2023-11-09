@@ -83,11 +83,11 @@ export default function Sidebar(props) {
           </span>
         </div>
         <div className="list-group">
-          {user.role === "admin" &&
+          {["admin", "super-admin"].includes(user.role) &&
             <SidebarAdmin routeName={routeName} isShowFullSidebar={isShowFullSidebar} />
           }
 
-          {(user.role === "member" || (user.role === "admin" && routeName === "analyses")) &&
+          {(user.role === "member" || (["admin", "super-admin"].includes(user.role) && routeName === "analyses")) &&
             <SidebarMember
               role={user.role}
               isShowFiles={isShowFiles}

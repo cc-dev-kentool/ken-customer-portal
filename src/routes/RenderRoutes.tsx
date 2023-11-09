@@ -9,6 +9,7 @@ const ListUser = lazy(() => import("pages/User/ListUser"))
 const Login = lazy(() => import("pages/Auth/Login"))
 const Analysis = lazy(() => import("pages/Analyses/Analysis"))
 const Dashboard = lazy(() => import("pages/Dashboard"))
+const Configuation = lazy(() => import("pages/Configuation"))
 
 // Defines a type for individual route objects
 type routeItem = {
@@ -19,6 +20,7 @@ type routeItem = {
   requiredAuth: boolean, // Determines whether the user needs to be authenticated to access the route
   name: string, // Name of the route
   title: string, // Title of the route (will be displayed in the browser tab)
+  roles: Array<string>;
 }
 
 // Defines a type for nested routes that extends routeItem type
@@ -37,6 +39,7 @@ const ROUTES: routes[] = [
     requiredAuth: true, // Indicates whether authentication is required or not
     name: "contracts", // Identifier for this route
     title: "contracts", // Title that will be displayed in the header
+    roles: ["admin", "super-admin"],
   },
   {
     path: "/prompts", // URL pattern for the login route
@@ -47,6 +50,7 @@ const ROUTES: routes[] = [
     requiredAuth: true, // Indicates whether authentication is required or not
     name: "prompts", // Identifier for this route
     title: "Prompts", // Title that will be displayed in the header
+    roles: ["super-admin"],
   },
   {
     path: "/users", // URL pattern for the login route
@@ -57,6 +61,7 @@ const ROUTES: routes[] = [
     requiredAuth: true, // Indicates whether authentication is required or not
     name: "users", // Identifier for this route
     title: "Users", // Title that will be displayed in the header
+    roles: ["admin", "super-admin"],
   },
   {
     path: "/login", // URL pattern for the login route
@@ -67,6 +72,7 @@ const ROUTES: routes[] = [
     requiredAuth: false, // Indicates whether authentication is required or not
     name: "login", // Identifier for this route
     title: "Login", // Title that will be displayed in the header
+    roles: ["admin", "super-admin", "member"],
   },
   {
     path: "/analyses", // URL pattern for the dashboard route
@@ -77,6 +83,7 @@ const ROUTES: routes[] = [
     requiredAuth: true, // Indicates whether authentication is required or not
     name: "analyses", // Identifier for this route
     title: "Analyses", // Title that will be displayed in the header
+    roles: ["admin", "super-admin", "member"],
   },
   // Dashboard Route
   {
@@ -88,6 +95,19 @@ const ROUTES: routes[] = [
     requiredAuth: true, // Indicates whether authentication is required or not
     name: "dashboard", // Identifier for this route
     title: "Ken", // Title that will be displayed in the header
+    roles: ["admin", "super-admin", "member"],
+  },
+  // Config Route
+  {
+    path: "/configuations", // URL pattern for the dashboard route
+    key: "ROOT", // Unique identifier for this component instance
+    exact: true, // Exact match is required to load the component
+    component: Configuation, // Component that will be loaded on this route
+    routes: [], // Optional array of child routes if any
+    requiredAuth: true, // Indicates whether authentication is required or not
+    name: "configuations", // Identifier for this route
+    title: "Ken", // Title that will be displayed in the header
+    roles: ["super-admin"],
   }
 ];
 
@@ -117,7 +137,7 @@ function RouteWithSubRoutes(route: routes) {
 
   // Set the document title to match the title defined in the route object
   document.title = route.title
-
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   // Return a Route component with the given path, exact flag, and rendering function
   // The rendering function checks for authentication status and redirects the user as needed
   return (
@@ -137,6 +157,11 @@ function RouteWithSubRoutes(route: routes) {
           if (route.requiredAuth) {
             window.location.href = "/login?continue=" + encodeURIComponent(window.location.href);
           }
+        }
+
+        // Redirect to 403 page if user doesn't have required role for the current route
+        if (!route.roles.includes(user.role)) {
+          window.location.href = "/";
         }
 
         // Render the given component and pass down the props and sub-routes

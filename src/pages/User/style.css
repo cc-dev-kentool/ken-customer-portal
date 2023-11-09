@@ -40,11 +40,12 @@
 }
 
 .role-admin,
+.role-super-admin,
 .role-member {
     padding: 3px;
     border-radius: 8px;
     text-align: center;
-    width: 75px;
+    width: 100px;
     margin-bottom: 0;
 }
 
@@ -55,6 +56,11 @@
 
 .role-member {
     background-color: #e5e5e5;
+}
+
+.role-super-admin {
+    background-color: #26adc9;
+    color: #fff;
 }
 
 .last-login {
@@ -132,4 +138,13 @@
 .modal-history {
     width: 80%;
     left: 10%;
+}
+
+.ant-btn-primary {
+    margin-right: 10px;
+    background-color: #26ADC9;
+}
+
+.hide-action {
+    display: none
 }
