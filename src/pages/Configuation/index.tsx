@@ -1,0 +1,1 @@
+export { Configuation as default } from './Configuation'

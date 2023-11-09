@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { PopupDialog } from "components/Modals/PopUpDialog";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { getListUser, getLoginHistory } from "store/actions/user";
-import { getDateDiff, upperFistChar } from "helpers/until";
+import { getDateDiff } from "helpers/until";
 import { ContentTable } from "components/Table/ContentTable";
 import type { ColumnsType } from "antd/es/table";
 import moment from "moment";
@@ -29,7 +29,7 @@ interface DataType {
 export default function ListUser(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
-
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
   const [listUser] = useAppSelector((state) => [state.users.listUser]);
 
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
@@ -46,6 +46,8 @@ export default function ListUser(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const loggedUser = JSON.parse(localStorage.getItem("user") || "{}");
+
   useEffect(() => {
     if (listUser) {
       setCurrentTime(listUser.currentTime);
@@ -54,9 +56,22 @@ export default function ListUser(props) {
         a?.created_at < b?.created_at ? 1 : -1
       );
       setOriginData(sortedData);
-      setCurrentData(sortedData);
+      setCurrentData(listUser.data);
     }
   }, [listUser]);
+
+  const getRoleName = (role) => {
+    switch (role) {
+      case "admin":
+        return "Admin";
+      case "member":
+        return "Member";
+      case "super-admin":
+        return "Super Admin";
+      default:
+        break;
+    }
+  };
 
   const columns: ColumnsType<DataType> = [
     {
@@ -136,9 +151,10 @@ export default function ListUser(props) {
           className={classNames("", {
             "role-admin": role === "admin",
             "role-member": role === "member",
+            "role-super-admin": role === "super-admin",
           })}
         >
-          {upperFistChar(role)}
+          {getRoleName(role)}
         </p>
       ),
     },
@@ -158,6 +174,7 @@ export default function ListUser(props) {
     {
       title: "Action",
       width: "11%",
+      className: loggedUser.role == "super-admin" ? "" : "hide-action",
       render: (user) => (
         <i
           className="fa-solid fa-pen"
@@ -202,7 +219,7 @@ export default function ListUser(props) {
   };
 
   const onReset = () => {
-    dispatch(getListUser(false));
+    location.reload();
   };
 
   // Returns JSX for rendering component on the page
@@ -215,7 +232,9 @@ export default function ListUser(props) {
             Users Management
           </Col>
           <Col sm={2} className="add-user">
-            <button onClick={() => setIsShowAdd(true)}>+</button>
+            {user.role == "super-admin" && (
+              <button onClick={() => setIsShowAdd(true)}>+</button>
+            )}
           </Col>
         </Row>
         <Row>

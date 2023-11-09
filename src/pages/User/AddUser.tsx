@@ -49,7 +49,7 @@ export default function AddUser(props) {
             }
             className={`form-control ${errors.email ? "is-invalid" : ""}`}
             name="email"
-            placeholder="user@gmail.com"
+            placeholder="Please enter a valid email address"
             onKeyDown={(evt) => evt.key === " " && evt.preventDefault()}
           />
           <div className="invalid-feedback">{errors.email?.message}</div>
@@ -62,7 +62,7 @@ export default function AddUser(props) {
             {...register("password")}
             className={`form-control ${errors.password ? "is-invalid" : ""}`}
             name="password"
-            placeholder="Zxcv123456@"
+            placeholder="Please enter password"
           />
           <i
             className="fa-regular fa-eye"
@@ -73,14 +73,17 @@ export default function AddUser(props) {
 
         <div className="mb-3">
           <label className="label-input">Role</label>
-          <input
-            type="role"
+
+          <select
             {...register("role")}
             className={`form-control ${errors.role ? "is-invalid" : ""}`}
             name="role"
-            value={"Member"}
-            disabled
-          />
+            value={"member"}
+          >
+
+            <option value="admin">Admin</option>
+            <option value="member">Member</option>
+          </select>
           <div className="invalid-feedback">{errors.role?.message}</div>
         </div>
 
