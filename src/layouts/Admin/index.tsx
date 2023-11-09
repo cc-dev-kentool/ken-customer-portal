@@ -16,6 +16,7 @@ function AdminLayout(props) {
     setShowPdf,
     setDataAnalysis,
     setShowChat,
+    setCurrentDocumentId,
   } = props;
 
   const [isLoading] = useAppSelector((state) => [state.app.isLoading])
@@ -37,6 +38,7 @@ function AdminLayout(props) {
         setShowPdf={setShowPdf}
         setDataAnalysis={setDataAnalysis}
         setShowChat={setShowChat}
+        setCurrentDocumentId={setCurrentDocumentId}
       />
       <div className="main">
         <Navmenu
