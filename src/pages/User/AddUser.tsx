@@ -29,6 +29,7 @@ export default function AddUser(props) {
     const params = {
       email: data.email.toLowerCase(),
       password: data.password.trim(),
+      role: data.role.trim(),
     };
     dispatch(createUser(params));
     setIsShowAdd(false);

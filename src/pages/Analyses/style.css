@@ -36,11 +36,15 @@
   background-color: #fff;
   padding: 10px;
   border-radius: 15px;
-  height: 68vh; 
+  height: 60vh; 
 }
 
 .full-height {
   height: 89vh;
+}
+
+.min-height {
+  display: none;
 }
 
 .risk-content .title-risk {
@@ -107,8 +111,12 @@
   background-color: #fff;
   padding: 10px;
   border-radius: 15px;
-  height: 20vh;
+  height: 28vh;
   margin-top: 10px;
+}
+
+.full-chat {
+  height: 88vh;
 }
 
 .chat-content .title-chat {
@@ -119,15 +127,27 @@
   margin: 10px;
 }
 
-.chat-content .icon-close {
+.chat-content .icon-close, .icon-expand  {
   float: right;
   cursor: pointer;
 }
 
+.chat-content .icon-close {
+  margin-right: 0;
+}
+
+.chat-content .icon-expand {
+  margin-right: 10px;
+}
+
 .conversation {
-  height: 64%;
+  height: 65%;
   overflow: auto;
   margin-top: 20px;
+}
+
+.height-full {
+  height: 88%;
 }
 
 .conversation .question {

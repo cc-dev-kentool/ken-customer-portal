@@ -19,6 +19,7 @@ export default function RiskContent(props) {
     dataAnalysis,
     currentStatus,
     isDowndLoad,
+    isShowFullChat,
     setIsDowndLoad,
     setValueSearch,
   } = props;
@@ -100,9 +101,19 @@ export default function RiskContent(props) {
 
   }, [currentStatus])
 
+  const getHeightRiskContent = () => {
+    let height : number;
+    if (isShowProgressBar) {
+      height = showChat ? 18 : 47;
+    } else {
+      height = showChat ? 43 : 72;
+    }
+    return height;
+  }
+
   // Return the following JSX
   return (
-    <div className={classNames("risk-content", {"full-height" : !showChat})}>
+    <div className={classNames("risk-content", {"full-height" : !showChat, "min-height" : isShowFullChat})}>
       <p className="title-risk">Risk Analysis Data</p>
       {dataAnalysis?.length > 0 && currentStatus === 'done' && (
         <i
@@ -127,9 +138,9 @@ export default function RiskContent(props) {
               </Col>
             </Row>
             <p className="text-right"></p>
-            {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} />}
+            {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} currentStatus={currentStatus}/>}
           </div>
-          <div className="table-content" style={{ height: `${isShowProgressBar ? '56%' : '83%'}` }}>
+          <div className="table-content" style={{ height: `${getHeightRiskContent()}vh` }}>
             {dataAnalysis.map((data) => {
               if (data.executed_status !== 'running' && data.executed_status !== 'wait_to_run') {
                 return (
