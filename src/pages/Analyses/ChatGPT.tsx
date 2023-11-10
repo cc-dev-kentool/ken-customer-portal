@@ -23,6 +23,7 @@ export default function ChatGPT(props) {
 
   const handleCloseChat = () => {
     setShowChat(false);
+    setIsShowFullChat(false);
   }
 
   const handleSendMessage = () => {
