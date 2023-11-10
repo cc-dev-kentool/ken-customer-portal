@@ -46,7 +46,7 @@ export default function AddUser(props) {
             type="text"
             {...register("email")}
             onBlur={(e: any) =>
-              setValue("email", e.target.value.replace(" ", "").trim())
+              setValue("email", e.target.value .trim())
             }
             className={`form-control ${errors.email ? "is-invalid" : ""}`}
             name="email"
@@ -65,10 +65,10 @@ export default function AddUser(props) {
             name="password"
             placeholder="Please enter password"
           />
-          <i
+          {!errors.password?.message && <i
             className="fa-regular fa-eye"
             onClick={() => setIsShowPassword(!isShowPassword)}
-          />
+          />}
           <div className="invalid-feedback">{errors.password?.message}</div>
         </div>
 
@@ -79,7 +79,7 @@ export default function AddUser(props) {
             {...register("role")}
             className={`form-control ${errors.role ? "is-invalid" : ""}`}
             name="role"
-            value={"member"}
+            defaultValue={"member"}
           >
 
             <option value="admin">Admin</option>

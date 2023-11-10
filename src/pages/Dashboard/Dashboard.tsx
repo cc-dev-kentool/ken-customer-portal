@@ -119,7 +119,7 @@ export function Dashboard(props) {
                     progress={getProgressUserLogin()}
                     strokeColor="#5cc200"
                     classIndicator="indicator-left"
-                    label="Logined User"
+                    label="Logged-in User"
                   />
                 </Col>
                 <Col sm={6}>
@@ -136,7 +136,7 @@ export function Dashboard(props) {
               <p>Total Users <span className="value-report">{statisticsUser.total_user_number}</span></p>
             </div>
             <div className="tt-report">
-              <p>Logined <span className="value-report">{statisticsUser.total_user_login_number}</span></p>
+              <p>Logged-in <span className="value-report">{statisticsUser.total_user_login_number}</span></p>
               <p>Analyzed <span className="value-report">{statisticsUser.total_user_upload_number}</span></p>
             </div>
           </Col>
@@ -202,7 +202,7 @@ export function Dashboard(props) {
                 type="pie"
                 width={700}
               />
-              <p className="label-chart">Question mart ratio</p>
+              <p className="label-chart">Question Mark Ratio</p>
             </Row>
             <Row className="content-detail-chart">
               <Col className="detail-chart-left">

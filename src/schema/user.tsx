@@ -10,6 +10,16 @@ export const userAddValidation = Yup.object().shape({
   email: Yup.string()
     .required("Email address is required.")
     .email("Email is invalid.")
-    .matches(EMAIL_REGREX, "Email is invalid."),
+    .matches(EMAIL_REGREX, "Email is invalid.")
+    .test("email", "Email is invalid.", function (value: any) {
+      const chars = ['?', '[', ']', '(', ')', '{', '}', '*', '^', '~', '$']
+      let isValid = false;
+      chars.forEach(char => {
+        if (value.includes(char)) {
+          isValid = true;
+        }
+      })
+      return !isValid;
+    }),
   password: Yup.string().required("Password is required."),
 });
