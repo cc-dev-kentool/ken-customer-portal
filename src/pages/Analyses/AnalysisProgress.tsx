@@ -30,12 +30,10 @@ export default function AnalysisProgress(props) {
         if (findIndex) {
           dataTopics.find(item => item.topic_order === 1).executed_status = 'running';
           setDataProgress(dataTopics)
-        } else {
-          setDataProgress(dataTopics)
         }
       }
-      setDataProgress(dataTopics)
     }
+    setDataProgress(dataTopics)
   }, [currentStatus, dataTopics])
 
   listPrompt.sort(function (a, b) {
@@ -135,7 +133,6 @@ export default function AnalysisProgress(props) {
 
   const contentStep = (prompt) => {
     let icon = iconNone;
-
     const findTopic = dataProgress.find(topic => topic.topic === prompt.topic_id)
 
     if (findTopic) {
