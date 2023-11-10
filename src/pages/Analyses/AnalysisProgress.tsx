@@ -34,6 +34,7 @@ export default function AnalysisProgress(props) {
           setDataProgress(dataTopics)
         }
       }
+      setDataProgress(dataTopics)
     }
   }, [currentStatus, dataTopics])
 
