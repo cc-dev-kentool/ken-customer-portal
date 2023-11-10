@@ -59,7 +59,7 @@ export default function Analysis(props) {
       } else if (executionStatus === 'done') {
         setFileUploadId(dataAnaly.uuid);
         url !== dataAnaly.path && setUrl(dataAnaly.path)
-        dispatch(getListFile())
+        dispatch(getListFile(false))
       }
 
       setDataAnalysis(dataAnaly?.topic_executions?.[0].execution_details)
@@ -73,6 +73,7 @@ export default function Analysis(props) {
     }
     if (currentDocumentId) {
       setValueSearch("")
+      setDataAnalysis([])
       dispatch(getListPrompt(false));
       dispatch(getAnalysisData(currentDocumentId, true));
     }
@@ -93,7 +94,8 @@ export default function Analysis(props) {
       setShowChat={setShowChat}
       setCurrentDocumentId={setCurrentDocumentId}
     >
-      <Row className="main-content">
+      {dataAnalysis?.length > 0 && 
+        <Row className="main-content">
         <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
           {!showPdf &&
             <i
@@ -143,7 +145,7 @@ export default function Analysis(props) {
             />
           }
         </Col>
-      </Row>
+      </Row>}
       {isDowndLoad &&
         <ExportPdf dataAnalysis={dataAnalysis} conversation={conversation} />
       }
