@@ -83,7 +83,7 @@ export default function PdfDocument(props) {
       }
     });
 
-    if (!isFounded) {
+    if (!isFounded && valueSearch) {
       clearHighlights();
       dispatch(
         addAlert("The sentence is not found in the document!", "danger")

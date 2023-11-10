@@ -1,6 +1,7 @@
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
+import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { StepIconProps } from '@mui/material/StepIcon';
 import { labelDisplay } from 'helpers/until';
@@ -14,11 +15,27 @@ import "./style.css"
 
 
 export default function AnalysisProgress(props) {
-  const { dataTopics } = props;
+  const { dataTopics, currentStatus } = props;
 
   const [listPrompt] = useAppSelector((state) => [
     state.prompts.listPrompt,
   ]);
+
+  const [dataProgress, setDataProgress] = useState<any>([])
+
+  useEffect(() => {
+    if (dataTopics?.length > 0) {
+      if (currentStatus === 'running') {
+        const findIndex = dataTopics.every(data =>  data.executed_status !== 'running')
+        if (findIndex) {
+          dataTopics.find(item => item.topic_order === 1).executed_status = 'running';
+          setDataProgress(dataTopics)
+        } else {
+          setDataProgress(dataTopics)
+        }
+      }
+    }
+  }, [currentStatus, dataTopics])
 
   listPrompt.sort(function (a, b) {
     if (a.topic_order < b.topic_order) {
@@ -118,7 +135,7 @@ export default function AnalysisProgress(props) {
   const contentStep = (prompt) => {
     let icon = iconNone;
 
-    const findTopic = dataTopics.find(topic => topic.topic === prompt.topic_id)
+    const findTopic = dataProgress.find(topic => topic.topic === prompt.topic_id)
 
     if (findTopic) {
       switch (findTopic.executed_status) {

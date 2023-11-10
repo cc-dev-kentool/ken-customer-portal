@@ -28,13 +28,15 @@ export default function Analysis(props) {
   const [currentStatus, setCurrentStatus] = useState<string>("");
   const [dataAnalysis, setDataAnalysis] = useState<object[]>([]);
   const [currentDocumentId, setCurrentDocumentId] = useState<string>("");
-  let runningTimeout: any = null;
-
+  const [isShowFullChat, setIsShowFullChat] = useState<boolean>(false);
+  
   const [uploadId, dataAnaly, conversation] = useAppSelector((state) => [
     state.analysis.uploadPdf,
     state.analysis.dataAnalysis,
     state.conversation.conversation,
   ]);
+
+  let runningTimeout: any = null;
 
   useEffect(() => {
     if (uploadId) {
@@ -70,6 +72,7 @@ export default function Analysis(props) {
       runningTimeout = null;
     }
     if (currentDocumentId) {
+      setValueSearch("")
       dispatch(getListPrompt(false));
       dispatch(getAnalysisData(currentDocumentId, true));
     }
@@ -111,6 +114,7 @@ export default function Analysis(props) {
             dataAnalysis={dataAnalysis}
             currentStatus={currentStatus}
             isDowndLoad={isDowndLoad}
+            isShowFullChat={isShowFullChat}
             setIsDowndLoad={setIsDowndLoad}
             setValueSearch={setValueSearch}
           />
@@ -123,7 +127,9 @@ export default function Analysis(props) {
               : <ChatGPT
                 showChat={showPdf}
                 fileUploadId={fileUploadId}
+                isShowFullChat={isShowFullChat}
                 setShowChat={setShowChat}
+                setIsShowFullChat={setIsShowFullChat}
               />
             }
           </>}

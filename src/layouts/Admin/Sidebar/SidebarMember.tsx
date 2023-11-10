@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "hooks";
-import { remove as removeAlert } from "store/actions/alert"
+import { remove, remove as removeAlert } from "store/actions/alert"
 import { labelDisplay } from "helpers/until";
 import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import { useEffect, useState } from "react";
@@ -30,7 +30,18 @@ export default function SidebarMember(props) {
     state.analysis.getListFileSuccess,
   ]);
 
-  const defaultValue = role === 'admin' ? 440 : 210
+  let defaultValue: number;
+  switch (role) {
+    case 'super-admin':
+      defaultValue = 490;
+      break;
+    case 'admin':
+      defaultValue = 400;
+      break;
+    default:
+      defaultValue = 210;
+  }
+
   const [heightMenu, setHeightMenu] = useState<number>(window.innerHeight - defaultValue)
   const [activeFile, setActiveFile] = useState<string>("");
 
@@ -62,6 +73,7 @@ export default function SidebarMember(props) {
   }, []);
 
   const showDetailFile = (fileId) => {
+    dispatch(remove());
     setShowChat(false);
     setActiveFile(fileId);
     setCurrentDocumentId(fileId);
