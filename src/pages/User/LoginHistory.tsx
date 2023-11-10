@@ -43,17 +43,25 @@ export default function LoginHistory() {
       title: 'Duration',
       dataIndex: 'duration',
       key: 'duration',
+      sorter: {
+        compare: (a, b) => {
+          const durationA = compareDuration(a.last_access_time, a.logout_time);
+          const durationB = compareDuration(b.last_access_time, b.logout_time);
+          return durationA > durationB ? 1 : -1;
+        },
+      },
       render: (_, { last_access_time, logout_time }) => (
         <p>{logout_time ? getDateDiff(last_access_time, logout_time, false): 'N/A'}</p>
       ),
     },
     {
       title: 'Login Time',
-      dataIndex: 'login_time',
-      key: 'login_time',
+      dataIndex: 'last_access_time',
+      key: 'last_access_time',
+      defaultSortOrder: 'descend',
       sorter: {
         compare: (a, b) => {
-          return a > b ? 1 : -1;
+          return a.last_access_time > b.last_access_time ? 1 : -1;
         },
       },
       render: (_, { last_access_time }) => (
@@ -61,12 +69,14 @@ export default function LoginHistory() {
       ),
     },
     {
-      title: 'Log out',
+      title: 'Log Out',
       dataIndex: 'logout',
       key: 'logout',
       sorter: {
         compare: (a, b) => {
-          return a.logout_time > b.logout_time ? 1 : -1;
+          const timeA = a.logout_time ?? 'N/A'
+          const timeB = b.logout_time ?? 'N/A'
+          return timeA > timeB ? 1 : -1;
         },
       },
       render: (_, { logout_time }) => (
@@ -74,6 +84,10 @@ export default function LoginHistory() {
       )
     },
   ];
+
+  const compareDuration = (timeLogin, timeLogout) => {
+    return new Date(timeLogout).getTime() - new Date(timeLogin).getTime()
+  }
 
   // Returns JSX for rendering component on the page
   return (

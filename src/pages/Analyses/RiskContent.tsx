@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useAppDispatch } from "hooks";
 import { getConversation } from "store/actions/chatGpt";
+import { remove } from "store/actions/alert";
 import generatePDF, { Margin } from 'react-to-pdf';
 import AnalysisProgress from "./AnalysisProgress";
 import classNames from "classnames";
@@ -18,6 +19,7 @@ export default function RiskContent(props) {
     dataAnalysis,
     currentStatus,
     isDowndLoad,
+    isShowFullChat,
     setIsDowndLoad,
     setValueSearch,
   } = props;
@@ -72,7 +74,8 @@ export default function RiskContent(props) {
 
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
-    setValueSearch(text)
+    setValueSearch(text);
+    dispatch(remove());
   }
 
   const exportPDf = () => {
@@ -98,11 +101,21 @@ export default function RiskContent(props) {
 
   }, [currentStatus])
 
+  const getHeightRiskContent = () => {
+    let height : number;
+    if (isShowProgressBar) {
+      height = showChat ? 18 : 47;
+    } else {
+      height = showChat ? 43 : 72;
+    }
+    return height;
+  }
+
   // Return the following JSX
   return (
-    <div className={classNames("risk-content", {"full-height" : !showChat})}>
+    <div className={classNames("risk-content", {"full-height" : !showChat, "min-height" : isShowFullChat})}>
       <p className="title-risk">Risk Analysis Data</p>
-      {dataAnalysis?.length > 0 && (
+      {dataAnalysis?.length > 0 && currentStatus === 'done' && (
         <i
           className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
           style={{ color: "#26ADC9" }}
@@ -125,11 +138,11 @@ export default function RiskContent(props) {
               </Col>
             </Row>
             <p className="text-right"></p>
-            {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} />}
+            {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} currentStatus={currentStatus}/>}
           </div>
-          <div className="table-content" style={{ height: `${isShowProgressBar ? '56%' : '83%'}` }}>
+          <div className="table-content" style={{ height: `${getHeightRiskContent()}vh` }}>
             {dataAnalysis.map((data) => {
-              if (data.executed_status !== 'running' && data.executed_status !== 'wait_to_run') {
+              if (data.executed_status === 'success') {
                 return (
                   <div key={data.uuid} className="risk-content-item">
                     <Row className="risk-content-item-topic mb-4">

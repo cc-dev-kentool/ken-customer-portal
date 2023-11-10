@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { postConversation } from "store/actions/chatGpt";
 import icon_send from "assets/icon/icon_send.svg";
+import classNames from "classnames";
 
 export default function ChatGPT(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
-  const { showChat, fileUploadId, setShowChat } = props;
+  const { showChat, isShowFullChat, fileUploadId, setShowChat, setIsShowFullChat } = props;
 
   const [message, setMessage] = useState<string>("")
   const [showLoading, setShowLoading] = useState<boolean>(false);
@@ -22,6 +23,7 @@ export default function ChatGPT(props) {
 
   const handleCloseChat = () => {
     setShowChat(false);
+    setIsShowFullChat(false);
   }
 
   const handleSendMessage = () => {
@@ -30,13 +32,22 @@ export default function ChatGPT(props) {
   }
 
   return (
-    <div className="chat-content">
+    <div className={classNames("chat-content", {"full-chat" : isShowFullChat})}>
       <i
         className="fa fa-times icon-close"
         aria-hidden="true"
         onClick={handleCloseChat}
       ></i>
-      <div className="conversation">
+      {!isShowFullChat
+        ? <i
+          className="fa-solid fa-expand icon-expand"
+          onClick={() => setIsShowFullChat(true)}
+        />
+        : <i 
+        className="fa-solid fa-minus icon-expand" 
+        onClick={() => setIsShowFullChat(false)}
+      />}
+      <div className={classNames("conversation", {"height-full" : isShowFullChat})}>
         {conversation?.map(item => {
           return (
             <div key={item.uuid}>

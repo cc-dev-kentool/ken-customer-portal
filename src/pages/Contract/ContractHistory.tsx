@@ -39,7 +39,7 @@ export default function ContractHistory(props) {
 
   const columns: ColumnsType<DataType> = [
     {
-      title: 'File contract',
+      title: 'File Contract',
       dataIndex: 'file_name',
       key: 'file_name',
       sorter: {
@@ -55,18 +55,18 @@ export default function ContractHistory(props) {
       width: '15%',
       sorter: {
         compare: (a, b) => {
-          return a > b ? 1 : -1;
+          return a.pages > b.pages ? 1 : -1;
         },
       },
     },
     {
-      title: 'Time Of analysis (seconds)',
+      title: 'Time Of Analysis (seconds)',
       dataIndex: 'executed_time',
       key: 'executed_time',
       width: '15%',
       sorter: {
         compare: (a, b) => {
-          return a > b ? 1 : -1;
+          return a.executed_time > b.executed_time ? 1 : -1;
         },
       }
     },

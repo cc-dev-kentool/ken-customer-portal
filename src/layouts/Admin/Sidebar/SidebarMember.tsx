@@ -1,10 +1,9 @@
 import { useAppDispatch, useAppSelector } from "hooks";
-import { remove as removeAlert } from "store/actions/alert"
+import { remove, remove as removeAlert } from "store/actions/alert"
 import { labelDisplay } from "helpers/until";
 import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import { useEffect, useState } from "react";
-import { getAnalysisData, getListFile } from "store/actions/analysis";
-import { getListPrompt } from "store/actions/prompt";
+import { getListFile } from "store/actions/analysis";
 import icon_success from "assets/icon/icon_success.svg";
 import icon_error from "assets/icon/icon_error.svg";
 import icon_loading from "assets/icon/icon_loading.svg";
@@ -16,16 +15,35 @@ export default function SidebarMember(props) {
     role,
     isShowFiles,
     isShowFullSidebar,
+    isNewUplaod,
     setshowModalUplaod,
     setIsShowFiles,
+    setIsNewUplaod,
     setShowChat,
+    setCurrentDocumentId,
   } = props;
 
   const dispatch = useAppDispatch();
 
-  const [files] = useAppSelector((state) => [
+  const [files, getListFileSuccess] = useAppSelector((state) => [
     state.analysis.listFile,
+    state.analysis.getListFileSuccess,
   ]);
+
+  let defaultValue: number;
+  switch (role) {
+    case 'super-admin':
+      defaultValue = 490;
+      break;
+    case 'admin':
+      defaultValue = 400;
+      break;
+    default:
+      defaultValue = 210;
+  }
+
+  const [heightMenu, setHeightMenu] = useState<number>(window.innerHeight - defaultValue)
+  const [activeFile, setActiveFile] = useState<string>("");
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
@@ -33,9 +51,15 @@ export default function SidebarMember(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const defaultValue = role === 'admin' ? 440 : 210
-  const [heightMenu, setHeightMenu] = useState<number>(window.innerHeight - defaultValue)
-  const [activeFile, setActiveFile] = useState<number>();
+  useEffect(() => {
+    if (isNewUplaod && getListFileSuccess) {
+      const findFile = files.find(file => file.analysis_status === 'running')
+      if (findFile) {
+        setActiveFile(files[0]?.uuid);
+        setIsNewUplaod(false);
+      }
+    }
+  }, [isNewUplaod, getListFileSuccess]);
 
   // Define a function called "handleShowFiles" that toggles the value of "isShowFiles"
   const handleShowFiles = () => {
@@ -49,10 +73,10 @@ export default function SidebarMember(props) {
   }, []);
 
   const showDetailFile = (fileId) => {
+    dispatch(remove());
     setShowChat(false);
-    setActiveFile(fileId)
-    dispatch(getListPrompt(false));
-    dispatch(getAnalysisData(fileId));
+    setActiveFile(fileId);
+    setCurrentDocumentId(fileId);
   }
 
   const getStatusFile = (status) => {
@@ -73,7 +97,7 @@ export default function SidebarMember(props) {
   }
 
   const disableBtnNew = () => {
-    const findIndex = files.findIndex(item  => item.analysis_status === 'running');
+    const findIndex = files.findIndex(item => item.analysis_status === 'running');
     return findIndex >= 0;
   }
 
@@ -81,7 +105,7 @@ export default function SidebarMember(props) {
   return (
     <>
       <button
-        className={classNames('btn-add-document', {'btn-disabled': disableBtnNew()})}
+        className={classNames('btn-add-document', { 'btn-disabled': disableBtnNew() })}
         onClick={() => {
           dispatch(removeAlert())
           setshowModalUplaod(true)
@@ -114,8 +138,8 @@ export default function SidebarMember(props) {
           >
             {files.map((file) => {
               return (
-                <p 
-                  className={classNames("mb-2", { "active-file": file.uuid === activeFile })} 
+                <p
+                  className={classNames("mb-2", { "active-file": file.uuid === activeFile })}
                   key={file.uuid}
                   onClick={() => showDetailFile(file.uuid)}
                 >

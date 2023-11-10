@@ -1,0 +1,86 @@
+.dashboard {
+    background-color: #fff;
+    min-height: 90vh;
+    padding: 30px 0 10px 0;
+    border-radius: 10px;
+}
+
+/* Content dashboard */
+
+.content-db {
+    border: 1px solid #c5c5c5;
+    margin: 20px 30px;
+    padding: 0 20px 20px 20px;
+}
+
+.left-content, .right-content {
+    border: 1px solid #c5c5c5;
+    margin-top: 20px;
+}
+
+.content-db .icon-users {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #61696d;
+}
+
+.content-db .icon-users i {
+    margin-top: 28px;
+}
+
+.content-db .icon-rotata {
+    margin: 20px 20px 0 20px;
+    float: right;
+    cursor: pointer;
+}
+
+.content-db .label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.content-db .tt-report {
+    border: 1px solid #c5c5c5;
+    border-top: none;
+    padding: 10px;
+}
+
+.value-report {
+    float: right;
+}
+
+/* Content chart */
+
+.content-chart {
+    border: 1px solid #c5c5c5;
+    margin: 0 30px;
+    padding: 20px;
+    overflow: auto;
+}
+
+.apexcharts-canvas {
+    margin: 0 auto ;
+}
+
+.label-chart {
+    text-align: center;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.content-detail-chart {
+    border: 1px solid #c5c5c5;
+    margin: 0 30px 10px 30px;
+    padding: 20px;
+    border-top: none;
+}
+
+.detail-chart-left {
+    padding-right: 100px;
+}
+
+.content-chart .icon-rotata {
+    cursor: pointer;
+    text-align: end;
+}

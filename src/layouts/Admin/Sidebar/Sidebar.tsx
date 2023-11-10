@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useAppDispatch } from "hooks";
 import { uploadPdf } from "store/actions/analysis";
 import { remove as removeAlert } from "store/actions/alert"
-import { getListPrompt } from "store/actions/prompt";
 import classNames from "classnames";
 import UploadFile from "pages/Analyses/UploadFile";
 import SidebarAdmin from "./SidebarAdmin";
@@ -20,6 +19,7 @@ export default function Sidebar(props) {
     setShowPdf,
     setDataAnalysis,
     setShowChat,
+    setCurrentDocumentId,
   } = props;
 
   const user = JSON.parse(localStorage.getItem('user') || '{}')
@@ -29,6 +29,7 @@ export default function Sidebar(props) {
   const [isShowFiles, setIsShowFiles] = useState<boolean>(true);
   const [file, setFile] = useState<File>();
   const [isEnableBtnAnalyze, setIsEnableBtnAnalyze] = useState<boolean>(true);
+  const [isNewUplaod, setIsNewUplaod] = useState<boolean>(false);
 
   // Define a function called "getContentPopupArea" that returns some JSX
   const getContentPopupArea = () => {
@@ -47,9 +48,9 @@ export default function Sidebar(props) {
       setUrl(URL.createObjectURL(file));
       setShowModalUplaod(false);
       setShowPdf(true);
+      setIsNewUplaod(true);
       setShowChat(false);
       setDataAnalysis([]);
-      dispatch(getListPrompt());
       dispatch(uploadPdf(file));
     }
   }
@@ -82,24 +83,26 @@ export default function Sidebar(props) {
           </span>
         </div>
         <div className="list-group">
-          {user.role === "admin" &&
+          {["admin", "super-admin"].includes(user.role) &&
             <SidebarAdmin routeName={routeName} isShowFullSidebar={isShowFullSidebar} />
           }
 
-          {(user.role === "member" || (user.role === "admin" && routeName === "analyses")) &&
+          {(user.role === "member" || (["admin", "super-admin"].includes(user.role) && routeName === "analyses")) &&
             <SidebarMember
               role={user.role}
-              routeName={routeName}
               isShowFiles={isShowFiles}
               isShowFullSidebar={isShowFullSidebar}
+              isNewUplaod={isNewUplaod}
               setshowModalUplaod={setShowModalUplaod}
               setIsShowFiles={setIsShowFiles}
+              setIsNewUplaod={setIsNewUplaod}
               setShowChat={setShowChat}
+              setCurrentDocumentId={setCurrentDocumentId}
             />}
         </div>
       </div>
 
-      <p className={classNames("version", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}>KEN &copy; 1.0.0.8</p>
+      <p className={classNames("version", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}>KEN &copy; 1.0.0.10</p>
 
       <PopupDialog
         isShow={showModalUplaod}

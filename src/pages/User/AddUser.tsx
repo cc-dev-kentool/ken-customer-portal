@@ -29,6 +29,7 @@ export default function AddUser(props) {
     const params = {
       email: data.email.toLowerCase(),
       password: data.password.trim(),
+      role: data.role.trim(),
     };
     dispatch(createUser(params));
     setIsShowAdd(false);
@@ -45,11 +46,11 @@ export default function AddUser(props) {
             type="text"
             {...register("email")}
             onBlur={(e: any) =>
-              setValue("email", e.target.value.replace(" ", "").trim())
+              setValue("email", e.target.value .trim())
             }
             className={`form-control ${errors.email ? "is-invalid" : ""}`}
             name="email"
-            placeholder="user@gmail.com"
+            placeholder="Please enter a valid email address"
             onKeyDown={(evt) => evt.key === " " && evt.preventDefault()}
           />
           <div className="invalid-feedback">{errors.email?.message}</div>
@@ -62,25 +63,28 @@ export default function AddUser(props) {
             {...register("password")}
             className={`form-control ${errors.password ? "is-invalid" : ""}`}
             name="password"
-            placeholder="Zxcv123456@"
+            placeholder="Please enter password"
           />
-          <i
+          {!errors.password?.message && <i
             className="fa-regular fa-eye"
             onClick={() => setIsShowPassword(!isShowPassword)}
-          />
+          />}
           <div className="invalid-feedback">{errors.password?.message}</div>
         </div>
 
         <div className="mb-3">
           <label className="label-input">Role</label>
-          <input
-            type="role"
+
+          <select
             {...register("role")}
             className={`form-control ${errors.role ? "is-invalid" : ""}`}
             name="role"
-            value={"Member"}
-            disabled
-          />
+            defaultValue={"member"}
+          >
+
+            <option value="admin">Admin</option>
+            <option value="member">Member</option>
+          </select>
           <div className="invalid-feedback">{errors.role?.message}</div>
         </div>
 

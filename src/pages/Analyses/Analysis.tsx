@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
+import { getListPrompt } from "store/actions/prompt";
 import { Splitter, SplitterPanel } from 'primereact/splitter';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -23,45 +24,60 @@ export default function Analysis(props) {
   const [showChat, setShowChat] = useState<boolean>(false);
   const [valueSearch, setValueSearch] = useState<string>("");
   const [isDowndLoad, setIsDowndLoad] = useState<boolean>(false);
-  const [isJump, setIsJump] = useState<boolean>(false);
-  const [pageNumber, setPageNumber] = useState<number>(0)
   const [fileUploadId, setFileUploadId] = useState<string>("");
   const [currentStatus, setCurrentStatus] = useState<string>("");
-  const [dataAnalysis, setDataAnalysis] = useState([]);
-
-  const [uploadPdf, dataAnaly, conversation] = useAppSelector((state) => [
+  const [dataAnalysis, setDataAnalysis] = useState<object[]>([]);
+  const [currentDocumentId, setCurrentDocumentId] = useState<string>("");
+  const [isShowFullChat, setIsShowFullChat] = useState<boolean>(false);
+  
+  const [uploadId, dataAnaly, conversation] = useAppSelector((state) => [
     state.analysis.uploadPdf,
     state.analysis.dataAnalysis,
     state.conversation.conversation,
   ]);
 
-  useEffect(() => {
-    if (uploadPdf) {
-      setFileUploadId(uploadPdf)
-    }
-  }, [uploadPdf])
+  let runningTimeout: any = null;
 
   useEffect(() => {
-    if (dataAnaly?.uuid) {
-      setCurrentStatus(dataAnaly?.topic_executions?.[0].status)
-      if (dataAnaly?.topic_executions?.[0].status === 'running') {
-        setTimeout(() => {
+    if (uploadId) {
+      setFileUploadId(uploadId)
+      setCurrentDocumentId(uploadId)
+    }
+  }, [uploadId])
+
+  useEffect(() => {
+    if (currentDocumentId == dataAnaly?.uuid) {
+
+      const executionStatus = dataAnaly?.topic_executions?.[0].status
+
+      setCurrentStatus(executionStatus)
+
+      if (executionStatus === 'running' && !runningTimeout) {
+        runningTimeout = setTimeout(() => {
           dispatch(getAnalysisData(fileUploadId));
-        }, 5000);
-      }
-      if (dataAnaly?.topic_executions?.[0].status === 'done') {
+        }, 3000);
+      } else if (executionStatus === 'done') {
         setFileUploadId(dataAnaly.uuid);
         url !== dataAnaly.path && setUrl(dataAnaly.path)
-        dispatch(getListFile())
+        dispatch(getListFile(false))
       }
+
       setDataAnalysis(dataAnaly?.topic_executions?.[0].execution_details)
     }
   }, [dataAnaly])
 
-  const handleJump = () => {
-    setIsJump(true)
-    setPageNumber(5)
-  }
+  useEffect(() => {
+    if (runningTimeout) {
+      clearTimeout(runningTimeout);
+      runningTimeout = null;
+    }
+    if (currentDocumentId) {
+      setValueSearch("")
+      setDataAnalysis([])
+      dispatch(getListPrompt(false));
+      dispatch(getAnalysisData(currentDocumentId, true));
+    }
+  }, [currentDocumentId])
 
   const handleShowChat = () => {
     setShowChat(true);
@@ -76,10 +92,11 @@ export default function Analysis(props) {
       setShowPdf={setShowPdf}
       setDataAnalysis={setDataAnalysis}
       setShowChat={setShowChat}
+      setCurrentDocumentId={setCurrentDocumentId}
     >
-      <Row className="main-content">
+      {dataAnalysis?.length > 0 && 
+        <Row className="main-content">
         <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
-          {/* <button onClick={handleJump}>Jump to page</button> */}
           {!showPdf &&
             <i
               className="fa-regular fa-file-pdf fa-2xl icon-show-pdf"
@@ -99,6 +116,7 @@ export default function Analysis(props) {
             dataAnalysis={dataAnalysis}
             currentStatus={currentStatus}
             isDowndLoad={isDowndLoad}
+            isShowFullChat={isShowFullChat}
             setIsDowndLoad={setIsDowndLoad}
             setValueSearch={setValueSearch}
           />
@@ -111,7 +129,9 @@ export default function Analysis(props) {
               : <ChatGPT
                 showChat={showPdf}
                 fileUploadId={fileUploadId}
+                isShowFullChat={isShowFullChat}
                 setShowChat={setShowChat}
+                setIsShowFullChat={setIsShowFullChat}
               />
             }
           </>}
@@ -120,15 +140,12 @@ export default function Analysis(props) {
           {showPdf &&
             <PdfDocument
               url={url}
-              isJump={isJump}
-              pageNumber={pageNumber}
               valueSearch={valueSearch}
               setShowPdf={setShowPdf}
-              setIsJump={setIsJump}
             />
           }
         </Col>
-      </Row>
+      </Row>}
       {isDowndLoad &&
         <ExportPdf dataAnalysis={dataAnalysis} conversation={conversation} />
       }
