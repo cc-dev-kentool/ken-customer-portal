@@ -142,7 +142,7 @@ export default function RiskContent(props) {
           </div>
           <div className="table-content" style={{ height: `${getHeightRiskContent()}vh` }}>
             {dataAnalysis.map((data) => {
-              if (data.executed_status !== 'running' && data.executed_status !== 'wait_to_run') {
+              if (data.executed_status === 'success') {
                 return (
                   <div key={data.uuid} className="risk-content-item">
                     <Row className="risk-content-item-topic mb-4">

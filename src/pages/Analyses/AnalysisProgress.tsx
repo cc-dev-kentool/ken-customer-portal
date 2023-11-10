@@ -140,7 +140,7 @@ export default function AnalysisProgress(props) {
         case 'success':
           icon = iconSuccess;
           break;
-        case 'error':
+        case 'failure':
           icon = iconError;
           break;
         case 'running':
