@@ -85,7 +85,7 @@ export default function ListUser(props) {
       },
     },
     {
-      title: "Last login",
+      title: "Last Logged-in",
       dataIndex: "login",
       key: "login",
       sorter: {
@@ -99,7 +99,7 @@ export default function ListUser(props) {
           <Col sm="10" className="last-login-item-left">
             <ul>
               <li>
-                Last logined:{" "}
+                Last logged-in:{" "}
                 {last_access_time
                   ? getDateDiff(last_access_time, currentTime, true)
                   : "N/A"}
@@ -126,13 +126,13 @@ export default function ListUser(props) {
       ),
     },
     {
-      title: "Num Of Contract",
+      title: "Number Of Contract",
       dataIndex: "number_of_contracts",
       key: "number_of_contracts",
       width: "15%",
       sorter: {
         compare: (a, b) => {
-          return a > b ? 1 : -1;
+          return a.number_of_contracts > b.number_of_contracts ? 1 : -1;
         },
       },
     },
@@ -249,7 +249,7 @@ export default function ListUser(props) {
         <ContentTable columns={columns} listUser={currentData} />
         <PopupDialog
           isShow={isShowAdd}
-          title={"Add user"}
+          title={"Add User"}
           content={getContentPopupAdd()}
           firstLabelButon={""}
           seconLabelButton={""}
@@ -258,7 +258,7 @@ export default function ListUser(props) {
         />
         <PopupDialog
           isShow={isShowEdit}
-          title={"Edit user"}
+          title={"Edit User"}
           content={getContentPopupEdit()}
           firstLabelButon={""}
           seconLabelButton={""}

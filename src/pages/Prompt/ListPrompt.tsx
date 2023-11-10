@@ -120,7 +120,7 @@ export default function ListPrompt(props) {
       }
     },
     {
-      title: 'Update by',
+      title: 'Update By',
       dataIndex: 'user_email',
       key: 'user_email',
       width: '10%',
@@ -183,7 +183,7 @@ export default function ListPrompt(props) {
 
         <PopupDialog
           isShow={isShowEdit}
-          title={"Edit prompt"}
+          title={"Edit Prompt"}
           content={getContentPopupEdit()}
           firstLabelButon={""}
           seconLabelButton={""}

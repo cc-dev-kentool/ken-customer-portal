@@ -104,7 +104,9 @@ export function Login() {
                   name="password"
                   placeholder="***************"
                 />
-                <i className="fa-regular fa-eye" onClick={() => setIsShowPassword(!isShowPassword)} />
+                {!errors.password?.message &&
+                  <i className="fa-regular fa-eye" onClick={() => setIsShowPassword(!isShowPassword)}/>
+                }
                 <div className="invalid-feedback">
                   {errors.password?.message}
                 </div>

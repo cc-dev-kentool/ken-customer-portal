@@ -62,10 +62,10 @@ export default function EditUser(props) {
             placeholder="********"
             value={currentUser?.hashed_password}
           />
-          <i
+          {!errors.password?.message && <i
             className="fa-regular fa-eye"
             onClick={() => setIsShowPassword(!isShowPassword)}
-          />
+          />}
           <div className="invalid-feedback">{errors.password?.message}</div>
         </div>
 
