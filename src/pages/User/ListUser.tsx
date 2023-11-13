@@ -13,7 +13,6 @@ import EditUser from "./EditUser";
 import LoginHistory from "./LoginHistory";
 import classNames from "classnames";
 import "./style.css";
-import { Button } from "antd";
 
 interface DataType {
   uuid: string;
@@ -30,7 +29,12 @@ export default function ListUser(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const [listUser] = useAppSelector((state) => [state.users.listUser]);
+
+  const [listUser, histories, getLoginHistorySuccess] = useAppSelector((state) => [
+    state.users.listUser,
+    state.users.loginHistory,
+    state.users.getLoginHistorySuccess,
+  ]);
 
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
@@ -90,7 +94,9 @@ export default function ListUser(props) {
       key: "login",
       sorter: {
         compare: (a, b) => {
-          return a.last_access_time > b.last_access_time ? 1 : -1;
+          const timeA = a.last_access_time ?? 'N/A';
+          const timeB = b.last_access_time ?? 'N/A';
+          return timeA > timeB ? 1 : -1;
         },
       },
       width: "25%",
@@ -204,7 +210,7 @@ export default function ListUser(props) {
   };
 
   const getContentPopupHistory = () => {
-    return <LoginHistory />;
+    return <LoginHistory loginHistories={histories} getLoginHistorySuccess={getLoginHistorySuccess} />;
   };
 
   const onSortByDomain = () => {
@@ -237,14 +243,11 @@ export default function ListUser(props) {
             )}
           </Col>
         </Row>
-        <Row>
-          <Col sm={10} className="title" onClick={() => onSortByDomain()}>
-            <Button type="primary">Sort by domain</Button>
-            <Button type="default" onClick={() => onReset()}>
-              Reset
-            </Button>
+        <Row className="gr-btn-sort">
+          <Col sm={10}>
+            <button className="btn-sort-domain" onClick={() => onSortByDomain()}>Sort by domain</button>
+            <button className="btn-reset" onClick={() => onReset()}> Reset </button>
           </Col>
-          <Col sm={2} className="add-user"></Col>
         </Row>
         <ContentTable columns={columns} listUser={currentData} />
         <PopupDialog

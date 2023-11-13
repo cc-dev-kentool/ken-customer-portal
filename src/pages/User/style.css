@@ -16,22 +16,42 @@
     font-size: 30px;
 }
 
-.user-managerment .add-user button {
+.user-managerment .add-user button, .btn-sort-domain {
     background-color: #26ADC9;
-    padding: 0px 17px 5px 17px;
-    border-radius: 50%;
     border: none;
     color: #fff;
 }
 
-.user-managerment .add-user button:hover {
+.user-managerment .add-user button {
+    padding: 0px 17px 5px 17px;
+    border-radius: 50%;
+}
+
+.user-managerment .add-user button:hover, .btn-sort-domain:hover {
     background-color: #A8DEE9;
     border-color: #A8DEE9;
 }
 
-.user-managerment .add-user button:active {
+.user-managerment .add-user button:active, .btn-sort-domain:active {
     background-color: #A8DEE9;
     border: none;
+}
+
+.gr-btn-sort .btn-sort-domain, .gr-btn-sort .btn-reset {
+    border-radius: 10px;
+    padding: 10px 15px;
+}
+
+.gr-btn-sort .btn-reset {
+    border: 1px solid #26adc9;
+    color: #26adc9;
+    margin-left: 10px;
+    background-color: #fff;
+}
+
+.gr-btn-sort .btn-reset:hover {
+    border-color: #A8DEE9;
+    color: #A8DEE9;
 }
 
 .user-managerment p, .user-managerment ul {
@@ -45,7 +65,8 @@
     padding: 3px;
     border-radius: 8px;
     text-align: center;
-    width: 100px;
+    max-width: 130px;
+    min-width: 80px;
     margin-bottom: 0;
 }
 

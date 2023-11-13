@@ -181,8 +181,8 @@ export function Dashboard(props) {
               <p>Total Contracts <span className="value-report">{statisticsContract.total_contract_number}</span></p>
             </div>
             <div className="tt-report">
-              <p>Chat usage <span className="value-report">{statisticsContract.total_chat_usage_number}</span></p>
-              <p>Question mark <span className="value-report">{statisticsContract.total_questionmark_number}</span></p>
+              <p>Chat Usage <span className="value-report">{statisticsContract.total_chat_usage_number}</span></p>
+              <p>Question Mark <span className="value-report">{statisticsContract.total_questionmark_number}</span></p>
             </div>
           </Col>
         </Row>
