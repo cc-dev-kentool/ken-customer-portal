@@ -164,7 +164,7 @@ export function Dashboard(props) {
                     progress={getProgresChatUsage()}
                     strokeColor="#ff543a"
                     classIndicator="indicator-right"
-                    label="Chat usage"
+                    label="Chat Usage"
                   />
                 </Col>
                 <Col sm={6}>
@@ -172,7 +172,7 @@ export function Dashboard(props) {
                     progress={getProgresQuestionMark()}
                     strokeColor="#ff543a"
                     classIndicator="indicator-right"
-                    label="Question mark"
+                    label="Question Mark"
                   />
                 </Col>
               </Row>
