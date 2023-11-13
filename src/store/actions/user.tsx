@@ -67,13 +67,19 @@ export function createUser(data) {
 
 export function getLoginHistory(user_id) {
   return async function (dispatch) {
-    dispatch(setLoading(true));
+    dispatch({
+      type: userActionType.GET_LOGIN_HISTORY,
+      payload: [],
+    });
+    dispatch({
+      type: userActionType.GET_LOGIN_HISTORY_SUCCESS,
+      payload: false,
+    });
     await API({ url: `/users/${user_id}/login_histories`, method: "GET" })
       .then((result) => {
-        dispatch(setLoading(false));
         dispatch({
           type: userActionType.GET_LOGIN_HISTORY,
-          payload: result.data.data,
+          payload: result.data.data.data,
         });
         dispatch({
           type: userActionType.GET_LOGIN_HISTORY_SUCCESS,
@@ -81,7 +87,6 @@ export function getLoginHistory(user_id) {
         });
       })
       .catch((err) => {
-        dispatch(setLoading(false));
         dispatch({
           type: userActionType.GET_LOGIN_HISTORY_SUCCESS,
           payload: false,
