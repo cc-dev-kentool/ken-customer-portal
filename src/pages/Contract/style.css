@@ -39,6 +39,7 @@
 .contracts-history .question {
     color: #fff;
     background-color: #fa0000;
+    cursor: pointer;
 }
 
 .contracts-history p {

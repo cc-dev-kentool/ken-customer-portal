@@ -179,7 +179,7 @@ export default function ListUser(props) {
     },
     {
       title: "Action",
-      width: "11%",
+      width: loggedUser.role == "super-admin" ? "11%" : "1%",
       className: loggedUser.role == "super-admin" ? "" : "hide-action",
       render: (user) => (
         <i

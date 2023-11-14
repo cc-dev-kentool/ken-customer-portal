@@ -110,6 +110,10 @@
     padding: 0 3px;
 }
 
+.hide-action {
+    display: none
+}
+
 /* Add new user, Edit user */
 
 .edit-user .titile-add {
@@ -153,6 +157,9 @@
     margin-right: 5px;
 }
 
+.redColor {
+    color: red;
+}
 
 /* Modal history */
 
@@ -164,8 +171,4 @@
 .ant-btn-primary {
     margin-right: 10px;
     background-color: #26ADC9;
-}
-
-.hide-action {
-    display: none
 }

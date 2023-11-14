@@ -4,7 +4,7 @@ import { ToolbarSlot, TransformToolbarSlot, toolbarPlugin } from "@react-pdf-vie
 import { useEffect, useState } from "react";
 import { add as addAlert, remove } from "store/actions/alert";
 import { useAppDispatch } from "hooks";
-import close from "assets/icon/icon_close.svg";
+import closePdf from "assets/icon/icon_close.svg";
 import "@react-pdf-viewer/toolbar/lib/styles/index.css";
 import "@react-pdf-viewer/highlight/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
@@ -40,12 +40,32 @@ export default function PdfDocument(props) {
 
   const [contentPdf, setContentPdf] = useState<any>([])
 
-  // Define an onHighlight function that takes a value to search for and highlights it
-  const onHighlight = (searchText) => {
+  function calcLength(searchText) {
+    let len = searchText.length
+    while (len > 100) {
+      len = len / 2;
+    }
 
+    return len
+  }
+
+  function splitSentence(text: string) {
+    let startIndex = 0
+    const len = calcLength(text)
+
+    const result: any = []
+    while (startIndex < text.length) {
+      const endIndex = startIndex + len < text.length ? startIndex + len : text.length - 1
+      result.push(text.substring(startIndex, endIndex))
+      startIndex += len
+    }
+
+    return result;
+  }
+
+  function searchSentence(searchText) {
     // Make a regex from the needle...
     let regex = "";
-
     // ..split the needle into words...
     const words = searchText.split(/\s+/);
 
@@ -56,32 +76,81 @@ export default function PdfDocument(props) {
 
     for (let i = 0; i < words.length; i++) {
       const word = words[i];
-
       // ...allow HTML tags after each character except the last one in a word...
       for (let i = 0; i < word.length; i++) {
         regex += getRightChar(word.charAt(i)) + "((<.+?>|[ .()\n<>,;])?)*";
       }
-
       // ...allow a mixture of whitespace and HTML tags after each word except the last one
-      if (i < words.length - 1) regex += "(([ .()\n<>,;])?)+";
+      if (i < words.length - 1) {
+        regex += "(([ .()\n<>,;])?)+";
+      }
     }
 
+    const result: any = [];
 
-    let isFounded = false
     contentPdf.forEach(pageText => {
       const matches = pageText.match(regex);
 
       if (matches && matches.length > 0) {
+        result.push(matches[0])
+      } else {
+        result.push(null)
+      }
+    });
+
+    return result
+  }
+
+  // Define an onHighlight function that takes a value to search for and highlights it
+  const onHighlight = (searchText) => {
+
+    const sentencesArr = splitSentence(searchText.trim());
+    
+    const foundTextArr: any = [];
+    let isFounded = false;
+
+    for (let i = 0; i < sentencesArr.length; i++) {
+      const actualTexts = searchSentence(sentencesArr[i])
+      foundTextArr.push(actualTexts)
+    }
+
+    if (foundTextArr.length > 0 && sentencesArr.length > 0) {
+      const totalPage = foundTextArr[0].length;
+      const actualTextArr: any = [];
+      for (let i = 0; i < totalPage; i++) {
+        // page i.
+        let actualText = ""
+        let isIgnore = false
+
+        for (let j = 0; j < sentencesArr.length; j++) {
+          const textItem = foundTextArr[j][i]
+
+          if (!textItem) {
+            isIgnore = true
+            break;
+          }
+
+          actualText += textItem
+        }
+
+        if (!isIgnore) {
+          // highlight here.
+          actualTextArr.push(actualText);
+          // console.log('actual highlight text: ', actualText)
+        }
+      }
+
+      actualTextArr.forEach(element => {
         highlight([
           {
-            keyword: matches[0],
+            keyword: element.replace(/\s+/g, ' '),
             matchCase: true,
           },
         ]);
+        isFounded = true;
+      });
 
-        isFounded = true
-      }
-    });
+    }
 
     if (!isFounded && valueSearch) {
       clearHighlights();
@@ -144,7 +213,7 @@ export default function PdfDocument(props) {
             <div className="header-pdf" >
               <Toolbar>{renderDefaultToolbar(transform)}</Toolbar><br />
               <div className="btn-closePdf">
-                <img src={close} alt="" onClick={() => setShowPdf(false)} />
+                <img src={closePdf} alt="" onClick={() => setShowPdf(false)} />
               </div>
             </div>
             <div className="content-pdf">
