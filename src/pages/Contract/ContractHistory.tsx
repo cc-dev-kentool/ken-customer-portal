@@ -4,10 +4,10 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getContracts } from "store/actions/contract";
 import { ContentTable } from "components/Table/ContentTable";
 import { getStatisticsContract } from "store/actions/master";
+import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import type { ColumnsType } from 'antd/es/table';
 import moment from "moment";
 import AdminLayout from "layouts/Admin";
-import classNames from "classnames";
 import './style.css';
 
 interface DataType {
@@ -15,9 +15,10 @@ interface DataType {
   file_name: string;
   pages: number;
   executed_time: number;
-  usage: string;
+  num_of_tokens: number;
   num_of_questionmark: string;
   uploaded_at: string;
+  topics: string;
 }
 
 // Defines a React functional component called "List" that takes props as its parameter
@@ -71,22 +72,17 @@ export default function ContractHistory(props) {
       }
     },
     {
-      title: 'Usage Chat (message)',
-      dataIndex: 'usage',
-      key: 'usage',
+      title: 'Usage Chat (tokens)',
+      dataIndex: 'num_of_tokens',
+      key: 'num_of_tokens',
       width: '15%',
       sorter: {
         compare: (a, b) => {
-          return a.usage > b.usage ? 1 : -1;
+          return a.num_of_tokens > b.num_of_tokens ? 1 : -1;
         },
       },
-      render: (_, { usage }) => (
-        <p className={classNames("", {
-          "usage-str": isNaN(Number(usage)),
-          "usage-num": !isNaN(Number(usage)),
-        })}>
-          {10}
-        </p>
+      render: (_, { num_of_tokens }) => (
+        <p className="usage-num"> {num_of_tokens} </p>
       ),
     },
     {
@@ -99,8 +95,18 @@ export default function ContractHistory(props) {
           return a.num_of_questionmark > b.num_of_questionmark ? 1 : -1;
         },
       },
-      render: (_, { num_of_questionmark }) => (
-        <p className="question">{num_of_questionmark}</p>
+      render: (_, { num_of_questionmark, uuid, topics }) => (
+        <>
+          <p className="question" data-tooltip-id={`tooltip-${uuid}`}>
+            {num_of_questionmark}
+          </p>
+          <ReactTooltip
+            id={`tooltip-${uuid}`}
+            // content={topics}
+            content={num_of_questionmark}
+            widthTooltip={500}
+          />
+        </>
       ),
     },
     {

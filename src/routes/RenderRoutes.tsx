@@ -94,7 +94,7 @@ const ROUTES: routes[] = [
     requiredAuth: true, // Indicates whether authentication is required or not
     name: "dashboard", // Identifier for this route
     title: "Ken", // Title that will be displayed in the header
-    roles: ["admin", "super-admin", "member"],
+    roles: ["admin", "super-admin"],
   },
   // Config Route
   {
@@ -161,7 +161,11 @@ function RouteWithSubRoutes(route: routes) {
 
         // Redirect to 403 page if user doesn't have required role for the current route
         if (localStorage.getItem("token") && !route.roles.includes(user.role)) {
-          window.location.href = "/";
+          if (user.role === 'member') {
+            window.location.href = "/analyses";
+          } else {
+            window.location.href = "/";
+          }
         }
 
         // Render the given component and pass down the props and sub-routes
