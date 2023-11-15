@@ -35,13 +35,14 @@ export function updateUser(data) {
     // Set loading state to true
     dispatch(setLoading(true));
     // Make PUT request to API to update user settings profile
-    await API({ url: "users/update-by-id", method: "put", data })
+    await API({ url: `users/${data.user_id}`, method: "put", data })
       .then(() => {
         // Dispatch alert indicating successful update
         dispatch(
           addAlert("You have successfully updated password.", "success")
         );
         // Set loading state to false
+        dispatch(getListUser(false));
         dispatch(setLoading(false));
       })
       .catch((err) => dispatch(onError(err)));
