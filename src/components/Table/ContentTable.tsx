@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import "./style.css";
 import { Table } from 'antd';
+import "./style.css";
 /**
  * The popup dialog.
  * @param param0
@@ -11,10 +11,11 @@ type Props = {
   listUser: object[];
   currentHeight?: number;
   currentWidth?: number;
+  onChange?: any;
 }
 
 export function ContentTable(props: Props) {
-  const { columns, listUser, currentHeight, currentWidth } = props
+  const { columns, listUser, currentHeight, currentWidth, onChange } = props
 
   const [heightTable, setHeightTable] = useState<number>(window.innerHeight - 310);
 
@@ -34,6 +35,7 @@ export function ContentTable(props: Props) {
       dataSource={listUser}
       className="table-user"
       scroll={{ x: Width, y: height }}
+      onChange={onChange}
     />
   )
 }

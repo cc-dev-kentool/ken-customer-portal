@@ -33,6 +33,11 @@ export function Dashboard(props) {
     if (statisticsQuestionmark?.length > 0) {
       let labels: string[] = [];
       let values: number[] = [];
+      
+      statisticsQuestionmark.sort(function (a, b) {
+        return a.topic.order < b.topic.order ? -1 : 1;
+      });
+
       statisticsQuestionmark.map((item) => {
         labels.push(item?.topic.name);
         values.push(item?.count);

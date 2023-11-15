@@ -41,23 +41,23 @@ export default function PdfDocument(props) {
   const [contentPdf, setContentPdf] = useState<any>([])
 
   function calcLength(searchText) {
-    let len = searchText.length
+    let len = searchText.length;
     while (len > 100) {
       len = len / 2;
     }
 
-    return len
+    return len;
   }
 
   function splitSentence(text: string) {
-    let startIndex = 0
-    const len = calcLength(text)
+    let startIndex = 0;
+    const len = calcLength(text);
 
-    const result: any = []
+    const result: any = [];
     while (startIndex < text.length) {
-      const endIndex = startIndex + len < text.length ? startIndex + len : text.length - 1
-      result.push(text.substring(startIndex, endIndex))
-      startIndex += len
+      const endIndex = startIndex + len < text.length ? startIndex + len : text.length - 1;
+      result.push(text.substring(startIndex, endIndex));
+      startIndex += len;
     }
 
     return result;
@@ -67,11 +67,11 @@ export default function PdfDocument(props) {
     // Make a regex from the needle...
     let regex = "";
     // ..split the needle into words...
-    const words = searchText.split(/\s+/);
+    const words = searchText.trim().split(/\s+/);
 
     function getRightChar(charVal) {
-      const specialChars = ['(', ')']
-      return specialChars.find(p => p === charVal) ? "\\" + charVal : charVal
+      const specialChars = ['(', ')'];
+      return specialChars.find(p => p === charVal) ? "\\" + charVal : charVal;
     }
 
     for (let i = 0; i < words.length; i++) {
@@ -81,10 +81,12 @@ export default function PdfDocument(props) {
         regex += getRightChar(word.charAt(i)) + "((<.+?>|[ .()\n<>,;])?)*";
       }
       // ...allow a mixture of whitespace and HTML tags after each word except the last one
+      regex += "(([ .()\n<>,;])?)";
       if (i < words.length - 1) {
-        regex += "(([ .()\n<>,;])?)+";
+        regex += "+";
       }
     }
+
 
     const result: any = [];
 
@@ -92,26 +94,26 @@ export default function PdfDocument(props) {
       const matches = pageText.match(regex);
 
       if (matches && matches.length > 0) {
-        result.push(matches[0])
+        result.push(matches[0]);
       } else {
-        result.push(null)
+        result.push(null);
       }
     });
 
-    return result
+    return result;
   }
 
   // Define an onHighlight function that takes a value to search for and highlights it
   const onHighlight = (searchText) => {
 
     const sentencesArr = splitSentence(searchText.trim());
-    
+
     const foundTextArr: any = [];
     let isFounded = false;
 
     for (let i = 0; i < sentencesArr.length; i++) {
-      const actualTexts = searchSentence(sentencesArr[i])
-      foundTextArr.push(actualTexts)
+      const actualTexts = searchSentence(sentencesArr[i]);
+      foundTextArr.push(actualTexts);
     }
 
     if (foundTextArr.length > 0 && sentencesArr.length > 0) {
@@ -119,24 +121,22 @@ export default function PdfDocument(props) {
       const actualTextArr: any = [];
       for (let i = 0; i < totalPage; i++) {
         // page i.
-        let actualText = ""
-        let isIgnore = false
+        let actualText = "";
+        let isIgnore = false;
 
         for (let j = 0; j < sentencesArr.length; j++) {
-          const textItem = foundTextArr[j][i]
+          const textItem = foundTextArr[j][i];
 
           if (!textItem) {
-            isIgnore = true
+            isIgnore = true;
             break;
           }
 
-          actualText += textItem
+          actualText += textItem;
         }
 
         if (!isIgnore) {
-          // highlight here.
           actualTextArr.push(actualText);
-          // console.log('actual highlight text: ', actualText)
         }
       }
 

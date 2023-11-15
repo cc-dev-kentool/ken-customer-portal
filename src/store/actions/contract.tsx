@@ -28,3 +28,34 @@ export function getContracts() {
       });
   };
 }
+
+export function getContractDetail(id) {
+  return async function (dispatch) {
+    dispatch({
+      type: contractActionType.GET_CONTRACT_DETAIL,
+      payload: [],
+    });
+    dispatch({
+      type: contractActionType.GET_CONTRACT_DETAIL_SUCCESS,
+      payload: false,
+    });
+    await API({ url: `/analysis/${id}/questionmarks`, method: "GET" })
+      .then((result) => {
+        dispatch({
+          type: contractActionType.GET_CONTRACT_DETAIL,
+          payload: result.data.data,
+        });
+        dispatch({
+          type: contractActionType.GET_CONTRACT_DETAIL_SUCCESS,
+          payload: true,
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: contractActionType.GET_CONTRACT_DETAIL_SUCCESS,
+          payload: false,
+        });
+        dispatch(onError(err))
+      });
+  };
+}
