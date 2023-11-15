@@ -5,7 +5,8 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getListUser, getLoginHistory } from "store/actions/user";
 import { getDateDiff } from "helpers/until";
 import { ContentTable } from "components/Table/ContentTable";
-import type { ColumnsType } from "antd/es/table";
+import { SorterResult } from "antd/es/table/interface";
+import type { ColumnsType, TableProps } from "antd/es/table";
 import moment from "moment";
 import AdminLayout from "layouts/Admin";
 import AddUser from "./AddUser";
@@ -36,13 +37,17 @@ export default function ListUser(props) {
     state.users.getLoginHistorySuccess,
   ]);
 
+  const handleChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter) => {
+    setSortedInfo(sorter as SorterResult<DataType>);
+  };
+
+  const [sortedInfo, setSortedInfo] = useState<SorterResult<DataType>>({});
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
   const [isShowHistory, setIsShowHistory] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Object>({});
   const [currentData, setCurrentData] = useState([]);
   const [currentTime, setCurrentTime] = useState<string>();
-  const [originData, setOriginData] = useState([]);
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
@@ -59,7 +64,6 @@ export default function ListUser(props) {
       const sortedData = data?.sort((a, b) =>
         a?.created_at < b?.created_at ? 1 : -1
       );
-      setOriginData(sortedData);
       setCurrentData(listUser.data);
     }
   }, [listUser]);
@@ -87,11 +91,13 @@ export default function ListUser(props) {
           return a.email > b.email ? 1 : -1;
         },
       },
+      sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
     },
     {
       title: "Last Logged-in",
-      dataIndex: "login",
-      key: "login",
+      dataIndex: "last_access_time",
+      key: "last_access_time",
+      sortOrder: sortedInfo.columnKey === 'last_access_time' ? sortedInfo.order : null,
       sorter: {
         compare: (a, b) => {
           const timeA = a.last_access_time ?? 'N/A';
@@ -136,6 +142,7 @@ export default function ListUser(props) {
       dataIndex: "number_of_contracts",
       key: "number_of_contracts",
       width: "15%",
+      sortOrder: sortedInfo.columnKey === 'number_of_contracts' ? sortedInfo.order : null,
       sorter: {
         compare: (a, b) => {
           return a.number_of_contracts > b.number_of_contracts ? 1 : -1;
@@ -147,6 +154,7 @@ export default function ListUser(props) {
       dataIndex: "role",
       key: "role",
       width: "15%",
+      sortOrder: sortedInfo.columnKey === 'role' ? sortedInfo.order : null,
       sorter: {
         compare: (a, b) => {
           return a.role > b.role ? 1 : -1;
@@ -167,7 +175,9 @@ export default function ListUser(props) {
     {
       title: "Created Date",
       dataIndex: "created_at",
+      key: "created_at",
       width: "18%",
+      sortOrder: sortedInfo.columnKey === 'created_at' ? sortedInfo.order : null,
       sorter: {
         compare: (a, b) => {
           return a.created_at > b.created_at ? 1 : -1;
@@ -214,14 +224,15 @@ export default function ListUser(props) {
   };
 
   const onSortByDomain = () => {
-    const currentDataCopy = [...originData];
-    setCurrentData(
-      currentDataCopy.sort((a, b) => {
-        const aEmail: any = a["email"];
-        const bEmail: any = b["email"];
-        return aEmail?.split("@")[1].localeCompare(bEmail?.split("@")[1]);
-      })
-    );
+    setSortedInfo({});
+
+    const newData = currentData.sort((a, b) => {
+      const aEmail: any = a["email"];
+      const bEmail: any = b["email"];
+      return aEmail?.split("@")[1].localeCompare(bEmail?.split("@")[1]);
+    })
+
+    setCurrentData(newData)
   };
 
   const onReset = () => {
@@ -249,7 +260,7 @@ export default function ListUser(props) {
             <button className="btn-reset" onClick={() => onReset()}> Reset </button>
           </Col>
         </Row>
-        <ContentTable columns={columns} listUser={currentData} />
+        <ContentTable columns={columns} listUser={currentData} onChange={handleChange} />
         <PopupDialog
           isShow={isShowAdd}
           title={"Add User"}

@@ -1,10 +1,11 @@
 import { Col, Row } from "react-bootstrap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { getContracts } from "store/actions/contract";
+import { getContractDetail, getContracts } from "store/actions/contract";
 import { ContentTable } from "components/Table/ContentTable";
 import { getStatisticsContract } from "store/actions/master";
-import { ReactTooltip } from "components/Tooltip/ReactTooltip";
+import { PopupDialog } from "components/Modals/PopUpDialog";
+import { CircularProgress } from "@mui/material";
 import type { ColumnsType } from 'antd/es/table';
 import moment from "moment";
 import AdminLayout from "layouts/Admin";
@@ -26,10 +27,15 @@ export default function ContractHistory(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
 
-  const [contracts, statisticsContract] = useAppSelector((state) => [
+  const [contracts, statisticsContract, constractDetail, getContractDetailsSuccess] = useAppSelector((state) => [
     state.contracts.contracts,
     state.masterData.statisticsContract,
+    state.contracts.constractDetail,
+    state.contracts.getContractDetailsSuccess
   ]);
+
+  const [isShowTopics, setIsShowTopics] = useState<boolean>(false);
+  const [currentContract, setCurrentContract] = useState<string>("");
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
@@ -95,18 +101,10 @@ export default function ContractHistory(props) {
           return a.num_of_questionmark > b.num_of_questionmark ? 1 : -1;
         },
       },
-      render: (_, { num_of_questionmark, uuid, topics }) => (
-        <>
-          <p className="question" data-tooltip-id={`tooltip-${uuid}`}>
-            {num_of_questionmark}
-          </p>
-          <ReactTooltip
-            id={`tooltip-${uuid}`}
-            // content={topics}
-            content={num_of_questionmark}
-            widthTooltip={500}
-          />
-        </>
+      render: (_, { num_of_questionmark, uuid, file_name }) => (
+        <p className="question" onClick={() => getListTopic(uuid, file_name)}>
+          {num_of_questionmark}
+        </p>
       ),
     },
     {
@@ -124,6 +122,26 @@ export default function ContractHistory(props) {
       ),
     },
   ];
+
+  const getListTopic = (uuid, file_name) => {
+    setIsShowTopics(true);
+    setCurrentContract(file_name);
+    dispatch(getContractDetail(uuid));
+  }
+
+  const getContentPopupTopics = () => {
+    constractDetail.sort(function (a, b) {
+      return a.order < b.order ? -1 : 1;
+    });
+    
+    return (
+      getContractDetailsSuccess
+      ? constractDetail.map((detail, index) => {
+        return <p>{index + 1}. {detail.topic_name}</p>
+      })
+      : <div className="text-center"><CircularProgress color="inherit" /></div>
+    )
+  }
 
 
   // Returns JSX for rendering component on the page
@@ -144,6 +162,16 @@ export default function ContractHistory(props) {
           listUser={contracts}
         />
       </div>
+
+      <PopupDialog
+        isShow={isShowTopics}
+        title={currentContract}
+        content={getContentPopupTopics()}
+        firstLabelButon={""}
+        seconLabelButton={""}
+        handleFirstButtonCalback={() => setIsShowTopics(false)}
+        handleSeconButtonCalback={""}
+      />
     </AdminLayout>
   );
 }

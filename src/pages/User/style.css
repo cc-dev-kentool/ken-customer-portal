@@ -114,6 +114,12 @@
     display: none
 }
 
+.iconLoadingTable {
+    text-align: center;
+    height: 60vh;
+    padding-top: 15%;
+}
+
 /* Add new user, Edit user */
 
 .edit-user .titile-add {

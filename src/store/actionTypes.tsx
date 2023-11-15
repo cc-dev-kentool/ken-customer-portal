@@ -80,6 +80,8 @@ export const masterActionType = {
 export const contractActionType = {
   GET_CONTRACTS: "GET_CONTRACTS",
   GET_CONTRACTS_SUCCESS: "GET_CONTRACTS_SUCCESS",
+  GET_CONTRACT_DETAIL: "GET_CONTRACT_DETAIL",
+  GET_CONTRACT_DETAIL_SUCCESS: "GET_CONTRACT_DETAIL_SUCCESS",
 }
 
 export const chatActionType = {
