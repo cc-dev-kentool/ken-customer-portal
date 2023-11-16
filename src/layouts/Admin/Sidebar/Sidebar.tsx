@@ -8,9 +8,12 @@ import UploadFile from "pages/Analyses/UploadFile";
 import SidebarAdmin from "./SidebarAdmin";
 import SidebarMember from "./SidebarMember";
 
-// Define a function called "Sidebar" which receives a single parameter called "props"
+// Export the Sidebar component as the default export
 export default function Sidebar(props) {
+  // Get the dispatch function from the useAppDispatch hook
   const dispatch = useAppDispatch();
+  
+  // Destructure the props object for easier access to its properties
   const {
     routeName,
     isShowFullSidebar,
@@ -22,6 +25,7 @@ export default function Sidebar(props) {
     setCurrentDocumentId,
   } = props;
 
+  // Parse the user object stored in localStorage
   const user = JSON.parse(localStorage.getItem('user') || '{}')
 
   // Define state variables
@@ -55,13 +59,14 @@ export default function Sidebar(props) {
     }
   }
 
+  // Define a function called "handleClosePupopUpload" that resets state variables and dispatches an action
   const handleClosePupopUpload = () => {
     setIsEnableBtnAnalyze(true);
     setShowModalUplaod(false);
     dispatch(removeAlert());
   }
 
-  // Return the following JSX
+  // Render the following JSX
   return (
     <nav
       id="sidebar"
@@ -82,11 +87,14 @@ export default function Sidebar(props) {
             <i className={`fa fa-chevron-${isShowFullSidebar ? 'left' : 'right'}`} aria-hidden="true"></i>
           </span>
         </div>
+        
         <div className="list-group">
+          {/* Render SidebarAdmin component if user role is "admin" or "super-admin" */}
           {["admin", "super-admin"].includes(user.role) &&
             <SidebarAdmin routeName={routeName} isShowFullSidebar={isShowFullSidebar} />
           }
 
+          {/* Render SidebarMember component if user role is "member" or ("admin" or "super-admin" and routeName is "analyses") */}
           {(user.role === "member" || (["admin", "super-admin"].includes(user.role) && routeName === "analyses")) &&
             <SidebarMember
               role={user.role}
@@ -104,6 +112,7 @@ export default function Sidebar(props) {
 
       <p className={classNames("version", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}>KEN &copy; 1.0.0.13</p>
 
+      {/* Render PopupDialog component with specific props */}
       <PopupDialog
         isShow={showModalUplaod}
         title={"Upload Document"}

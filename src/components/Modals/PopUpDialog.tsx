@@ -8,39 +8,43 @@ import "./style.css";
  * @returns
  */
 type Props = {
-  // Is show flag.
+  // Boolean variable to determine if the dialog is shown or not.
   isShow: boolean,
 
-  // The title.
+  // A string variable to store the title of the dialog.
   title: string,
 
-  // The content of dialog.
+  // Any variable to store the content of the dialog. It can be of any type.
   content: any,
 
-  // The first label button.
+  // Any variable to store the label of the first button. It can be of any type.
   firstLabelButon: any,
 
-  // The send label button.
+  // Any variable to store the label of the second button. It can be of any type.
   seconLabelButton: any,
 
-  // Handler when click on the first button.
+  // Callback function to handle click events on the first button.
   handleFirstButtonCalback: any,
 
-  // Handler when click on the second button.
+  // Callback function to handle click events on the second button.
   handleSeconButtonCalback: any,
 
-  // enable second button flag.
+  // Optional boolean variable to enable/disable the second button.
   enableSecondButton?: boolean
 
+  // Optional boolean variable to determine if the second button should be shown or not.
   showSecondButton?: boolean,
 
-  // Customized classes.
+  // Optional string variable to add custom classes to the dialog component.
   customizedClass?: string,
 
+  // Optional string variable to add custom classes to the content of the dialog.
   modalContentClass?: string,
 
+  // Optional string variable to specify the size of the dialog.
   size?: string,
 
+  // Optional boolean variable to determine if the close icon should be shown or not.
   showIconClose?: boolean,
 }
 

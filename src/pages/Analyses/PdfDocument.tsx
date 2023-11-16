@@ -38,8 +38,9 @@ export default function PdfDocument(props) {
   const searchPluginInstance = searchPlugin();
   const { highlight, clearHighlights } = searchPluginInstance;
 
-  const [contentPdf, setContentPdf] = useState<any>([])
+  const [contentPdf, setContentPdf] = useState<any>([]);
 
+  // Calculates the length of a given string and continuously divides it by 2 until it is less than or equal to 100
   function calcLength(searchText) {
     let len = searchText.length;
     while (len > 100) {
@@ -49,6 +50,7 @@ export default function PdfDocument(props) {
     return len;
   }
 
+  // Splits a given text into smaller sentences based on the calculated length
   function splitSentence(text: string) {
     let startIndex = 0;
     const len = calcLength(text);
@@ -63,11 +65,12 @@ export default function PdfDocument(props) {
     return result;
   }
 
+  // Searches for a given sentence in the contentPdf array using a regular expression created from the search text
   function searchSentence(searchText) {
     // Make a regex from the needle...
-    let regex = "";
+    let regex = ""; 
     // ..split the needle into words...
-    const words = searchText.trim().split(/\s+/);
+    const words = searchText.trim().split(/\s+/); 
 
     function getRightChar(charVal) {
       const specialChars = ['(', ')'];
@@ -76,20 +79,23 @@ export default function PdfDocument(props) {
 
     for (let i = 0; i < words.length; i++) {
       const word = words[i];
+
       // ...allow HTML tags after each character except the last one in a word...
       for (let i = 0; i < word.length; i++) {
         regex += getRightChar(word.charAt(i)) + "((<.+?>|[ .()\n<>,;])?)*";
       }
+
       // ...allow a mixture of whitespace and HTML tags after each word except the last one
       regex += "(([ .()\n<>,;])?)";
+
       if (i < words.length - 1) {
         regex += "+";
       }
     }
 
-
     const result: any = [];
 
+    // Iterate through each page in the contentPdf array
     contentPdf.forEach(pageText => {
       const matches = pageText.match(regex);
 
@@ -103,11 +109,11 @@ export default function PdfDocument(props) {
     return result;
   }
 
-  // Define an onHighlight function that takes a value to search for and highlights it
+  // Defines an onHighlight function that splits the search text into smaller sentences,
+  // searches for each sentence using searchSentence function,
+  // and highlights the found text using the highlight function
   const onHighlight = (searchText) => {
-
     const sentencesArr = splitSentence(searchText.trim());
-
     const foundTextArr: any = [];
     let isFounded = false;
 
@@ -119,8 +125,8 @@ export default function PdfDocument(props) {
     if (foundTextArr.length > 0 && sentencesArr.length > 0) {
       const totalPage = foundTextArr[0].length;
       const actualTextArr: any = [];
+
       for (let i = 0; i < totalPage; i++) {
-        // page i.
         let actualText = "";
         let isIgnore = false;
 
@@ -149,7 +155,6 @@ export default function PdfDocument(props) {
         ]);
         isFounded = true;
       });
-
     }
 
     if (!isFounded && valueSearch) {
@@ -162,37 +167,30 @@ export default function PdfDocument(props) {
       }, 5000);
     }
 
-    setValueSearch("")
+    setValueSearch("");
   }
 
-  // Use the useEffect hook to perform the highlight when the valueSearch changes
+  // Uses the useEffect hook to perform the highlight when the valueSearch changes
   useEffect(() => {
     if (valueSearch) {
       onHighlight(valueSearch);
     }
   }, [valueSearch])
 
+  // Handles the document load success event and extracts the text content from each page of the document
   const onDocumentLoadSuccess = async (doc) => {
     const totalNumPages = doc.doc.numPages;
-
     let pdfContent: any = [];
 
     const pdfDoc = doc.doc;
-
     const render_options = {
-      //replaces all occurrences of whitespace with standard spaces (0x20). The default value is `false`.
       normalizeWhitespace: false,
-      //do not attempt to combine same line TextItem's. The default value is `false`.
       disableCombineTextItems: false
     };
 
-    // Loop through each page of the document
     for (let i = 0; i < totalNumPages; i++) {
       let pageText = '';
-
       const page = await pdfDoc.getPage(i + 1);
-
-      // Extract text content from each page
       const textContent = await page.getTextContent(render_options);
 
       textContent.items.forEach((item) => {
@@ -200,7 +198,6 @@ export default function PdfDocument(props) {
       });
 
       pdfContent.push(pageText)
-
     }
 
     setContentPdf(pdfContent)

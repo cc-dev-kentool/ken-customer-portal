@@ -17,6 +17,7 @@ export default function LoginHistory(props) {
 
   const { loginHistories, getLoginHistorySuccess } = props;
 
+  // Define the columns for the table
   const columns: ColumnsType<DataType> = [
     {
       title: 'Email',
@@ -74,6 +75,7 @@ export default function LoginHistory(props) {
     },
   ];
 
+  // Function to compare the duration between login and logout times
   const compareDuration = (timeLogin, timeLogout) => {
     return new Date(timeLogout).getTime() - new Date(timeLogin).getTime()
   }

@@ -13,29 +13,36 @@ import icon_error from "assets/icon/icon_error.svg";
 import icon_loading from "assets/icon/icon_loading.svg";
 import "./style.css"
 
-
 export default function AnalysisProgress(props) {
+  // Destructure props
   const { dataTopics, currentStatus } = props;
 
+  // Get listPrompt from app state using useAppSelector hook
   const [listPrompt] = useAppSelector((state) => [
     state.prompts.listPrompt,
   ]);
 
-  const [dataProgress, setDataProgress] = useState<any>([])
+  // Set dataProgress state variable as an empty array
+  const [dataProgress, setDataProgress] = useState<any>([]);
 
+  // Use useEffect hook to update dataProgress whenever currentStatus or dataTopics change
   useEffect(() => {
     if (dataTopics?.length > 0) {
       if (currentStatus === 'running') {
         const findIndex = dataTopics.every(data =>  data.executed_status !== 'running')
         if (findIndex) {
+          // Set the executed_status of the first topic with topic_order of 1 to 'running'
           dataTopics.find(item => item.topic_order === 1).executed_status = 'running';
+          // Update dataProgress state with dataTopics
           setDataProgress(dataTopics)
         }
       }
     }
+    // Update dataProgress state with dataTopics
     setDataProgress(dataTopics)
-  }, [currentStatus, dataTopics])
+  }, [currentStatus, dataTopics]);
 
+  // Sort the listPrompt array based on topic_order property
   listPrompt.sort(function (a, b) {
     if (a.topic_order < b.topic_order) {
       return -1;
@@ -46,6 +53,7 @@ export default function AnalysisProgress(props) {
     return 0;
   });
 
+  // Define ColorlibConnector styled component using StepConnector
   const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
       top: 16,
@@ -71,6 +79,7 @@ export default function AnalysisProgress(props) {
     },
   }));
 
+  // Define ColorlibStepIconRoot styled component for StepIcons
   const ColorlibStepIconRoot = styled('div')<{
     ownerState: { completed?: boolean; active?: boolean };
   }>(({ theme, ownerState }) => ({
@@ -92,6 +101,7 @@ export default function AnalysisProgress(props) {
     }),
   }));
 
+  // Define custom icons for different StepIcon states
   const iconLoading = (props: StepIconProps) => {
     const { active, completed, className } = props;
 
@@ -131,6 +141,7 @@ export default function AnalysisProgress(props) {
     );
   }
 
+  // Return the content for each step based on the dataProgress and listPrompt
   const contentStep = (prompt) => {
     let icon = iconNone;
     const findTopic = dataProgress.find(topic => topic.topic === prompt.topic_id)
@@ -167,7 +178,7 @@ export default function AnalysisProgress(props) {
     )
   }
 
-  // Return html dialog modal.
+  // Return the HTML for the AnalysisProgress component
   return (
     <div>
       <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>

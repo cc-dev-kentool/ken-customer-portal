@@ -9,8 +9,9 @@ import icon_error from "assets/icon/icon_error.svg";
 import icon_loading from "assets/icon/icon_loading.svg";
 import classNames from "classnames";
 
-// Define a function called "Sidebar" which receives a single parameter called "props"
+// Export the function as a default export with name SidebarMember and import the required props.
 export default function SidebarMember(props) {
+  // Destructure the props object to get individual values
   const {
     role,
     isShowFiles,
@@ -23,13 +24,16 @@ export default function SidebarMember(props) {
     setCurrentDocumentId,
   } = props;
 
+  // Import the dispatch function from the Redux store
   const dispatch = useAppDispatch();
 
+  // Use the useAppSelector hook to get values from the state
   const [files, getListFileSuccess] = useAppSelector((state) => [
     state.analysis.listFile,
     state.analysis.getListFileSuccess,
   ]);
 
+  // Set the defaultValue based on the value of role using a switch statement
   let defaultValue: number;
   switch (role) {
     case 'super-admin':
@@ -42,15 +46,17 @@ export default function SidebarMember(props) {
       defaultValue = 210;
   }
 
+  // Declare and initialize states using the useState hook
   const [heightMenu, setHeightMenu] = useState<number>(window.innerHeight - defaultValue)
   const [activeFile, setActiveFile] = useState<string>("");
 
-  // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
+  // Set up side effect using the useEffect hook to fetch list of files when component mounts
   useEffect(() => {
     dispatch(getListFile());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Set up side effect using the useEffect hook to handle the file selection logic when isNewUplaod or getListFileSuccess changes
   useEffect(() => {
     if (isNewUplaod && getListFileSuccess) {
       const findFile = files.find(file => file.analysis_status === 'running')
@@ -66,12 +72,14 @@ export default function SidebarMember(props) {
     setIsShowFiles(!isShowFiles)
   }
 
+  // Set up side effect using the useEffect hook to update the heightMenu state when window resizes
   useEffect(() => {
     window.addEventListener('resize', function () {
       setHeightMenu(window.innerHeight - defaultValue);
     });
   }, []);
 
+  // Define a function called "showDetailFile" that dispatches remove action and updates states based on the selected fileId
   const showDetailFile = (fileId) => {
     dispatch(remove());
     setShowChat(false);
@@ -79,6 +87,7 @@ export default function SidebarMember(props) {
     setCurrentDocumentId(fileId);
   }
 
+  // Define a function called "getStatusFile" that returns an icon based on the status provided
   const getStatusFile = (status) => {
     let icon;
     switch (status) {
@@ -96,6 +105,7 @@ export default function SidebarMember(props) {
     return icon;
   }
 
+  // Define a function called "disableBtnNew" that checks if there are any files with analysis_status set to 'running'
   const disableBtnNew = () => {
     const findIndex = files.findIndex(item => item.analysis_status === 'running');
     return findIndex >= 0;
