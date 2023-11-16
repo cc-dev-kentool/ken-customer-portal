@@ -54,7 +54,7 @@ export function Login() {
           <Col className="p-0">
             <div className="bg_login"></div>
           </Col>
-          <Col>
+          <Col className="form-content">
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="center_form"
