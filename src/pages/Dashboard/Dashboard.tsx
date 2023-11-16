@@ -8,16 +8,19 @@ import ProgressCircle from "components/Progress/ProgressCircle";
 import ReactApexChart from 'react-apexcharts';
 import "./style.css";
 
-// Define a function component named "Dashboard" which does not receive any parameters.
+// This code exports a functional component called Dashboard, which takes in a prop object
 export function Dashboard(props) {
+  // Declares a const variable "dispatch" and initializes it with the useAppDispatch hook
   const dispatch = useAppDispatch();
 
+  // Destructure some values from the state using the useAppSelector hook
   const [statisticsUser, statisticsContract, statisticsQuestionmark] = useAppSelector((state) => [
     state.masterData.statisticsUser,
     state.masterData.statisticsContract,
     state.masterData.statisticsQuestionmark,
   ]);
 
+  // Define states using the useState hook
   const [labelsChart, setLabelsChart] = useState<string[]>([])
   const [valuesChart, setValuesChart] = useState<number[]>([])
 
@@ -29,11 +32,15 @@ export function Dashboard(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Sets up a side effect using the useEffect hook that runs when the "statisticsQuestionmark"
+  // dependency changes. Inside the effect, the "labelsChart" and "valuesChart" arrays are populated
+  // based on the "statisticsQuestionmark" data and sorted using the "topic.order" property. 
+  // Finally, the "labelsChart" and "valuesChart" state variables are updated.
   useEffect(() => {
     if (statisticsQuestionmark?.length > 0) {
       let labels: string[] = [];
       let values: number[] = [];
-      
+
       statisticsQuestionmark.sort(function (a, b) {
         return a.topic.order < b.topic.order ? -1 : 1;
       });
@@ -48,25 +55,31 @@ export function Dashboard(props) {
 
   }, [statisticsQuestionmark]);
 
+  // Declares a const variable "colors" and initializes it with an array of color values
   const colors = ['#26adc9', '#BD13AC', '#5cc200', '#F21D0B', '#a8dee9', '#ccc', '#BCAB14', '#0EDC9F', '#E293D9', '#A9CD8D', '#F4952C', '#3915D7'];
 
+  // Defines an options object for the chart with the "colors" array and the "labelsChart" array
   const options = {
     colors: colors,
     labels: labelsChart,
   };
 
+  // This function is used to reset the statistics for the user.
   const resetStatisticsUser = () => {
     dispatch(getStatisticsUser());
   }
 
+  // This function is used to reset the statistics for the contract.
   const resetStatisticsContract = () => {
     dispatch(getStatisticsContract());
   }
 
+  // This function is used to reset the statistics for Ember.
   const resetStatisticsEmber = () => {
     dispatch(getStatisticsEmber());
   }
 
+  // This function calculates and returns the progress of user logins, based on the total number of users and the number of users who have logged in.
   const getProgressUserLogin = () => {
     if (statisticsUser.total_user_number !== 0) {
       return Math.round(statisticsUser.total_user_login_number / statisticsUser.total_user_number * 100);
@@ -74,6 +87,7 @@ export function Dashboard(props) {
     return 0;
   }
 
+  // This function calculates and returns the progress of users who have analyzed documents, based on the total number of users and the number of users who have uploaded documents.
   const getProgressUserAnalyzedDoc = () => {
     if (statisticsUser.total_user_number !== 0) {
       return Math.round(statisticsUser.total_user_upload_number / statisticsUser.total_user_number * 100);
@@ -81,6 +95,7 @@ export function Dashboard(props) {
     return 0;
   }
 
+  // This function calculates and returns the progress of chat usage, based on the total number of contracts and the number of contracts that have used chat.
   const getProgresChatUsage = () => {
     if (statisticsContract.total_contract_number !== 0) {
       return Math.round(statisticsContract.total_chat_usage_number / statisticsContract.total_contract_number * 100);
@@ -88,6 +103,7 @@ export function Dashboard(props) {
     return 0;
   }
 
+  // This function calculates and returns the progress of question marks, based on the total number of contracts and the number of contracts that have used question marks.
   const getProgresQuestionMark = () => {
     if (statisticsContract.total_contract_number !== 0) {
       return Math.round(statisticsContract.total_questionmark_number / statisticsContract.total_contract_number * 100);

@@ -29,18 +29,24 @@ interface DataType {
 export default function ListUser(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
+  // Initialize 'loggedUser' variable by parsing the value returned from localStorage.getItem("user"). If the value is null or undefined, initialize it as an empty object.
+  const loggedUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+  // Destructure some values from the state using the useAppSelector hook
   const [listUser, histories, getLoginHistorySuccess] = useAppSelector((state) => [
     state.users.listUser,
     state.users.loginHistory,
     state.users.getLoginHistorySuccess,
   ]);
 
+  // Define a handleChange function that will be used as a callback for the onChange event of a table. It takes pagination, filters, and sorter as arguments.
   const handleChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter) => {
+    // Set the sortedInfo state to the value of the sorter argument.
     setSortedInfo(sorter as SorterResult<DataType>);
   };
 
+  // Define states using the useState hook
   const [sortedInfo, setSortedInfo] = useState<SorterResult<DataType>>({});
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
@@ -55,8 +61,7 @@ export default function ListUser(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const loggedUser = JSON.parse(localStorage.getItem("user") || "{}");
-
+  // This useEffect hook will be executed whenever the `listUser` variable changes.
   useEffect(() => {
     if (listUser) {
       setCurrentTime(listUser.currentTime);
@@ -68,6 +73,7 @@ export default function ListUser(props) {
     }
   }, [listUser]);
 
+  // This function takes a role as input and returns the corresponding role name
   const getRoleName = (role) => {
     switch (role) {
       case "admin":
@@ -81,6 +87,7 @@ export default function ListUser(props) {
     }
   };
 
+  // Define an array of columns with a specific data type (ColumnsType<DataType>)
   const columns: ColumnsType<DataType> = [
     {
       title: "Email",
@@ -201,28 +208,34 @@ export default function ListUser(props) {
     },
   ];
 
+  // This function returns the content for the add user popup
   const getContentPopupAdd = () => {
     return <AddUser setIsShowAdd={setIsShowAdd} />;
   };
 
+  // This function sets the current user and shows the edit user popup
   const handleShowPopupEdit = (user) => {
     setCurrentUser(user);
     setIsShowEdit(true);
   };
 
+  // This function returns the content for the edit user popup
   const getContentPopupEdit = () => {
     return <EditUser currentUser={currentUser} setIsShowEdit={setIsShowEdit} />;
   };
 
+  // This function shows the login history popup and dispatches an action to get the login history
   const handleShowPopupHistory = (uuid) => {
     setIsShowHistory(true);
     dispatch(getLoginHistory(uuid));
   };
 
+  // This function returns the content for the login history popup
   const getContentPopupHistory = () => {
     return <LoginHistory loginHistories={histories} getLoginHistorySuccess={getLoginHistorySuccess} />;
   };
 
+  // This function sorts the current data by email domain
   const onSortByDomain = () => {
     setSortedInfo({});
 
@@ -235,9 +248,11 @@ export default function ListUser(props) {
     setCurrentData(newData)
   };
 
+  // This function reloads the page to reset the state
   const onReset = () => {
     location.reload();
   };
+
 
   // Returns JSX for rendering component on the page
   return (
@@ -249,7 +264,7 @@ export default function ListUser(props) {
             Users Management
           </Col>
           <Col sm={2} className="add-user">
-            {user.role == "super-admin" && (
+            {loggedUser.role == "super-admin" && (
               <button onClick={() => setIsShowAdd(true)}>+</button>
             )}
           </Col>

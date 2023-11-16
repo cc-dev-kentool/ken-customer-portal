@@ -42,6 +42,7 @@ export default function RiskContent(props) {
     { name: 'Readability', isShow: true },
   ]);
 
+  // Sort the "dataAnalysis" array based on the "topic_order" property of each element
   dataAnalysis.sort(function (a, b) {
     if (a.topic_order < b.topic_order) {
       return -1;
@@ -78,19 +79,22 @@ export default function RiskContent(props) {
     dispatch(remove());
   }
 
-  const exportPDf = () => {
-    dispatch(getConversation(fileUploadId))
+  // Define a function exportPDF that does the following:
+  const exportPdf = () => {
+    dispatch(getConversation(fileUploadId));
     setIsDowndLoad(true);
   }
 
+  // Use the useEffect hook to run the provided callback when the isDowndLoad state changes
   useEffect(() => {
     if (isDowndLoad) {
       const getTargetElement = () => document.getElementById('divToPrint');
-      generatePDF(getTargetElement, { filename: 'page.pdf', page: { margin: Margin.MEDIUM } })
+      generatePDF(getTargetElement, { filename: 'page.pdf', page: { margin: Margin.MEDIUM } });
       setIsDowndLoad(false);
     }
-  }, [isDowndLoad])
+  }, [isDowndLoad]);
 
+  // Use the useEffect hook to run the provided callback when the currentStatus state changes
   useEffect(() => {
     if (currentStatus === 'running') {
       setIsShowProgressBar(true);
@@ -98,11 +102,11 @@ export default function RiskContent(props) {
     if (currentStatus === 'done') {
       setIsShowProgressBar(false);
     }
+  }, [currentStatus]);
 
-  }, [currentStatus])
-
+  // Define a function getHeightRiskContent that calculates and returns the height value based on conditions
   const getHeightRiskContent = () => {
-    let height : number;
+    let height: number;
     if (isShowProgressBar) {
       height = showChat ? 18 : 47;
     } else {
@@ -113,16 +117,16 @@ export default function RiskContent(props) {
 
   // Return the following JSX
   return (
-    <div className={classNames("risk-content", {"full-height" : !showChat, "min-height" : isShowFullChat})}>
+    <div className={classNames("risk-content", { "full-height": !showChat, "min-height": isShowFullChat })}>
       <p className="title-risk">Risk Analysis Data</p>
       {dataAnalysis?.length > 0 && currentStatus === 'done' && (
         <i
           className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
           style={{ color: "#26ADC9" }}
-          onClick={exportPDf}
+          onClick={exportPdf}
         />
       )}
-      
+
       {dataAnalysis?.length > 0 &&
         <>
           <div className='analysis-progress'>
@@ -138,7 +142,7 @@ export default function RiskContent(props) {
               </Col>
             </Row>
             <p className="text-right"></p>
-            {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} currentStatus={currentStatus}/>}
+            {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} currentStatus={currentStatus} />}
           </div>
           <div className="table-content" style={{ height: `${getHeightRiskContent()}vh` }}>
             {dataAnalysis.map((data) => {

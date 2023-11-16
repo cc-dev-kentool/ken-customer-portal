@@ -1,20 +1,22 @@
 import { statusRisk } from "constants/riskAnalysis";
 import { Col, Row } from "react-bootstrap";
 
-// Define a function component named "RiskContent" and receive a single parameter called "props"
 export default function ExportPdf(props) {
 
+  // Destructuring props object to get dataAnalysis and conversation variables
   const { dataAnalysis, conversation } = props;
-
-  // Define a function named "getStatusRisk" that takes a "status" parameter and returns a value from the "statusRisk" array based on the label
+  
+  // Define a function named "getStatusRisk" that takes a "status" parameter 
+  // and returns a value from the "statusRisk" array based on the label
   const getStatusRisk = (status) => {
     return statusRisk.find(item => item.label === status)?.value;
   }
 
-  // Return the following JSX
+  // Return JSX elements
   return (
     <div id="divToPrint" style={{ overflow: "hidden", marginTop: "30px" }}>
       <h2 className="text-center">Data Analysis</h2>
+      {/* Check if dataAnalysis array has items */}
       {dataAnalysis?.length > 0 &&
         <div className="table-content">
           {dataAnalysis.map((data) => {

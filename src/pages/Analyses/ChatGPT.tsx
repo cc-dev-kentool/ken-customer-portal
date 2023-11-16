@@ -12,27 +12,31 @@ export default function ChatGPT(props) {
   const [message, setMessage] = useState<string>("")
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
+  // Retrieves the conversation array from the Redux store's state
   const [conversation] = useAppSelector((state) => [
     state.conversation.conversation,
   ]);
 
   useEffect(() => {
+    // Resets loading state and message input when conversation changes
     setShowLoading(false);
     setMessage("")
   }, [conversation])
 
   const handleCloseChat = () => {
+    // Closes the chat window and sets isShowFullChat to false
     setShowChat(false);
     setIsShowFullChat(false);
   }
 
   const handleSendMessage = () => {
+    // Sets loading state to true and dispatches a postConversation action with the fileUploadId and message value
     setShowLoading(true);
     dispatch(postConversation(fileUploadId, message.trim()));
   }
 
   return (
-    <div className={classNames("chat-content", {"full-chat" : isShowFullChat})}>
+    <div className={classNames("chat-content", { "full-chat": isShowFullChat })}>
       <i
         className="fa fa-times icon-close"
         aria-hidden="true"
@@ -43,13 +47,14 @@ export default function ChatGPT(props) {
           className="fa-solid fa-expand icon-expand"
           onClick={() => setIsShowFullChat(true)}
         />
-        : <i 
-        className="fa-solid fa-minus icon-expand" 
-        onClick={() => setIsShowFullChat(false)}
-      />}
-      <div className={classNames("conversation", {"height-full" : isShowFullChat})}>
+        : <i
+          className="fa-solid fa-minus icon-expand"
+          onClick={() => setIsShowFullChat(false)}
+        />}
+      <div className={classNames("conversation", { "height-full": isShowFullChat })}>
         {conversation?.map(item => {
           return (
+            // Renders each conversation item with question and answer labels
             <div key={item.uuid}>
               <p className="question">
                 <label className="question-content">{item.question}</label>
@@ -62,6 +67,7 @@ export default function ChatGPT(props) {
         })}
         {showChat && showLoading &&
           <>
+            {/* Renders the user's message and a loading animation when showChat and showLoading are true */}
             <p className="question">
               <label className="question-content">{message}</label>
             </p>
@@ -74,6 +80,7 @@ export default function ChatGPT(props) {
         }
       </div>
       <div className="area-input">
+        {/* Sends the message when the send button is clicked */}
         <button
           type="submit"
           onClick={handleSendMessage}

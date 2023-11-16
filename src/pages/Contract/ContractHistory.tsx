@@ -18,7 +18,7 @@ interface DataType {
   executed_time: number;
   num_of_tokens: number;
   num_of_questionmark: string;
-  uploaded_at: string;
+  created_at: string;
   topics: string;
 }
 
@@ -27,13 +27,20 @@ export default function ContractHistory(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
 
-  const [contracts, statisticsContract, constractDetail, getContractDetailsSuccess] = useAppSelector((state) => [
+  // Destructure some values from the state using the useAppSelector hook
+  const [
+    contracts,
+    statisticsContract,
+    constractDetail,
+    getContractDetailsSuccess,
+  ] = useAppSelector((state) => [
     state.contracts.contracts,
     state.masterData.statisticsContract,
     state.contracts.constractDetail,
     state.contracts.getContractDetailsSuccess
   ]);
 
+  // Define states using the useState hook
   const [isShowTopics, setIsShowTopics] = useState<boolean>(false);
   const [currentContract, setCurrentContract] = useState<string>("");
 
@@ -44,6 +51,7 @@ export default function ContractHistory(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // This array defines the columns for a table. Each object in the array represents a column.
   const columns: ColumnsType<DataType> = [
     {
       title: 'File Contract',
@@ -109,37 +117,42 @@ export default function ContractHistory(props) {
     },
     {
       title: 'Uploaded Date',
-      dataIndex: 'uploaded_at',
+      dataIndex: 'created_at',
       width: '16%',
       defaultSortOrder: "descend",
       sorter: {
         compare: (a, b) => {
-          return moment.utc(a.uploaded_at) > moment.utc(b.uploaded_at) ? 1 : -1;
+          return moment.utc(a.created_at) > moment.utc(b.created_at) ? 1 : -1;
         },
       },
-      render: (_, { uploaded_at }) => (
-        <p>{moment.utc(uploaded_at).format("YYYY/MM/DD")}</p>
+      render: (_, { created_at }) => (
+        <p>{moment.utc(created_at).format("YYYY/MM/DD")}</p>
       ),
     },
   ];
 
+  // This function sets the value of setIsShowTopics to true, 
+  // sets the value of setCurrentContract to the provided file_name,
+  // and dispatches the getContractDetail action with the provided uuid.
   const getListTopic = (uuid, file_name) => {
     setIsShowTopics(true);
     setCurrentContract(file_name);
     dispatch(getContractDetail(uuid));
   }
 
+  // This function sorts the constractDetail array based on the order property in ascending order.
+  // Then, it returns either a JSX element or a loading spinner based on the value of getContractDetailsSuccess.
   const getContentPopupTopics = () => {
     constractDetail.sort(function (a, b) {
       return a.order < b.order ? -1 : 1;
     });
-    
+
     return (
       getContractDetailsSuccess
-      ? constractDetail.map((detail, index) => {
-        return <p>{index + 1}. {detail.topic_name}</p>
-      })
-      : <div className="text-center"><CircularProgress color="inherit" /></div>
+        ? constractDetail.map((detail, index) => {
+          return <p>{index + 1}. {detail.topic_name}</p>
+        })
+        : <div className="text-center"><CircularProgress color="inherit" /></div>
     )
   }
 

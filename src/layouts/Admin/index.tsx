@@ -8,7 +8,7 @@ import "assets/css/app.css";
 import "./style.css";
 
 function AdminLayout(props) {
-
+  // Destructure the necessary props from the "props" object
   const {
     routeName,
     children,
@@ -19,8 +19,10 @@ function AdminLayout(props) {
     setCurrentDocumentId,
   } = props;
 
+  // Retrieve the value of "isLoading" from the app state using the useAppSelector hook
   const [isLoading] = useAppSelector((state) => [state.app.isLoading])
 
+  // Declare a state variable called "isShowFullSidebar" and initialize it to "true"
   const [isShowFullSidebar, setIsShowFullSidebar] = useState<boolean>(true);
 
   // Define a function called "toggleMenu" that toggles the value of "isShowFullSidebar" when called.
@@ -29,6 +31,7 @@ function AdminLayout(props) {
   };
 
   return (
+    // Render the admin layout UI
     <div className="wrapper">
       <Sidebar
         routeName={routeName}
