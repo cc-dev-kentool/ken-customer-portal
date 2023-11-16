@@ -142,6 +142,7 @@ export default function Analysis(props) {
               url={url}
               valueSearch={valueSearch}
               setShowPdf={setShowPdf}
+              setValueSearch={setValueSearch}
             />
           }
         </Col>

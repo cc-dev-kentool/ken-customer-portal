@@ -13,7 +13,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 export default function PdfDocument(props) {
   const dispatch = useAppDispatch();
   // Destructure the "url", "valueSearch", and "setShowPdf" props from the "props" object
-  const { url, valueSearch, setShowPdf } = props;
+  const { url, valueSearch, setShowPdf, setValueSearch } = props;
 
   // Define a transform function for the TransformToolbarSlot type
   const transform: TransformToolbarSlot = (slot: ToolbarSlot) => {
@@ -161,6 +161,8 @@ export default function PdfDocument(props) {
         dispatch(remove())
       }, 5000);
     }
+
+    setValueSearch("")
   }
 
   // Use the useEffect hook to perform the highlight when the valueSearch changes
