@@ -1,11 +1,13 @@
 .login-form {
   padding: 5% 20%;
   height: 100vh;
+  overflow-y: auto;
 }
 
 .login-content {
   background-color: #fff;
   height: 100%;
+  min-height: 470px;
   color: #000;
 }
 
@@ -16,11 +18,14 @@
   width: 100%;
 }
 
+.login-form .form-content {
+  display: flex;
+  align-items: center;
+}
+
 .login-form .center_form {
   margin: 0 auto;
   width: 70%;
-  top: 33%;
-  position: sticky;
 }
 
 .center_form .title {
@@ -63,4 +68,28 @@
   margin: -28px 5px 0 0;
   cursor: pointer;
   color: #26ADC9;
+}
+
+/* scroll */
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
 }
