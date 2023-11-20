@@ -25,7 +25,7 @@ export default function PdfDocument(props) {
       GoToPreviousPage: () => <></>,
       GoToNextPage: () => <></>,
       Open: () => <></>,
-      ShowSearchPopover: () => <></>,
+      // ShowSearchPopover: () => <></>,
       NumberOfPages: () => <span className="text-white">/ <NumberOfPages /></span>
     }
   }
