@@ -166,12 +166,13 @@ export default function RiskContent(props) {
                         <Row className="source-text m-0">
                           <Col sm="2" className="title-left p-0">Source Text</Col>
                           <Col sm="10" className="p-0">
-                            {data.analysis_result.source_text?.map((text) => {
+                            {data.analysis_result.source_text?.map((text, index) => {
                               return <p
                                 key={text.key}
                                 className="pt-2 mb-2 cursor-pointer source-text-item"
                                 onClick={() => handleSearch(text.value)}
                               >
+                                {index >= 1 && <hr />}
                                 {text.value}
                               </p>
                             })}

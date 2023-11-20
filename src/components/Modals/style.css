@@ -30,9 +30,21 @@
 .titlePopup {
     width: 100%;
     text-align: center;
+    word-wrap: break-word;
     font-weight: 600 !important;
     font-size: 16px !important;
     margin-top: 9px !important;
+}
+
+.titlePopup p {
+    margin: 0 20px 0 0;
+}
+
+.btn-Colse {
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 15px;
 }
 
 .item-content-center {
@@ -68,11 +80,6 @@
 .btnPopup .btnSubmitPopup:hover {
     background: #A8DEE9 !important;
     border: 1px solid #A8DEE9 !important;
-}
-
-.btn-Colse {
-    float: right;
-    cursor: pointer;
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {

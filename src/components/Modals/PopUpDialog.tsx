@@ -76,7 +76,7 @@ export function PopupDialog(props: Props) {
     >
       <Modal.Header className="modalHeader">
         <Modal.Title className="titlePopup">
-          {title}
+          <p>{title}</p>
           {showIconClose && <i
             className="fa fa-times btn-Colse"
             aria-hidden="true"
