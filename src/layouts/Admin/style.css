@@ -123,12 +123,16 @@
   overflow-y: auto;
 }
 
-.sidebar .list-file p {
+.sidebar .list-file button {
   cursor: pointer;
+  background-color: #d4eff4;
+  border: none;
+  width: 100%;
+  text-align: left;
 }
 
 .sidebar .active-file {
-  background-color: #a8dee9;
+  background-color: #a8dee9 !important;
   border-radius: 5px;
 }
 

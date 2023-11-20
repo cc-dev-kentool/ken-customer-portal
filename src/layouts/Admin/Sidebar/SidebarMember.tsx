@@ -148,7 +148,7 @@ export default function SidebarMember(props) {
           >
             {files.map((file) => {
               return (
-                <p
+                <button
                   className={classNames("mb-2", { "active-file": file.uuid === activeFile })}
                   key={file.uuid}
                   onClick={() => showDetailFile(file.uuid)}
@@ -164,7 +164,7 @@ export default function SidebarMember(props) {
                       widthTooltip={220}
                     />}
                   <img src={getStatusFile(file.analysis_status)} className="icon-action" alt="" width="20px" />
-                </p>
+                </button>
               )
             })}
           </div>
