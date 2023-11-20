@@ -96,7 +96,7 @@ export default function ContractHistory(props) {
         },
       },
       render: (_, { num_of_tokens }) => (
-        <p className="usage-num"> {num_of_tokens} </p>
+        <p className="usage-num"> {num_of_tokens ?? 0} </p>
       ),
     },
     {
