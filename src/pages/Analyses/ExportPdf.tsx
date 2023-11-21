@@ -5,7 +5,7 @@ export default function ExportPdf(props) {
 
   // Destructuring props object to get dataAnalysis and conversation variables
   const { dataAnalysis, conversation } = props;
-  
+
   // Define a function named "getStatusRisk" that takes a "status" parameter 
   // and returns a value from the "statusRisk" array based on the label
   const getStatusRisk = (status) => {
@@ -33,11 +33,16 @@ export default function ExportPdf(props) {
                 <Row className="source-text m-0">
                   <Col sm="2" className="title-left p-0">Source Text</Col>
                   <Col sm="10" className="p-0">
-                    <p
-                      className="pt-2 mb-2 cursor-pointer source-text-item"
-                    >
-                      {data.analysis_result?.source_text}
-                    </p>
+                    {data?.analysis_result?.source_text?.map((text, index) => (
+                      <p
+                        key={text.key}
+                        className="pt-2 mb-2"
+                      >
+                        {index >= 1 && <hr />}
+                        {text.value === 'n/a' ? <p>n/a</p> : text.value}
+                      </p>
+                        
+                    ))}
                   </Col>
                 </Row>
                 <Row className="mt-3 m-0">
