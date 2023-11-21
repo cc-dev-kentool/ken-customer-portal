@@ -9,7 +9,7 @@ export function getResultUtilities(dataPrompt) {
     dispatch(setLoading(true));
     dispatch({
       type: utilitiesActionType.GET_UTILITIES,
-      payload: {},
+      payload: "",
     });
     dispatch({
       type: utilitiesActionType.GET_UTILITIES_SUCCESS,
@@ -20,7 +20,6 @@ export function getResultUtilities(dataPrompt) {
     // Make PUT request to API to update user settings profile
     await API({ url: `/utilities/prompt/${dataPrompt.file_id}`, method: "post", data})
       .then((result) => {
-        // console.log(result);
         // Set loading state to false
         dispatch(setLoading(false));
         dispatch({

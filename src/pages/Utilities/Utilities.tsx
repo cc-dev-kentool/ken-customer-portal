@@ -11,8 +11,6 @@ export default function Utilities(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
 
-  const { setIsShowAdd } = props;
-
   // Destructure some values from the state using the useAppSelector hook
   const [result, getResultSuccess] = useAppSelector((state) => [
     state.utilities.result,
@@ -37,7 +35,6 @@ export default function Utilities(props) {
       prompt: data.prompt,
     };
     dispatch(getResultUtilities(params));
-    setIsShowAdd(false);
   };
 
   // Returns JSX for rendering component on the page
