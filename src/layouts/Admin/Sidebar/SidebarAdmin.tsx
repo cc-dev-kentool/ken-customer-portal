@@ -17,7 +17,7 @@ export default function SidebarAdmin(props) {
           {isShowFullSidebar && <span>Dashboard</span>}
         </a>
       </li>
-      
+
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'users' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/users">
           <i className="fa-solid fa-user-group" style={{ color: `${routeName === 'users' ? '#fff' : '#000'}` }}></i>
@@ -27,7 +27,7 @@ export default function SidebarAdmin(props) {
 
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'contracts' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/contracts">
-          <i className="fa-solid fa-user-group" style={{ color: `${routeName === 'contracts' ? '#fff' : '#000'}` }}></i>
+          <i className="fa-solid fa-clock-rotate-left" style={{ color: `${routeName === 'contracts' ? '#fff' : '#000'}` }}></i>
           {isShowFullSidebar && <span>Contracts History</span>}
         </a>
       </li>
@@ -51,6 +51,13 @@ export default function SidebarAdmin(props) {
           </a>
         </li>
       )}
+
+      <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'utilities' })}>
+        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/utilities">
+          <i className="fa-solid fa-paperclip" style={{ color: `${routeName === 'utilities' ? '#fff' : '#000'}` }}></i>
+          {isShowFullSidebar && <span>Utilities</span>}
+        </a>
+      </li>
 
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'analyses' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/analyses">

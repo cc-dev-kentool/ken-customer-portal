@@ -4,6 +4,14 @@ import API from "service/api";
 
 export function getConversation(id) {
   return async function (dispatch) {
+    dispatch({
+      type: chatActionType.GET_CONVERSATION,
+      payload: [],
+    });
+    dispatch({
+      type: chatActionType.GET_CONVERSATION_SUCCESS,
+      payload: false,
+    });
     await API({ url: `/analysis/${id}/chats`, method: "GET" })
       .then((result) => {
         dispatch({

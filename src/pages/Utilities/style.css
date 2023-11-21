@@ -1,0 +1,53 @@
+.utilities-component {
+    background-color: #fff;
+    min-height: 89vh;
+    border-radius: 10px;
+    padding: 10px;
+    overflow: auto;
+    margin-bottom: 10px;
+}
+
+.center_form {
+    width: 70%;
+    margin: 10px auto;
+}
+
+.center_form .label-input {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.center_form .btn-submit {
+    margin-top: 8px;
+    width: 120px;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    background-color: #26ADC9;
+    color: #fff;
+}
+
+.center_form .btn-submit:hover {
+    background: #A8DEE9;
+}
+
+.result {
+    margin-top: 50px;
+}
+
+.result .title-result {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.result .content-result {
+    background-color: #f4fbfc;
+    min-height: 35vh;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.redColor {
+    color: red;
+}

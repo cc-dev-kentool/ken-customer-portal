@@ -10,6 +10,7 @@ const Login = lazy(() => import("pages/Auth/Login"));
 const Analysis = lazy(() => import("pages/Analyses/Analysis"));
 const Dashboard = lazy(() => import("pages/Dashboard"));
 const Configuation = lazy(() => import("pages/Configuation"));
+const Utilities = lazy(() => import("pages/Utilities/Utilities"));
 
 // Defines a type for individual route objects
 type routeItem = {
@@ -30,6 +31,17 @@ type routes = routeItem & {
 
 const ROUTES: routes[] = [
   {
+    path: "/utilities", // URL pattern for the login route
+    key: "ROOT", // Unique identifier for this component instance
+    exact: true, // Exact match is required to load the component
+    component: Utilities, // Component that will be loaded on this route
+    routes: [], // Optional array of child routes if any
+    requiredAuth: true, // Indicates whether authentication is required or not
+    name: "utilities", // Identifier for this route
+    title: "Utilities", // Title that will be displayed in the header
+    roles: ["admin", "super-admin"],
+  },
+  {
     path: "/contracts", // URL pattern for the login route
     key: "ROOT", // Unique identifier for this component instance
     exact: true, // Exact match is required to load the component
@@ -37,7 +49,7 @@ const ROUTES: routes[] = [
     routes: [], // Optional array of child routes if any
     requiredAuth: true, // Indicates whether authentication is required or not
     name: "contracts", // Identifier for this route
-    title: "contracts", // Title that will be displayed in the header
+    title: "Contracts", // Title that will be displayed in the header
     roles: ["admin", "super-admin"],
   },
   {
