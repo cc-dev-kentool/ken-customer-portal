@@ -117,6 +117,7 @@
 
 .full-chat {
   height: 88vh;
+  margin-top: 0;
 }
 
 .chat-content .title-chat {
@@ -166,7 +167,11 @@
   text-align: left;
 }
 
-.conversation .answer .answer-content {
+.conversation .answer {
+  margin-right: 10%;
+}
+
+.answer .answer-content {
   background-color: #ccc;
   padding: 10px;
   border-radius: 8px;
@@ -189,6 +194,10 @@
   float: right;
   margin: 15px 10px -35px 0;
   z-index: 10;
+}
+
+.iconLoading {
+  margin-top: 10%;
 }
 
 @keyframes dot-pulse {
