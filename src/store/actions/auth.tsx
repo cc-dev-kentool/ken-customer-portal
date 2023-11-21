@@ -35,7 +35,8 @@ export function login(data) {
           payload: "",
         });
 
-        if (result.data.data.user.role === "admin") {
+        const role = result.data.data.user.role
+        if ( role === "admin" || role === "super-admin") {
           window.location.href = "/";
         } else {
           window.location.href = "/analyses";
