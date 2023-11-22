@@ -12,6 +12,25 @@ export default function ExportPdf(props) {
     return statusRisk.find(item => item.label === status)?.value;
   }
 
+  const genComment = (data) => {
+    if (data.topic === 'Readability') {
+      return (
+        <div>
+          <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br/>
+          <span>Three worst clauses: </span>
+          {data.comment["Three worst clauses"].length === 0 
+            ? "N/A"
+            : data.comment["Three worst clauses"].map((item, index) => (
+              <><br /><span key={index} className="m-3"> - {item[`worst clause ${index+1}`]} ({item.score})</span></>
+            ))
+          }
+        </div>
+      );
+    } else {
+      return data.comment;
+    }
+  }
+
   // Return JSX elements
   return (
     <div id="divToPrint" style={{ overflow: "hidden", marginTop: "30px" }}>
@@ -47,7 +66,7 @@ export default function ExportPdf(props) {
                 </Row>
                 <Row className="mt-3 m-0">
                   <Col sm="2" className="title-left p-0">Comment</Col>
-                  <Col sm="10" className="p-0">{data.analysis_result?.comment}</Col>
+                  <Col sm="10" className="p-0">{genComment(data.analysis_result)}</Col>
                 </Row>
               </div>
             )

@@ -75,7 +75,7 @@ export default function RiskContent(props) {
 
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
-    setValueSearch(text.trim());
+    setValueSearch(text);
     dispatch(remove());
   }
 
@@ -119,11 +119,14 @@ export default function RiskContent(props) {
     if (data.topic === 'Readability') {
       return (
         <div>
-          <p>Readability score for whole document: {data.comment["Readability score for whole document"]}</p>
-          <p>Three worst clauses:</p>
-          {data.comment["Three worst clauses"].map((item, index) => (
-            <p key={index} className="m-3"> - {item[`worst clause ${index+1}`]} ({item.score})</p>
-          ))}
+          <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br/>
+          <span>Three worst clauses: </span>
+          {data.comment["Three worst clauses"].length === 0 
+            ? "N/A"
+            : data.comment["Three worst clauses"].map((item, index) => (
+              <><br /><span key={index} className="m-3"> - {item[`worst clause ${index+1}`]} ({item.score})</span></>
+            ))
+          }
         </div>
       );
     } else {
