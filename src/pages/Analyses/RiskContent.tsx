@@ -38,7 +38,7 @@ export default function RiskContent(props) {
     { name: 'Unused definitions', isShow: true },
     { name: 'Court jurisdiction', isShow: true },
     { name: 'Arbitration', isShow: true },
-    { name: 'Court jurisdiction and arbitration clause interaction', isShow: true },
+    { name: 'Interaction between court jurisdiction and arbitration', isShow: true },
     { name: 'Readability', isShow: true },
   ]);
 
@@ -75,7 +75,7 @@ export default function RiskContent(props) {
 
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
-    setValueSearch(text);
+    setValueSearch(text.trim());
     dispatch(remove());
   }
 
@@ -113,6 +113,22 @@ export default function RiskContent(props) {
       height = showChat ? 43 : 72;
     }
     return height;
+  }
+
+  const genComment = (data) => {
+    if (data.topic === 'Readability') {
+      return (
+        <div>
+          <p>Readability score for whole document: {data.comment["Readability score for whole document"]}</p>
+          <p>Three worst clauses:</p>
+          {data.comment["Three worst clauses"].map((item, index) => (
+            <p key={index} className="m-3"> - {item[`worst clause ${index+1}`]} ({item.score})</p>
+          ))}
+        </div>
+      );
+    } else {
+      return data.comment;
+    }
   }
 
   // Return the following JSX
@@ -180,7 +196,7 @@ export default function RiskContent(props) {
                         </Row>
                         <Row className="mt-3 m-0">
                           <Col sm="2" className="title-left p-0">Comment</Col>
-                          <Col sm="10" className="p-0">{data.analysis_result?.comment}</Col>
+                          <Col sm="10" className="p-0">{genComment(data.analysis_result)}</Col>
                         </Row>
                       </>}
                   </div>
