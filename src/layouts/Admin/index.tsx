@@ -16,6 +16,7 @@ function AdminLayout(props) {
     setShowPdf,
     setDataAnalysis,
     setShowChat,
+    setIsShowFullChat,
     setCurrentDocumentId,
   } = props;
 
@@ -41,6 +42,7 @@ function AdminLayout(props) {
         setShowPdf={setShowPdf}
         setDataAnalysis={setDataAnalysis}
         setShowChat={setShowChat}
+        setIsShowFullChat={setIsShowFullChat}
         setCurrentDocumentId={setCurrentDocumentId}
       />
       <div className="main">

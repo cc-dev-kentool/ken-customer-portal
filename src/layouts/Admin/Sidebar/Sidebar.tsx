@@ -22,6 +22,7 @@ export default function Sidebar(props) {
     setShowPdf,
     setDataAnalysis,
     setShowChat,
+    setIsShowFullChat,
     setCurrentDocumentId,
   } = props;
 
@@ -54,6 +55,7 @@ export default function Sidebar(props) {
       setShowPdf(true);
       setIsNewUplaod(true);
       setShowChat(false);
+      setIsShowFullChat(false);
       setDataAnalysis([]);
       dispatch(uploadPdf(file));
     }
@@ -105,6 +107,7 @@ export default function Sidebar(props) {
               setIsShowFiles={setIsShowFiles}
               setIsNewUplaod={setIsNewUplaod}
               setShowChat={setShowChat}
+              setIsShowFullChat={setIsShowFullChat}
               setCurrentDocumentId={setCurrentDocumentId}
             />}
         </div>

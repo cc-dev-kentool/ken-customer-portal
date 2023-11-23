@@ -102,6 +102,7 @@ export default function Analysis(props) {
       setShowPdf={setShowPdf}
       setDataAnalysis={setDataAnalysis}
       setShowChat={setShowChat}
+      setIsShowFullChat={setIsShowFullChat}
       setCurrentDocumentId={setCurrentDocumentId}
     >
       {dataAnalysis?.length > 0 &&

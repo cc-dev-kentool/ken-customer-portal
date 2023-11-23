@@ -50,6 +50,18 @@ export default function PdfDocument(props) {
     return len;
   }
 
+  function getEndIndex(text, endIndex) {
+    let newEnd = endIndex;
+    for (let i = endIndex; i < text.length; i++) {
+      console.log(text.charAt(i));
+      if (text.charAt(i) === ' ') {
+        newEnd = i;
+        break;
+      }
+    }
+    return newEnd;
+  }
+
   // Splits a given text into smaller sentences based on the calculated length
   function splitSentence(text: string) {
     let startIndex = 0;
@@ -57,9 +69,14 @@ export default function PdfDocument(props) {
 
     const result: any = [];
     while (startIndex < text.length) {
-      const endIndex = startIndex + len < text.length ? startIndex + len : text.length - 1;
-      result.push(text.substring(startIndex, endIndex));
-      startIndex += len;
+      if (text.charAt(startIndex) === '(') {
+        startIndex++;
+      }
+      let endIndex = startIndex + len < text.length ? startIndex + len : text.length - 1;
+      const newEnd = getEndIndex(text, endIndex);
+
+      result.push(text.substring(startIndex, newEnd));
+      startIndex = newEnd + 1;
     }
 
     return result;
@@ -68,9 +85,9 @@ export default function PdfDocument(props) {
   // Searches for a given sentence in the contentPdf array using a regular expression created from the search text
   function searchSentence(searchText) {
     // Make a regex from the needle...
-    let regex = ""; 
+    let regex = "";
     // ..split the needle into words...
-    const words = searchText.trim().split(/\s+/); 
+    const words = searchText.trim().split(/\s+/);
 
     function getRightChar(charVal) {
       const specialChars = ['(', ')'];
@@ -78,7 +95,7 @@ export default function PdfDocument(props) {
     }
 
     for (let i = 0; i < words.length; i++) {
-      const word = words[i];
+      const word = words[i].trim();
 
       // ...allow HTML tags after each character except the last one in a word...
       for (let i = 0; i < word.length; i++) {
