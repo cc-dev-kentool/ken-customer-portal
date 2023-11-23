@@ -21,6 +21,7 @@ export default function SidebarMember(props) {
     setIsShowFiles,
     setIsNewUplaod,
     setShowChat,
+    setIsShowFullChat,
     setCurrentDocumentId,
   } = props;
 
@@ -83,6 +84,7 @@ export default function SidebarMember(props) {
   const showDetailFile = (fileId) => {
     dispatch(remove());
     setShowChat(false);
+    setIsShowFullChat(false);
     setActiveFile(fileId);
     setCurrentDocumentId(fileId);
   }
