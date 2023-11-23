@@ -119,19 +119,28 @@ export default function RiskContent(props) {
     if (data.topic === 'Readability') {
       return (
         <div>
-          <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br/>
+          <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br />
           <span>Three worst clauses: </span>
-          {data.comment["Three worst clauses"].length === 0 
+          {data.comment["Three worst clauses"].length === 0
             ? "N/A"
-            : data.comment["Three worst clauses"].map((item, index) => (
-              <><br /><span key={index} className="m-3"> - {item[`worst clause ${index+1}`]} ({item.score})</span></>
-            ))
+            : <ul>
+              {data.comment["Three worst clauses"].map((item, index) => (
+                <li key={index} className="item-comment">{item[`worst clause ${index + 1}`]} ({item.score})</li>
+              ))}
+            </ul>
           }
         </div>
       );
     } else {
       return data.comment;
     }
+  }
+
+  const checkSourceText = (text) => {
+    if (text === 'n/a' || text === 'No clause text found.') {
+      return false;
+    }
+    return true;
   }
 
   // Return the following JSX
@@ -188,8 +197,8 @@ export default function RiskContent(props) {
                             {data.analysis_result.source_text?.map((text, index) => {
                               return <p
                                 key={text.key}
-                                className="pt-2 mb-2 cursor-pointer source-text-item"
-                                onClick={() => handleSearch(text.value)}
+                                className={classNames('pt-2 mb-2', {'cursor-pointer source-text-item' : checkSourceText(text.value)})}
+                                onClick={() => checkSourceText(text.value) && handleSearch(text.value)}
                               >
                                 {index >= 1 && <hr />}
                                 {text.value}
