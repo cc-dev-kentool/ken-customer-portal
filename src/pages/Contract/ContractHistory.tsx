@@ -1,13 +1,14 @@
 import { Col, Row } from "react-bootstrap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { getContracts } from "store/actions/contract";
+import { getContractDetail, getContracts } from "store/actions/contract";
 import { ContentTable } from "components/Table/ContentTable";
 import { getStatisticsContract } from "store/actions/master";
+import { PopupDialog } from "components/Modals/PopUpDialog";
+import { CircularProgress } from "@mui/material";
 import type { ColumnsType } from 'antd/es/table';
 import moment from "moment";
 import AdminLayout from "layouts/Admin";
-import classNames from "classnames";
 import './style.css';
 
 interface DataType {
@@ -15,9 +16,10 @@ interface DataType {
   file_name: string;
   pages: number;
   executed_time: number;
-  usage: string;
+  num_of_tokens: number;
   num_of_questionmark: string;
-  uploaded_at: string;
+  created_at: string;
+  topics: string;
 }
 
 // Defines a React functional component called "List" that takes props as its parameter
@@ -25,10 +27,22 @@ export default function ContractHistory(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
 
-  const [contracts, statisticsContract] = useAppSelector((state) => [
+  // Destructure some values from the state using the useAppSelector hook
+  const [
+    contracts,
+    statisticsContract,
+    constractDetail,
+    getContractDetailsSuccess,
+  ] = useAppSelector((state) => [
     state.contracts.contracts,
     state.masterData.statisticsContract,
+    state.contracts.constractDetail,
+    state.contracts.getContractDetailsSuccess
   ]);
+
+  // Define states using the useState hook
+  const [isShowTopics, setIsShowTopics] = useState<boolean>(false);
+  const [currentContract, setCurrentContract] = useState<string>("");
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
@@ -37,6 +51,7 @@ export default function ContractHistory(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // This array defines the columns for a table. Each object in the array represents a column.
   const columns: ColumnsType<DataType> = [
     {
       title: 'File Contract',
@@ -71,22 +86,17 @@ export default function ContractHistory(props) {
       }
     },
     {
-      title: 'Usage Chat (message)',
-      dataIndex: 'usage',
-      key: 'usage',
+      title: 'Usage Chat (tokens)',
+      dataIndex: 'num_of_tokens',
+      key: 'num_of_tokens',
       width: '15%',
       sorter: {
         compare: (a, b) => {
-          return a.usage > b.usage ? 1 : -1;
+          return a.num_of_tokens > b.num_of_tokens ? 1 : -1;
         },
       },
-      render: (_, { usage }) => (
-        <p className={classNames("", {
-          "usage-str": isNaN(Number(usage)),
-          "usage-num": !isNaN(Number(usage)),
-        })}>
-          {10}
-        </p>
+      render: (_, { num_of_tokens }) => (
+        <p className="usage-num"> {num_of_tokens ?? 0} </p>
       ),
     },
     {
@@ -99,25 +109,52 @@ export default function ContractHistory(props) {
           return a.num_of_questionmark > b.num_of_questionmark ? 1 : -1;
         },
       },
-      render: (_, { num_of_questionmark }) => (
-        <p className="question">{num_of_questionmark}</p>
+      render: (_, { num_of_questionmark, uuid, file_name }) => (
+        <p className="question" onClick={() => getListTopic(uuid, file_name)}>
+          {num_of_questionmark}
+        </p>
       ),
     },
     {
       title: 'Uploaded Date',
-      dataIndex: 'uploaded_at',
+      dataIndex: 'created_at',
       width: '16%',
       defaultSortOrder: "descend",
       sorter: {
         compare: (a, b) => {
-          return moment.utc(a.uploaded_at) > moment.utc(b.uploaded_at) ? 1 : -1;
+          return moment.utc(a.created_at) > moment.utc(b.created_at) ? 1 : -1;
         },
       },
-      render: (_, { uploaded_at }) => (
-        <p>{moment.utc(uploaded_at).format("YYYY/MM/DD")}</p>
+      render: (_, { created_at }) => (
+        <p>{moment.utc(created_at).format("YYYY/MM/DD")}</p>
       ),
     },
   ];
+
+  // This function sets the value of setIsShowTopics to true, 
+  // sets the value of setCurrentContract to the provided file_name,
+  // and dispatches the getContractDetail action with the provided uuid.
+  const getListTopic = (uuid, file_name) => {
+    setIsShowTopics(true);
+    setCurrentContract(file_name);
+    dispatch(getContractDetail(uuid));
+  }
+
+  // This function sorts the constractDetail array based on the order property in ascending order.
+  // Then, it returns either a JSX element or a loading spinner based on the value of getContractDetailsSuccess.
+  const getContentPopupTopics = () => {
+    constractDetail.sort(function (a, b) {
+      return a.order < b.order ? -1 : 1;
+    });
+
+    return (
+      getContractDetailsSuccess
+        ? constractDetail.map((detail, index) => {
+          return <p>{index + 1}. {detail.topic_name}</p>
+        })
+        : <div className="text-center"><CircularProgress color="inherit" /></div>
+    )
+  }
 
 
   // Returns JSX for rendering component on the page
@@ -138,6 +175,16 @@ export default function ContractHistory(props) {
           listUser={contracts}
         />
       </div>
+
+      <PopupDialog
+        isShow={isShowTopics}
+        title={currentContract}
+        content={getContentPopupTopics()}
+        firstLabelButon={""}
+        seconLabelButton={""}
+        handleFirstButtonCalback={() => setIsShowTopics(false)}
+        handleSeconButtonCalback={""}
+      />
     </AdminLayout>
   );
 }

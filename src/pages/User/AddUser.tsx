@@ -29,7 +29,7 @@ export default function AddUser(props) {
     const params = {
       email: data.email.toLowerCase(),
       password: data.password.trim(),
-      role: data.role.trim(),
+      role: data.role,
     };
     dispatch(createUser(params));
     setIsShowAdd(false);
@@ -41,7 +41,7 @@ export default function AddUser(props) {
     <div className="edit-user">
       <form onSubmit={handleSubmit(onSubmit)} className="center_form">
         <div className="mb-3">
-          <label className="label-input">Email</label>
+          <label className="label-input">Email <span className="redColor">*</span></label>
           <input
             type="text"
             {...register("email")}
@@ -57,7 +57,7 @@ export default function AddUser(props) {
         </div>
 
         <div className="mb-3">
-          <label className="label-input">Password</label>
+          <label className="label-input">Password <span className="redColor">*</span></label>
           <input
             type={`${isShowPassword ? "text" : "password"}`}
             {...register("password")}
@@ -73,7 +73,7 @@ export default function AddUser(props) {
         </div>
 
         <div className="mb-3">
-          <label className="label-input">Role</label>
+          <label className="label-input">Role <span className="redColor">*</span></label>
 
           <select
             {...register("role")}
@@ -81,7 +81,7 @@ export default function AddUser(props) {
             name="role"
             defaultValue={"member"}
           >
-
+            <option value="super-admin">Super Admin</option>
             <option value="admin">Admin</option>
             <option value="member">Member</option>
           </select>

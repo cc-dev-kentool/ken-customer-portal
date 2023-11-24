@@ -2,8 +2,12 @@ import classNames from "classnames";
 
 // Define a function called "Sidebar" which receives a single parameter called "props"
 export default function SidebarAdmin(props) {
+  // Destructure props to get routeName and isShowFullSidebar
   const { routeName, isShowFullSidebar } = props;
+
+  // Parse user from local storage
   const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   // Return the following JSX
   return (
     <ul className="sidebar-nav text-left mt-0">
@@ -13,18 +17,22 @@ export default function SidebarAdmin(props) {
           {isShowFullSidebar && <span>Dashboard</span>}
         </a>
       </li>
+
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'users' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/users">
           <i className="fa-solid fa-user-group" style={{ color: `${routeName === 'users' ? '#fff' : '#000'}` }}></i>
           {isShowFullSidebar && <span>User Management</span>}
         </a>
       </li>
+
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'contracts' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/contracts">
-          <i className="fa-solid fa-user-group" style={{ color: `${routeName === 'contracts' ? '#fff' : '#000'}` }}></i>
+          <i className="fa-solid fa-clock-rotate-left" style={{ color: `${routeName === 'contracts' ? '#fff' : '#000'}` }}></i>
           {isShowFullSidebar && <span>Contracts History</span>}
         </a>
       </li>
+
+      {/* Check if the user's role is "super-admin" */}
       {user.role == "super-admin" && (
         <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'prompts' })}>
           <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/prompts">
@@ -33,6 +41,8 @@ export default function SidebarAdmin(props) {
           </a>
         </li>
       )}
+
+      {/* Check if the user's role is "super-admin" */}
       {user.role == "super-admin" && (
         <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'configuations' })}>
           <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/configuations">
@@ -41,6 +51,14 @@ export default function SidebarAdmin(props) {
           </a>
         </li>
       )}
+
+      <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'utilities' })}>
+        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/utilities">
+          <i className="fa-solid fa-paperclip" style={{ color: `${routeName === 'utilities' ? '#fff' : '#000'}` }}></i>
+          {isShowFullSidebar && <span>Utilities</span>}
+        </a>
+      </li>
+
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'analyses' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/analyses">
           <i className="fa-solid fa-chart-bar" style={{ color: `${routeName === 'analyses' ? '#fff' : '#000'}` }}></i>

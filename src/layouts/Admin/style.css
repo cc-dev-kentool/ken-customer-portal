@@ -123,12 +123,16 @@
   overflow-y: auto;
 }
 
-.sidebar .list-file p {
+.sidebar .list-file button {
   cursor: pointer;
+  background-color: #d4eff4;
+  border: none;
+  width: 100%;
+  text-align: left;
 }
 
 .sidebar .active-file {
-  background-color: #a8dee9;
+  background-color: #a8dee9 !important;
   border-radius: 5px;
 }
 
@@ -217,6 +221,8 @@
   height: 9vh;
   background: #F2F2F2;
   padding-left: 0;
+  width: 100%;
+  min-height: 50px;
 }
 
 .avatar {

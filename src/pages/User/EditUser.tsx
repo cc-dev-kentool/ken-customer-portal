@@ -18,9 +18,7 @@ export default function EditUser(props) {
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    resolver: yupResolver(userEditValidation),
-  });
+  } = useForm({});
 
   const [isShowPassword, setIsShowPassword] = useState(false);
 
@@ -30,6 +28,7 @@ export default function EditUser(props) {
       user_id: currentUser.uuid,
       email: data.username,
       password: data.password.trim(),
+      role: data.role,
     };
     dispatch(updateUser(params));
     setIsShowEdit(false);
@@ -75,8 +74,7 @@ export default function EditUser(props) {
             {...register("role")}
             className={`form-control ${errors.role ? "is-invalid" : ""}`}
             name="role"
-            value={currentUser?.role}
-            disabled
+            defaultValue={currentUser?.role}
           >
             <option value="super-admin">Super Admin</option>
             <option value="admin">Admin</option>

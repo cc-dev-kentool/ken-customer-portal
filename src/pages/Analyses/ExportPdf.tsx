@@ -1,20 +1,41 @@
 import { statusRisk } from "constants/riskAnalysis";
 import { Col, Row } from "react-bootstrap";
 
-// Define a function component named "RiskContent" and receive a single parameter called "props"
 export default function ExportPdf(props) {
 
+  // Destructuring props object to get dataAnalysis and conversation variables
   const { dataAnalysis, conversation } = props;
 
-  // Define a function named "getStatusRisk" that takes a "status" parameter and returns a value from the "statusRisk" array based on the label
+  // Define a function named "getStatusRisk" that takes a "status" parameter 
+  // and returns a value from the "statusRisk" array based on the label
   const getStatusRisk = (status) => {
     return statusRisk.find(item => item.label === status)?.value;
   }
 
-  // Return the following JSX
+  const genComment = (data) => {
+    if (data.topic === 'Readability') {
+      return (
+        <div>
+          <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br/>
+          <span>Three worst clauses: </span>
+          {data.comment["Three worst clauses"].length === 0 
+            ? "N/A"
+            : data.comment["Three worst clauses"].map((item, index) => (
+              <><br /><span key={index} className="m-3"> - {item[`worst clause ${index+1}`]} ({item.score})</span></>
+            ))
+          }
+        </div>
+      );
+    } else {
+      return data.comment;
+    }
+  }
+
+  // Return JSX elements
   return (
     <div id="divToPrint" style={{ overflow: "hidden", marginTop: "30px" }}>
       <h2 className="text-center">Data Analysis</h2>
+      {/* Check if dataAnalysis array has items */}
       {dataAnalysis?.length > 0 &&
         <div className="table-content">
           {dataAnalysis.map((data) => {
@@ -31,16 +52,21 @@ export default function ExportPdf(props) {
                 <Row className="source-text m-0">
                   <Col sm="2" className="title-left p-0">Source Text</Col>
                   <Col sm="10" className="p-0">
-                    <p
-                      className="pt-2 mb-2 cursor-pointer source-text-item"
-                    >
-                      {data.analysis_result?.source_text}
-                    </p>
+                    {data?.analysis_result?.source_text?.map((text, index) => (
+                      <p
+                        key={text.key}
+                        className="pt-2 mb-2"
+                      >
+                        {index >= 1 && <hr />}
+                        {text.value === 'n/a' ? <p>n/a</p> : text.value}
+                      </p>
+                        
+                    ))}
                   </Col>
                 </Row>
                 <Row className="mt-3 m-0">
                   <Col sm="2" className="title-left p-0">Comment</Col>
-                  <Col sm="10" className="p-0">{data.analysis_result?.comment}</Col>
+                  <Col sm="10" className="p-0">{genComment(data.analysis_result)}</Col>
                 </Row>
               </div>
             )

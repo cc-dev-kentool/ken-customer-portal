@@ -5,7 +5,8 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getListUser, getLoginHistory } from "store/actions/user";
 import { getDateDiff } from "helpers/until";
 import { ContentTable } from "components/Table/ContentTable";
-import type { ColumnsType } from "antd/es/table";
+import { SorterResult } from "antd/es/table/interface";
+import type { ColumnsType, TableProps } from "antd/es/table";
 import moment from "moment";
 import AdminLayout from "layouts/Admin";
 import AddUser from "./AddUser";
@@ -13,7 +14,6 @@ import EditUser from "./EditUser";
 import LoginHistory from "./LoginHistory";
 import classNames from "classnames";
 import "./style.css";
-import { Button } from "antd";
 
 interface DataType {
   uuid: string;
@@ -29,16 +29,31 @@ interface DataType {
 export default function ListUser(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const [listUser] = useAppSelector((state) => [state.users.listUser]);
 
+  // Initialize 'loggedUser' variable by parsing the value returned from localStorage.getItem("user"). If the value is null or undefined, initialize it as an empty object.
+  const loggedUser = JSON.parse(localStorage.getItem("user") || "{}");
+
+  // Destructure some values from the state using the useAppSelector hook
+  const [listUser, histories, getLoginHistorySuccess] = useAppSelector((state) => [
+    state.users.listUser,
+    state.users.loginHistory,
+    state.users.getLoginHistorySuccess,
+  ]);
+
+  // Define a handleChange function that will be used as a callback for the onChange event of a table. It takes pagination, filters, and sorter as arguments.
+  const handleChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter) => {
+    // Set the sortedInfo state to the value of the sorter argument.
+    setSortedInfo(sorter as SorterResult<DataType>);
+  };
+
+  // Define states using the useState hook
+  const [sortedInfo, setSortedInfo] = useState<SorterResult<DataType>>({});
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
   const [isShowHistory, setIsShowHistory] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Object>({});
   const [currentData, setCurrentData] = useState([]);
   const [currentTime, setCurrentTime] = useState<string>();
-  const [originData, setOriginData] = useState([]);
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
@@ -46,8 +61,7 @@ export default function ListUser(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const loggedUser = JSON.parse(localStorage.getItem("user") || "{}");
-
+  // This useEffect hook will be executed whenever the `listUser` variable changes.
   useEffect(() => {
     if (listUser) {
       setCurrentTime(listUser.currentTime);
@@ -55,11 +69,11 @@ export default function ListUser(props) {
       const sortedData = data?.sort((a, b) =>
         a?.created_at < b?.created_at ? 1 : -1
       );
-      setOriginData(sortedData);
       setCurrentData(listUser.data);
     }
   }, [listUser]);
 
+  // This function takes a role as input and returns the corresponding role name
   const getRoleName = (role) => {
     switch (role) {
       case "admin":
@@ -73,6 +87,7 @@ export default function ListUser(props) {
     }
   };
 
+  // Define an array of columns with a specific data type (ColumnsType<DataType>)
   const columns: ColumnsType<DataType> = [
     {
       title: "Email",
@@ -83,14 +98,18 @@ export default function ListUser(props) {
           return a.email > b.email ? 1 : -1;
         },
       },
+      sortOrder: sortedInfo.columnKey === 'email' ? sortedInfo.order : null,
     },
     {
       title: "Last Logged-in",
-      dataIndex: "login",
-      key: "login",
+      dataIndex: "last_access_time",
+      key: "last_access_time",
+      sortOrder: sortedInfo.columnKey === 'last_access_time' ? sortedInfo.order : null,
       sorter: {
         compare: (a, b) => {
-          return a.last_access_time > b.last_access_time ? 1 : -1;
+          const timeA = a.last_access_time ?? 'N/A';
+          const timeB = b.last_access_time ?? 'N/A';
+          return timeA > timeB ? 1 : -1;
         },
       },
       width: "25%",
@@ -130,6 +149,7 @@ export default function ListUser(props) {
       dataIndex: "number_of_contracts",
       key: "number_of_contracts",
       width: "15%",
+      sortOrder: sortedInfo.columnKey === 'number_of_contracts' ? sortedInfo.order : null,
       sorter: {
         compare: (a, b) => {
           return a.number_of_contracts > b.number_of_contracts ? 1 : -1;
@@ -141,6 +161,7 @@ export default function ListUser(props) {
       dataIndex: "role",
       key: "role",
       width: "15%",
+      sortOrder: sortedInfo.columnKey === 'role' ? sortedInfo.order : null,
       sorter: {
         compare: (a, b) => {
           return a.role > b.role ? 1 : -1;
@@ -161,7 +182,9 @@ export default function ListUser(props) {
     {
       title: "Created Date",
       dataIndex: "created_at",
+      key: "created_at",
       width: "18%",
+      sortOrder: sortedInfo.columnKey === 'created_at' ? sortedInfo.order : null,
       sorter: {
         compare: (a, b) => {
           return a.created_at > b.created_at ? 1 : -1;
@@ -173,7 +196,7 @@ export default function ListUser(props) {
     },
     {
       title: "Action",
-      width: "11%",
+      width: loggedUser.role == "super-admin" ? "11%" : "1%",
       className: loggedUser.role == "super-admin" ? "" : "hide-action",
       render: (user) => (
         <i
@@ -185,42 +208,51 @@ export default function ListUser(props) {
     },
   ];
 
+  // This function returns the content for the add user popup
   const getContentPopupAdd = () => {
     return <AddUser setIsShowAdd={setIsShowAdd} />;
   };
 
+  // This function sets the current user and shows the edit user popup
   const handleShowPopupEdit = (user) => {
     setCurrentUser(user);
     setIsShowEdit(true);
   };
 
+  // This function returns the content for the edit user popup
   const getContentPopupEdit = () => {
     return <EditUser currentUser={currentUser} setIsShowEdit={setIsShowEdit} />;
   };
 
+  // This function shows the login history popup and dispatches an action to get the login history
   const handleShowPopupHistory = (uuid) => {
     setIsShowHistory(true);
     dispatch(getLoginHistory(uuid));
   };
 
+  // This function returns the content for the login history popup
   const getContentPopupHistory = () => {
-    return <LoginHistory />;
+    return <LoginHistory loginHistories={histories} getLoginHistorySuccess={getLoginHistorySuccess} />;
   };
 
+  // This function sorts the current data by email domain
   const onSortByDomain = () => {
-    const currentDataCopy = [...originData];
-    setCurrentData(
-      currentDataCopy.sort((a, b) => {
-        const aEmail: any = a["email"];
-        const bEmail: any = b["email"];
-        return aEmail?.split("@")[1].localeCompare(bEmail?.split("@")[1]);
-      })
-    );
+    setSortedInfo({});
+
+    const newData = currentData.sort((a, b) => {
+      const aEmail: any = a["email"];
+      const bEmail: any = b["email"];
+      return aEmail?.split("@")[1].localeCompare(bEmail?.split("@")[1]);
+    })
+
+    setCurrentData(newData)
   };
 
+  // This function reloads the page to reset the state
   const onReset = () => {
     location.reload();
   };
+
 
   // Returns JSX for rendering component on the page
   return (
@@ -232,21 +264,18 @@ export default function ListUser(props) {
             Users Management
           </Col>
           <Col sm={2} className="add-user">
-            {user.role == "super-admin" && (
+            {loggedUser.role == "super-admin" && (
               <button onClick={() => setIsShowAdd(true)}>+</button>
             )}
           </Col>
         </Row>
-        <Row>
-          <Col sm={10} className="title" onClick={() => onSortByDomain()}>
-            <Button type="primary">Sort by domain</Button>
-            <Button type="default" onClick={() => onReset()}>
-              Reset
-            </Button>
+        <Row className="gr-btn-sort">
+          <Col sm={10}>
+            <button className="btn-sort-domain" onClick={() => onSortByDomain()}>Sort by domain</button>
+            <button className="btn-reset" onClick={() => onReset()}> Reset </button>
           </Col>
-          <Col sm={2} className="add-user"></Col>
         </Row>
-        <ContentTable columns={columns} listUser={currentData} />
+        <ContentTable columns={columns} listUser={currentData} onChange={handleChange} />
         <PopupDialog
           isShow={isShowAdd}
           title={"Add User"}

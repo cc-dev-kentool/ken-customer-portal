@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
 import { getListPrompt } from "store/actions/prompt";
-import { Splitter, SplitterPanel } from 'primereact/splitter';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
@@ -14,8 +13,9 @@ import AdminLayout from "layouts/Admin";
 import ExportPdf from "./ExportPdf";
 import "./style.css";
 
-// Define a function component named "Dashboard" which does not receive any parameters.
+// This is the Analysis component which is exported as default.
 export default function Analysis(props) {
+  // The useAppDispatch hook returns the dispatch function of the Redux store.
   const dispatch = useAppDispatch();
 
   // The useState hook is used here to define state variables.
@@ -29,7 +29,9 @@ export default function Analysis(props) {
   const [dataAnalysis, setDataAnalysis] = useState<object[]>([]);
   const [currentDocumentId, setCurrentDocumentId] = useState<string>("");
   const [isShowFullChat, setIsShowFullChat] = useState<boolean>(false);
-  
+
+  // The useAppSelector hook is used here to extract data from the Redux store state.
+  // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
   const [uploadId, dataAnaly, conversation] = useAppSelector((state) => [
     state.analysis.uploadPdf,
     state.analysis.dataAnalysis,
@@ -38,6 +40,8 @@ export default function Analysis(props) {
 
   let runningTimeout: any = null;
 
+  // The useEffect hook is used here to perform side effects after rendering.
+  // It will run when the value of uploadId changes.
   useEffect(() => {
     if (uploadId) {
       setFileUploadId(uploadId)
@@ -45,6 +49,8 @@ export default function Analysis(props) {
     }
   }, [uploadId])
 
+  // The useEffect hook is used here to perform side effects after rendering.
+  // It will run when the value of dataAnaly changes.
   useEffect(() => {
     if (currentDocumentId == dataAnaly?.uuid) {
 
@@ -58,14 +64,18 @@ export default function Analysis(props) {
         }, 3000);
       } else if (executionStatus === 'done') {
         setFileUploadId(dataAnaly.uuid);
-        url !== dataAnaly.path && setUrl(dataAnaly.path)
         dispatch(getListFile(false))
       }
 
+      if (!url) {
+        setUrl(dataAnaly.path)
+      }
       setDataAnalysis(dataAnaly?.topic_executions?.[0].execution_details)
     }
   }, [dataAnaly])
 
+  // The useEffect hook is used here to perform side effects after rendering.
+  // It will run when the value of currentDocumentId changes.
   useEffect(() => {
     if (runningTimeout) {
       clearTimeout(runningTimeout);
@@ -79,6 +89,7 @@ export default function Analysis(props) {
     }
   }, [currentDocumentId])
 
+  // This function handles showing the chat.
   const handleShowChat = () => {
     setShowChat(true);
     dispatch(getConversation(fileUploadId))
@@ -92,60 +103,56 @@ export default function Analysis(props) {
       setShowPdf={setShowPdf}
       setDataAnalysis={setDataAnalysis}
       setShowChat={setShowChat}
+      setIsShowFullChat={setIsShowFullChat}
       setCurrentDocumentId={setCurrentDocumentId}
     >
-      {dataAnalysis?.length > 0 && 
+      {dataAnalysis?.length > 0 &&
         <Row className="main-content">
-        <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
-          {!showPdf &&
-            <i
-              className="fa-regular fa-file-pdf fa-2xl icon-show-pdf"
-              style={{ color: "#26ADC9" }}
-              onClick={() => setShowPdf(true)}
-            />
-          }
-          {/*
-            <Splitter style={{ height: '89vh' }} layout="vertical">
-              <SplitterPanel className="flex align-items-center justify-content-center mb-2 bg-white">Panel 1</SplitterPanel>
-              <SplitterPanel className="flex align-items-center justify-content-center bg-white">Panel 2</SplitterPanel>
-            </Splitter>
-          */}
-          <RiskContent
-            fileUploadId={fileUploadId}
-            showChat={showChat}
-            dataAnalysis={dataAnalysis}
-            currentStatus={currentStatus}
-            isDowndLoad={isDowndLoad}
-            isShowFullChat={isShowFullChat}
-            setIsDowndLoad={setIsDowndLoad}
-            setValueSearch={setValueSearch}
-          />
-          {currentStatus && currentStatus !== 'running' && <>
-            {!showChat
-              ? <i
-                className="fa-solid fa-message fa-2xl icon-chat"
-                onClick={handleShowChat}
-              />
-              : <ChatGPT
-                showChat={showPdf}
-                fileUploadId={fileUploadId}
-                isShowFullChat={isShowFullChat}
-                setShowChat={setShowChat}
-                setIsShowFullChat={setIsShowFullChat}
+          <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
+            {!showPdf &&
+              <i
+                className="fa-regular fa-file-pdf fa-2xl icon-show-pdf"
+                style={{ color: "#26ADC9" }}
+                onClick={() => setShowPdf(true)}
               />
             }
-          </>}
-        </Col>
-        <Col lg={url && showPdf ? 5 : 0}>
-          {showPdf &&
-            <PdfDocument
-              url={url}
-              valueSearch={valueSearch}
-              setShowPdf={setShowPdf}
+            <RiskContent
+              fileUploadId={fileUploadId}
+              showChat={showChat}
+              dataAnalysis={dataAnalysis}
+              currentStatus={currentStatus}
+              isDowndLoad={isDowndLoad}
+              isShowFullChat={isShowFullChat}
+              setIsDowndLoad={setIsDowndLoad}
+              setValueSearch={setValueSearch}
             />
-          }
-        </Col>
-      </Row>}
+            {currentStatus && currentStatus !== 'running' && <>
+              {!showChat
+                ? <i
+                  className="fa-solid fa-message fa-2xl icon-chat"
+                  onClick={handleShowChat}
+                />
+                : <ChatGPT
+                  showChat={showPdf}
+                  fileUploadId={fileUploadId}
+                  isShowFullChat={isShowFullChat}
+                  setShowChat={setShowChat}
+                  setIsShowFullChat={setIsShowFullChat}
+                />
+              }
+            </>}
+          </Col>
+          <Col lg={url && showPdf ? 5 : 0}>
+            {showPdf &&
+              <PdfDocument
+                url={url}
+                valueSearch={valueSearch}
+                setShowPdf={setShowPdf}
+                setValueSearch={setValueSearch}
+              />
+            }
+          </Col>
+        </Row>}
       {isDowndLoad &&
         <ExportPdf dataAnalysis={dataAnalysis} conversation={conversation} />
       }

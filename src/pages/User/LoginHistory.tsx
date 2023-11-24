@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useAppSelector } from "hooks";
+import { CircularProgress } from "@mui/material";
 import { getDateDiff } from "helpers/until";
 import { ContentTable } from "components/Table/ContentTable";
 import type { ColumnsType } from 'antd/es/table';
@@ -14,20 +13,11 @@ interface DataType {
 }
 
 // Defines a React functional component called "List" that takes props as its parameter
-export default function LoginHistory() {
+export default function LoginHistory(props) {
 
-  const [histories] = useAppSelector((state) => [
-    state.users.loginHistory,
-  ]);
+  const { loginHistories, getLoginHistorySuccess } = props;
 
-  const [loginHistories, setLoginHistories] = useState([])
-
-  useEffect(() => {
-    if (loginHistories) {
-      setLoginHistories(histories.data);
-    }
-  }, [loginHistories])
-
+  // Define the columns for the table
   const columns: ColumnsType<DataType> = [
     {
       title: 'Email',
@@ -51,7 +41,7 @@ export default function LoginHistory() {
         },
       },
       render: (_, { last_access_time, logout_time }) => (
-        <p>{logout_time ? getDateDiff(last_access_time, logout_time, false): 'N/A'}</p>
+        <p>{logout_time ? getDateDiff(last_access_time, logout_time, false) : 'N/A'}</p>
       ),
     },
     {
@@ -80,11 +70,12 @@ export default function LoginHistory() {
         },
       },
       render: (_, { logout_time }) => (
-        <p>{logout_time ? moment.utc(logout_time).local().format('lll')  : 'N/A'}</p>
+        <p>{logout_time ? moment.utc(logout_time).local().format('lll') : 'N/A'}</p>
       )
     },
   ];
 
+  // Function to compare the duration between login and logout times
   const compareDuration = (timeLogin, timeLogout) => {
     return new Date(timeLogout).getTime() - new Date(timeLogin).getTime()
   }
@@ -92,10 +83,13 @@ export default function LoginHistory() {
   // Returns JSX for rendering component on the page
   return (
     <div className="login-history-page">
-      <ContentTable
-        columns={columns}
-        listUser={loginHistories}
-      />
+      {getLoginHistorySuccess
+        ? <ContentTable
+          columns={columns}
+          listUser={loginHistories}
+        />
+        : <div className="text-center"><CircularProgress color="inherit" /></div>
+      }
     </div>
   );
 }
