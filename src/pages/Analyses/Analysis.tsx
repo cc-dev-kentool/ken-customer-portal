@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
 import { getListPrompt } from "store/actions/prompt";
-import { Splitter, SplitterPanel } from 'primereact/splitter';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
@@ -65,10 +64,12 @@ export default function Analysis(props) {
         }, 3000);
       } else if (executionStatus === 'done') {
         setFileUploadId(dataAnaly.uuid);
-        url !== dataAnaly.path && setUrl(dataAnaly.path)
         dispatch(getListFile(false))
       }
 
+      if (!url) {
+        setUrl(dataAnaly.path)
+      }
       setDataAnalysis(dataAnaly?.topic_executions?.[0].execution_details)
     }
   }, [dataAnaly])
@@ -115,12 +116,6 @@ export default function Analysis(props) {
                 onClick={() => setShowPdf(true)}
               />
             }
-            {/*
-              <Splitter style={{ height: '89vh' }} layout="vertical">
-                <SplitterPanel className="flex align-items-center justify-content-center mb-2 bg-white">Panel 1</SplitterPanel>
-                <SplitterPanel className="flex align-items-center justify-content-center bg-white">Panel 2</SplitterPanel>
-              </Splitter>
-            */}
             <RiskContent
               fileUploadId={fileUploadId}
               showChat={showChat}

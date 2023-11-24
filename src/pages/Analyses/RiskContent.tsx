@@ -207,6 +207,9 @@ export default function RiskContent(props) {
                         />
                       </Col>
                     </Row>
+                    <Row className="d-none">
+                      {data.chatgpt_result}
+                    </Row>
                     {getStatusShowTopic(data.analysis_result?.topic) &&
                       <>
                         <Row className="source-text m-0">
