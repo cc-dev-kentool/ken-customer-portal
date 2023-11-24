@@ -84,9 +84,6 @@ export default function RiskContent(props) {
       data.analysis_result.source_text?.map(item => {
         const sourceText = item.value?.replace(/\s+/g, '')
         const selectedText = itemText?.replace(/\s+/g, '')
-        console.log('item.value', sourceText)
-        console.log('itemText', selectedText)
-        console.log('result', sourceText.includes(selectedText))
         if (sourceText.includes(selectedText)) {
           isInSourceText = true;
         }
