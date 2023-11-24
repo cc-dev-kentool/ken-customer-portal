@@ -22,26 +22,6 @@ export default function AnalysisProgress(props) {
     state.prompts.listPrompt,
   ]);
 
-  // Set dataProgress state variable as an empty array
-  const [dataProgress, setDataProgress] = useState<any>([]);
-
-  // Use useEffect hook to update dataProgress whenever currentStatus or dataTopics change
-  useEffect(() => {
-    if (dataTopics?.length > 0) {
-      if (currentStatus === 'running') {
-        const findIndex = dataTopics.every(data =>  data.executed_status !== 'running')
-        if (findIndex) {
-          // Set the executed_status of the first topic with topic_order of 1 to 'running'
-          dataTopics.find(item => item.topic_order === 1).executed_status = 'running';
-          // Update dataProgress state with dataTopics
-          setDataProgress(dataTopics)
-        }
-      }
-    }
-    // Update dataProgress state with dataTopics
-    setDataProgress(dataTopics)
-  }, [currentStatus, dataTopics]);
-
   // Sort the listPrompt array based on topic_order property
   listPrompt.sort(function (a, b) {
     if (a.topic_order < b.topic_order) {
@@ -107,7 +87,7 @@ export default function AnalysisProgress(props) {
 
     return (
       <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
-        <img src={icon_loading} alt="" width="20px"/>
+        <img src={icon_loading} alt="" width="20px" />
       </ColorlibStepIconRoot>
     );
   }
@@ -144,7 +124,7 @@ export default function AnalysisProgress(props) {
   // Return the content for each step based on the dataProgress and listPrompt
   const contentStep = (prompt) => {
     let icon = iconNone;
-    const findTopic = dataProgress.find(topic => topic.topic === prompt.topic_id)
+    const findTopic = dataTopics.find(topic => topic.topic === prompt.topic_id)
 
     if (findTopic) {
       switch (findTopic.executed_status) {
@@ -178,10 +158,32 @@ export default function AnalysisProgress(props) {
     )
   }
 
+  const getContentLoadingPdf = () => {
+    const waitting = dataTopics.every(topic => topic.executed_status === 'wait_to_run')
+
+    const icon = waitting && currentStatus === 'running' ? iconLoading : iconSuccess
+    
+    return (
+      <StepLabel StepIconComponent={icon}>
+        <p data-tooltip-id={`tooltip-waiting`} style={{ cursor: "pointer" }}>
+          {labelDisplay("Waiting to read pdf", 5)}
+        </p>
+        <ReactTooltip
+          id={`tooltip-waiting`}
+          content={"Waiting to read pdf"}
+          widthTooltip={200}
+        />
+      </StepLabel>
+    )
+  }
+
   // Return the HTML for the AnalysisProgress component
   return (
     <div>
-      <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
+      <Stepper alternativeLabel activeStep={6} connector={<ColorlibConnector />}>
+        <Step >
+          {getContentLoadingPdf()}
+        </Step>
         {listPrompt.map((prompt, index) => (
           (index < 6) && (<Step key={prompt.uuid}>
             {contentStep(prompt)}

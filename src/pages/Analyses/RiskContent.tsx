@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useAppDispatch } from "hooks";
 import { getConversation } from "store/actions/chatGpt";
-import { remove } from "store/actions/alert";
+import { add as addAlert, remove } from "store/actions/alert"
 import generatePDF, { Margin } from 'react-to-pdf';
 import AnalysisProgress from "./AnalysisProgress";
 import classNames from "classnames";
@@ -75,9 +75,27 @@ export default function RiskContent(props) {
 
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
-    const itemText = window.getSelection()?.toString();
-    itemText?.trim() ? setValueSearch(itemText) : setValueSearch(text);
+    
     dispatch(remove());
+
+    const itemText = window.getSelection()?.toString().trim();
+    let isInSourceText = false;
+    dataAnalysis.map(data => {
+      data.analysis_result.source_text?.map(item => {
+        const sourceText = item.value?.replace(/\s+/g, '')
+        const selectedText = itemText?.replace(/\s+/g, '')
+        if (sourceText.includes(selectedText)) {
+          isInSourceText = true;
+        }
+      })
+    })
+
+    if (isInSourceText) {
+      itemText?.trim() ? setValueSearch(itemText) : setValueSearch(text);
+    } else {
+      dispatch(addAlert("Text selected don't have in source text.", "danger"))
+    }
+    
   }
 
   // Define a function exportPDF that does the following:
@@ -170,10 +188,9 @@ export default function RiskContent(props) {
                 />
               </Col>
             </Row>
-            <p className="text-right"></p>
             {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} currentStatus={currentStatus} />}
           </div>
-          <div className="table-content" style={{ height: `${getHeightRiskContent()}vh` }}>
+          <div className="table-content" onMouseUp={() => handleSearch("")} style={{ height: `${getHeightRiskContent()}vh` }}>
             {dataAnalysis.map((data) => {
               if (data.executed_status === 'success') {
                 return (
