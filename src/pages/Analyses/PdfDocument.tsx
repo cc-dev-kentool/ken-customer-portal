@@ -53,7 +53,6 @@ export default function PdfDocument(props) {
   function getEndIndex(text, endIndex) {
     let newEnd = endIndex;
     for (let i = endIndex; i < text.length; i++) {
-      console.log(text.charAt(i));
       if (text.charAt(i) === ' ') {
         newEnd = i;
         break;
