@@ -109,6 +109,7 @@ export default function Sidebar(props) {
               setShowChat={setShowChat}
               setIsShowFullChat={setIsShowFullChat}
               setCurrentDocumentId={setCurrentDocumentId}
+              setUrl={setUrl}
             />}
         </div>
       </div>

@@ -23,6 +23,7 @@ export default function SidebarMember(props) {
     setShowChat,
     setIsShowFullChat,
     setCurrentDocumentId,
+    setUrl,
   } = props;
 
   // Import the dispatch function from the Redux store
@@ -87,6 +88,7 @@ export default function SidebarMember(props) {
     setIsShowFullChat(false);
     setActiveFile(fileId);
     setCurrentDocumentId(fileId);
+    setUrl("")
   }
 
   // Define a function called "getStatusFile" that returns an icon based on the status provided
