@@ -163,6 +163,7 @@ export default function PdfDocument(props) {
       }
 
       actualTextArr.forEach(element => {
+        dispatch(remove())
         highlight([
           {
             keyword: element.replace(/\s+/g, ' '),
