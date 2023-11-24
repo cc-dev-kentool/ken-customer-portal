@@ -75,10 +75,9 @@ export default function RiskContent(props) {
 
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
-    
-    dispatch(remove());
 
     const itemText = window.getSelection()?.toString().trim();
+
     let isInSourceText = false;
     dataAnalysis.map(data => {
       data.analysis_result.source_text?.map(item => {
@@ -92,10 +91,7 @@ export default function RiskContent(props) {
 
     if (isInSourceText) {
       itemText?.trim() ? setValueSearch(itemText) : setValueSearch(text);
-    } else {
-      dispatch(addAlert("Text selected don't have in source text.", "danger"))
     }
-    
   }
 
   // Define a function exportPDF that does the following:
@@ -218,7 +214,7 @@ export default function RiskContent(props) {
                             {data.analysis_result.source_text?.map((text, index) => {
                               return <p
                                 key={text.key}
-                                className={classNames('pt-2 mb-2', {'cursor-pointer source-text-item' : checkSourceText(text.value)})}
+                                className={classNames('pt-2 mb-2', { 'cursor-pointer source-text-item': checkSourceText(text.value) })}
                                 onClick={() => checkSourceText(text.value) && handleSearch(text.value)}
                               >
                                 {index >= 1 && <hr />}
