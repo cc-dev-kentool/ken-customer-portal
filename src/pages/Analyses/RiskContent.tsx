@@ -76,7 +76,7 @@ export default function RiskContent(props) {
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
     const itemText = window.getSelection()?.toString();
-    itemText ? setValueSearch(itemText) : setValueSearch(text);
+    itemText?.trim() ? setValueSearch(itemText) : setValueSearch(text);
     dispatch(remove());
   }
 
