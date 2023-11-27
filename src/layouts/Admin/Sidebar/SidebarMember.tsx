@@ -39,10 +39,10 @@ export default function SidebarMember(props) {
   let defaultValue: number;
   switch (role) {
     case 'super-admin':
-      defaultValue = 490;
+      defaultValue = 530;
       break;
     case 'admin':
-      defaultValue = 400;
+      defaultValue = 442;
       break;
     default:
       defaultValue = 210;
@@ -138,41 +138,36 @@ export default function SidebarMember(props) {
         }
         style={{ height: heightMenu }}
       >
-        <p>
-          <i
-            className={`fa-solid fa-chevron-${isShowFiles ? 'up' : 'down'}`}
-            onClick={handleShowFiles}
-          />
-          <span className="m-2 main-menu-title">Main</span>
+        <p className="main-menu-title">
+          <i className="fa-solid fa-chevron-down" />
+          <span className="m-2">Main</span>
         </p>
-        {isShowFiles &&
-          <div
-            className="list-file"
-            style={{ height: '84%' }}
-          >
-            {files.map((file) => {
-              return (
-                <button
-                  className={classNames("mb-2", { "active-file": file.uuid === activeFile })}
-                  key={file.uuid}
-                  onClick={() => showDetailFile(file.uuid)}
-                >
-                  <i className="fa-regular fa-file-lines m-2" style={{ color: "#26adc9" }}></i>
-                  <span data-tooltip-id={`tooltip-1-${file.uuid}`}>
-                    {file.file_name?.length > 16 ? labelDisplay(file.file_name, 16) : file.file_name}
-                  </span>
-                  {file.file_name?.length > 16 &&
-                    <ReactTooltip
-                      id={`tooltip-1-${file.uuid}`}
-                      content={file.file_name}
-                      widthTooltip={220}
-                    />}
-                  <img src={getStatusFile(file.analysis_status)} className="icon-action" alt="" width="20px" />
-                </button>
-              )
-            })}
-          </div>
-        }
+        <div
+          className={classNames("list-file", { "none-file": !isShowFiles })}
+          style={{ height: '88%' }}
+        >
+          {files.map((file) => {
+            return (
+              <button
+                className={classNames("mb-2", { "active-file": file.uuid === activeFile })}
+                key={file.uuid}
+                onClick={() => showDetailFile(file.uuid)}
+              >
+                <i className="fa-regular fa-file-lines m-2" style={{ color: "#26adc9" }}></i>
+                <span data-tooltip-id={`tooltip-1-${file.uuid}`}>
+                  {file.file_name?.length > 16 ? labelDisplay(file.file_name, 16) : file.file_name}
+                </span>
+                {file.file_name?.length > 16 &&
+                  <ReactTooltip
+                    id={`tooltip-1-${file.uuid}`}
+                    content={file.file_name}
+                    widthTooltip={220}
+                  />}
+                <img src={getStatusFile(file.analysis_status)} className="icon-action" alt="" width="20px" />
+              </button>
+            )
+          })}
+        </div>
       </div>}
     </>
   );

@@ -52,6 +52,7 @@
 .sidebar .btn-add-document {
   background-color: #26ADC9;
   width: 100%;
+  height: 57px;
   border-radius: 10px;
   border: 1px solid #26ADC9;
   color: white;
@@ -112,11 +113,20 @@
 
 .sidebar .main-menu-title {
   font-weight: bold;
+  cursor: pointer;
 }
 
-.sidebar .main-menu-extended {
-  width: 270px;
+.sidebar .main-menu-extended, .sidebar .main-menu:hover {
+  width: 240px;
   z-index: 2;
+}
+
+.sidebar .main-menu:hover .list-file {
+  display: block;
+}
+
+.sidebar .main-menu .none-file {
+  display: none;
 }
 
 .sidebar .list-file {
