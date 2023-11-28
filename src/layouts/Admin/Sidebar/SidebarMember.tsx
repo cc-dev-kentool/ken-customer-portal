@@ -4,6 +4,7 @@ import { labelDisplay } from "helpers/until";
 import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import { useEffect, useState } from "react";
 import { getListFile } from "store/actions/analysis";
+import { useHistory, useParams } from 'react-router-dom';
 import icon_success from "assets/icon/icon_success.svg";
 import icon_error from "assets/icon/icon_error.svg";
 import icon_loading from "assets/icon/icon_loading.svg";
@@ -17,17 +18,19 @@ export default function SidebarMember(props) {
     isShowFiles,
     isShowFullSidebar,
     isNewUplaod,
-    setshowModalUplaod,
-    setIsShowFiles,
-    setIsNewUplaod,
+    setUrl,
     setShowChat,
     setIsShowFullChat,
-    setCurrentDocumentId,
-    setUrl,
+    setShowPdf,
+    setshowModalUplaod,
+    setIsNewUplaod,
   } = props;
 
   // Import the dispatch function from the Redux store
   const dispatch = useAppDispatch();
+
+  let history = useHistory();
+  const { fieldId } = useParams();
 
   // Use the useAppSelector hook to get values from the state
   const [files, getListFileSuccess] = useAppSelector((state) => [
@@ -69,10 +72,9 @@ export default function SidebarMember(props) {
     }
   }, [isNewUplaod, getListFileSuccess]);
 
-  // Define a function called "handleShowFiles" that toggles the value of "isShowFiles"
-  const handleShowFiles = () => {
-    setIsShowFiles(!isShowFiles)
-  }
+  useEffect(() => {
+    setActiveFile(fieldId)
+  }, [fieldId])
 
   // Set up side effect using the useEffect hook to update the heightMenu state when window resizes
   useEffect(() => {
@@ -84,11 +86,11 @@ export default function SidebarMember(props) {
   // Define a function called "showDetailFile" that dispatches remove action and updates states based on the selected fileId
   const showDetailFile = (fileId) => {
     dispatch(remove());
+    setUrl("");
     setShowChat(false);
     setIsShowFullChat(false);
-    setActiveFile(fileId);
-    setCurrentDocumentId(fileId);
-    setUrl("")
+    setShowPdf(true);
+    history.push(`/analyses/${fileId}`);
   }
 
   // Define a function called "getStatusFile" that returns an icon based on the status provided
