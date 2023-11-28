@@ -25,6 +25,17 @@ export default function ChatGPT(props) {
     setMessage("")
   }, [conversation])
 
+  // Effect hook to scroll to bottom of messages container whenever enquiry state changes.
+  useEffect(() => {
+    if (getConversationSuccess) {
+      const element = window.document.getElementById("conversation");
+      if (element) {
+        element.scrollTop = element.scrollHeight
+      }
+    }
+  }, [getConversationSuccess]);
+
+
   const handleCloseChat = () => {
     // Closes the chat window and sets isShowFullChat to false
     setShowChat(false);
@@ -55,7 +66,7 @@ export default function ChatGPT(props) {
               className="fa-solid fa-minus icon-expand"
               onClick={() => setIsShowFullChat(false)}
             />}
-          <div className={classNames("conversation", { "height-full": isShowFullChat })}>
+          <div id={"conversation"} className={classNames("conversation", { "height-full": isShowFullChat })}>
             {conversation?.map(item => {
               return (
                 // Renders each conversation item with question and answer labels
