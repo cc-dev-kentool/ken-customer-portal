@@ -126,6 +126,7 @@
   border-radius: 15px;
   height: 28vh;
   margin-top: 10px;
+  position: relative;
 }
 
 .full-chat {
@@ -155,7 +156,7 @@
 }
 
 .conversation {
-  height: 65%;
+  height: 70%;
   overflow: auto;
   margin-top: 20px;
 }
@@ -190,14 +191,20 @@
   border-radius: 8px;
 }
 
+.area-input {
+  position: absolute;
+  bottom: 10px;
+  width: -webkit-fill-available;
+  margin-right: 10px;
+}
+
 .field-input {
-  width: 99%;
-  background-color: #f4fbfc;
+  background-color: #f4fbfc !important;
   border: none !important;
+  box-shadow: none !important;
   border-radius: 10px;
-  height: 40px;
   margin-right: 3px;
-  padding: 0 45px 0 10px;
+  padding: 10px 45px 10px 10px;
 }
 
 .iconSend {

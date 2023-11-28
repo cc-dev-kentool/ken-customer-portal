@@ -32,7 +32,6 @@ export default function Sidebar(props) {
   const [isShowFiles, setIsShowFiles] = useState<boolean>(true);
   const [file, setFile] = useState<File>();
   const [isEnableBtnAnalyze, setIsEnableBtnAnalyze] = useState<boolean>(true);
-  const [isNewUplaod, setIsNewUplaod] = useState<boolean>(false);
 
   // Define a function called "getContentPopupArea" that returns some JSX
   const getContentPopupArea = () => {
@@ -95,13 +94,11 @@ export default function Sidebar(props) {
               role={user.role}
               isShowFiles={isShowFiles}
               isShowFullSidebar={isShowFullSidebar}
-              isNewUplaod={isNewUplaod}
               setUrl={setUrl}
               setShowChat={setShowChat}
               setIsShowFullChat={setIsShowFullChat}
               setShowPdf={setShowPdf}
               setshowModalUplaod={setShowModalUplaod}
-              setIsNewUplaod={setIsNewUplaod}
             />}
         </div>
       </div>
