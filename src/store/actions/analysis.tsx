@@ -35,7 +35,6 @@ export function uploadPdf(file) {
           type: analysisActionType.UPLOAD_PDF,
           payload: result.data.data.file_upload_id,
         });
-        window.location.href = `/analyses/${result.data.data.file_upload_id}`
         dispatch({
           type: analysisActionType.UPLOAD_PDF_SUCCESS,
           payload: true,

@@ -17,13 +17,11 @@ export default function SidebarMember(props) {
     role,
     isShowFiles,
     isShowFullSidebar,
-    isNewUplaod,
     setUrl,
     setShowChat,
     setIsShowFullChat,
     setShowPdf,
     setshowModalUplaod,
-    setIsNewUplaod,
   } = props;
 
   // Import the dispatch function from the Redux store
@@ -33,9 +31,8 @@ export default function SidebarMember(props) {
   const { fieldId } = useParams();
 
   // Use the useAppSelector hook to get values from the state
-  const [files, getListFileSuccess] = useAppSelector((state) => [
+  const [files] = useAppSelector((state) => [
     state.analysis.listFile,
-    state.analysis.getListFileSuccess,
   ]);
 
   // Set the defaultValue based on the value of role using a switch statement
@@ -60,17 +57,6 @@ export default function SidebarMember(props) {
     dispatch(getListFile());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Set up side effect using the useEffect hook to handle the file selection logic when isNewUplaod or getListFileSuccess changes
-  useEffect(() => {
-    if (isNewUplaod && getListFileSuccess) {
-      const findFile = files.find(file => file.analysis_status === 'running')
-      if (findFile) {
-        setActiveFile(files[0]?.uuid);
-        setIsNewUplaod(false);
-      }
-    }
-  }, [isNewUplaod, getListFileSuccess]);
 
   useEffect(() => {
     setActiveFile(fieldId)

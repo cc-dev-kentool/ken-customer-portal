@@ -1,7 +1,7 @@
 import { authActionType } from "../actionTypes";
 import { add as addAlert } from "store/actions/alert";
 import { setLoading, setStatus } from "store/actions/app";
-import { error, code } from "constants/error";
+import { error } from "constants/error";
 import { onError } from "./base";
 import API from "service/api";
 

@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
 import { getListPrompt } from "store/actions/prompt";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
@@ -19,6 +19,7 @@ export default function Analysis(props) {
   const { fieldId } = useParams();
   // The useAppDispatch hook returns the dispatch function of the Redux store.
   const dispatch = useAppDispatch();
+  let history = useHistory();
 
   // The useState hook is used here to define state variables.
   const [url, setUrl] = useState<string>("");
@@ -32,12 +33,22 @@ export default function Analysis(props) {
 
   // The useAppSelector hook is used here to extract data from the Redux store state.
   // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
-  const [dataAnaly, conversation] = useAppSelector((state) => [
+  const [uploadId, dataAnaly, conversation] = useAppSelector((state) => [
+    state.analysis.uploadPdf,
     state.analysis.dataAnalysis,
     state.conversation.conversation,
   ]);
 
   let runningTimeout: any = null;
+
+  // The useEffect hook is used here to perform side effects after rendering.
+  // It will run when the value of uploadId changes.
+  useEffect(() => {
+    if (uploadId) {
+      dispatch(getListFile(false));
+      history.push(`/analyses/${uploadId}`);
+    }
+  }, [uploadId])
 
   // The useEffect hook is used here to perform side effects after rendering.
   // It will run when the value of dataAnaly changes.

@@ -19,15 +19,11 @@ export default function ChatGPT(props) {
     state.conversation.getConversationSuccess,
   ]);
 
-  useEffect(() => {
-    // Resets loading state and message input when conversation changes
-    setShowLoading(false);
-    setMessage("")
-  }, [conversation])
-
   // Effect hook to scroll to bottom of messages container whenever enquiry state changes.
   useEffect(() => {
     if (getConversationSuccess) {
+      setShowLoading(false);
+      setMessage("")
       const element = window.document.getElementById("conversation");
       if (element) {
         element.scrollTop = element.scrollHeight
@@ -43,9 +39,11 @@ export default function ChatGPT(props) {
   }
 
   const handleSendMessage = () => {
-    // Sets loading state to true and dispatches a postConversation action with the fileUploadId and message value
-    setShowLoading(true);
-    dispatch(postConversation(fileUploadId, message.trim()));
+    if (message.trim()) {
+      // Sets loading state to true and dispatches a postConversation action with the fileUploadId and message value
+      setShowLoading(true);
+      dispatch(postConversation(fileUploadId, message.trim()));
+    }
   }
 
   return (
@@ -104,8 +102,8 @@ export default function ChatGPT(props) {
             >
               <img src={icon_send} alt="" />
             </button>
-            <input
-              type="text"
+            <textarea
+              rows={isShowFullChat ? 2 : 1}
               className="field-input form-control"
               value={showLoading ? "" : message}
               onChange={(e) => setMessage(e.target.value)}
