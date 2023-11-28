@@ -1,9 +1,8 @@
 import { statusRisk } from "constants/riskAnalysis";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { useAppDispatch } from "hooks";
+import { useAppDispatch, useAppSelector } from "hooks";
 import { getConversation } from "store/actions/chatGpt";
-import { add as addAlert, remove } from "store/actions/alert"
 import generatePDF, { Margin } from 'react-to-pdf';
 import AnalysisProgress from "./AnalysisProgress";
 import classNames from "classnames";
@@ -17,12 +16,18 @@ export default function RiskContent(props) {
     fileUploadId,
     showChat,
     dataAnalysis,
+    conversation,
     currentStatus,
     isDowndLoad,
     isShowFullChat,
     setIsDowndLoad,
     setValueSearch,
   } = props;
+
+  // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
+  const [getConversationSuccess] = useAppSelector((state) => [
+    state.conversation.getConversationSuccess,
+  ]);
 
   const [isShowProgressBar, setIsShowProgressBar] = useState<boolean>(false);
 
@@ -96,18 +101,18 @@ export default function RiskContent(props) {
 
   // Define a function exportPDF that does the following:
   const exportPdf = () => {
-    dispatch(getConversation(fileUploadId));
+    conversation.length === 0 && dispatch(getConversation(fileUploadId));
     setIsDowndLoad(true);
   }
 
   // Use the useEffect hook to run the provided callback when the isDowndLoad state changes
   useEffect(() => {
-    if (isDowndLoad) {
+    if (isDowndLoad && getConversationSuccess) {
       const getTargetElement = () => document.getElementById('divToPrint');
       generatePDF(getTargetElement, { filename: 'page.pdf', page: { margin: Margin.MEDIUM } });
       setIsDowndLoad(false);
     }
-  }, [isDowndLoad]);
+  }, [isDowndLoad, getConversationSuccess]);
 
   // Use the useEffect hook to run the provided callback when the currentStatus state changes
   useEffect(() => {
@@ -212,14 +217,15 @@ export default function RiskContent(props) {
                           <Col sm="2" className="title-left p-0">Source Text</Col>
                           <Col sm="10" className="p-0">
                             {data.analysis_result.source_text?.map((text, index) => {
-                              return <p
-                                key={text.key}
-                                className={classNames('pt-2 mb-2', { 'cursor-pointer source-text-item': checkSourceText(text.value) })}
-                                onClick={() => checkSourceText(text.value) && handleSearch(text.value)}
-                              >
+                              return <div key={text.key}>
                                 {index >= 1 && <hr />}
-                                {text.value}
-                              </p>
+                                <p
+                                  className={classNames('pt-2 mb-2', { 'cursor-pointer source-text-item': checkSourceText(text.value) })}
+                                  onClick={() => checkSourceText(text.value) && handleSearch(text.value)}
+                                >
+                                  {text.value}
+                                </p>
+                              </div>
                             })}
                           </Col>
                         </Row>

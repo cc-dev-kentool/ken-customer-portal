@@ -12,18 +12,16 @@ import SidebarMember from "./SidebarMember";
 export default function Sidebar(props) {
   // Get the dispatch function from the useAppDispatch hook
   const dispatch = useAppDispatch();
-  
+
   // Destructure the props object for easier access to its properties
   const {
     routeName,
     isShowFullSidebar,
     toggleMenu,
     setUrl,
-    setShowPdf,
-    setDataAnalysis,
     setShowChat,
     setIsShowFullChat,
-    setCurrentDocumentId,
+    setShowPdf,
   } = props;
 
   // Parse the user object stored in localStorage
@@ -52,11 +50,6 @@ export default function Sidebar(props) {
     if (file) {
       setUrl(URL.createObjectURL(file));
       setShowModalUplaod(false);
-      setShowPdf(true);
-      setIsNewUplaod(true);
-      setShowChat(false);
-      setIsShowFullChat(false);
-      setDataAnalysis([]);
       dispatch(uploadPdf(file));
     }
   }
@@ -89,7 +82,7 @@ export default function Sidebar(props) {
             <i className={`fa fa-chevron-${isShowFullSidebar ? 'left' : 'right'}`} aria-hidden="true"></i>
           </span>
         </div>
-        
+
         <div className="list-group">
           {/* Render SidebarAdmin component if user role is "admin" or "super-admin" */}
           {["admin", "super-admin"].includes(user.role) &&
@@ -103,13 +96,12 @@ export default function Sidebar(props) {
               isShowFiles={isShowFiles}
               isShowFullSidebar={isShowFullSidebar}
               isNewUplaod={isNewUplaod}
-              setshowModalUplaod={setShowModalUplaod}
-              setIsShowFiles={setIsShowFiles}
-              setIsNewUplaod={setIsNewUplaod}
+              setUrl={setUrl}
               setShowChat={setShowChat}
               setIsShowFullChat={setIsShowFullChat}
-              setCurrentDocumentId={setCurrentDocumentId}
-              setUrl={setUrl}
+              setShowPdf={setShowPdf}
+              setshowModalUplaod={setShowModalUplaod}
+              setIsNewUplaod={setIsNewUplaod}
             />}
         </div>
       </div>

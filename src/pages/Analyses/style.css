@@ -1,3 +1,12 @@
+/* analysis-index */
+.analysis-index {
+  background-color: #fff;
+  height: 90vh;
+  border-radius: 10px;
+  text-align: center;
+  padding-top: 10px;
+}
+
 /* Main Content */
 .main-content {
   overflow-y: auto;

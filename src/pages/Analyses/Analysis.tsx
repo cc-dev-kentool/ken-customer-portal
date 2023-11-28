@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
 import { getListPrompt } from "store/actions/prompt";
+import { useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
@@ -15,6 +16,7 @@ import "./style.css";
 
 // This is the Analysis component which is exported as default.
 export default function Analysis(props) {
+  const { fieldId } = useParams();
   // The useAppDispatch hook returns the dispatch function of the Redux store.
   const dispatch = useAppDispatch();
 
@@ -24,16 +26,13 @@ export default function Analysis(props) {
   const [showChat, setShowChat] = useState<boolean>(false);
   const [valueSearch, setValueSearch] = useState<string>("");
   const [isDowndLoad, setIsDowndLoad] = useState<boolean>(false);
-  const [fileUploadId, setFileUploadId] = useState<string>("");
   const [currentStatus, setCurrentStatus] = useState<string>("");
   const [dataAnalysis, setDataAnalysis] = useState<object[]>([]);
-  const [currentDocumentId, setCurrentDocumentId] = useState<string>("");
   const [isShowFullChat, setIsShowFullChat] = useState<boolean>(false);
 
   // The useAppSelector hook is used here to extract data from the Redux store state.
   // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
-  const [uploadId, dataAnaly, conversation] = useAppSelector((state) => [
-    state.analysis.uploadPdf,
+  const [dataAnaly, conversation] = useAppSelector((state) => [
     state.analysis.dataAnalysis,
     state.conversation.conversation,
   ]);
@@ -41,18 +40,9 @@ export default function Analysis(props) {
   let runningTimeout: any = null;
 
   // The useEffect hook is used here to perform side effects after rendering.
-  // It will run when the value of uploadId changes.
-  useEffect(() => {
-    if (uploadId) {
-      setFileUploadId(uploadId)
-      setCurrentDocumentId(uploadId)
-    }
-  }, [uploadId])
-
-  // The useEffect hook is used here to perform side effects after rendering.
   // It will run when the value of dataAnaly changes.
   useEffect(() => {
-    if (currentDocumentId == dataAnaly?.uuid) {
+    if (fieldId == dataAnaly?.uuid) {
 
       const executionStatus = dataAnaly?.topic_executions?.[0].status
 
@@ -60,10 +50,9 @@ export default function Analysis(props) {
 
       if (executionStatus === 'running' && !runningTimeout) {
         runningTimeout = setTimeout(() => {
-          dispatch(getAnalysisData(fileUploadId));
+          dispatch(getAnalysisData(fieldId));
         }, 3000);
       } else if (executionStatus === 'done') {
-        setFileUploadId(dataAnaly.uuid);
         dispatch(getListFile(false))
       }
 
@@ -81,18 +70,17 @@ export default function Analysis(props) {
       clearTimeout(runningTimeout);
       runningTimeout = null;
     }
-    if (currentDocumentId) {
+    if (fieldId) {
       setValueSearch("")
-      setDataAnalysis([])
       dispatch(getListPrompt(false));
-      dispatch(getAnalysisData(currentDocumentId, true));
+      dispatch(getAnalysisData(fieldId, true));
     }
-  }, [currentDocumentId])
+  }, [fieldId])
 
   // This function handles showing the chat.
   const handleShowChat = () => {
     setShowChat(true);
-    dispatch(getConversation(fileUploadId))
+    dispatch(getConversation(fieldId))
   }
 
   // Return JSX elements to render the dashboard.
@@ -100,13 +88,11 @@ export default function Analysis(props) {
     <AdminLayout
       routeName={props.routeName}
       setUrl={setUrl}
-      setShowPdf={setShowPdf}
-      setDataAnalysis={setDataAnalysis}
       setShowChat={setShowChat}
       setIsShowFullChat={setIsShowFullChat}
-      setCurrentDocumentId={setCurrentDocumentId}
+      setShowPdf={setShowPdf}
     >
-      {dataAnalysis?.length > 0 &&
+      {dataAnalysis?.length > 0 ?
         <Row className="main-content">
           <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
             {!showPdf &&
@@ -117,9 +103,10 @@ export default function Analysis(props) {
               />
             }
             <RiskContent
-              fileUploadId={fileUploadId}
+              fileUploadId={fieldId}
               showChat={showChat}
               dataAnalysis={dataAnalysis}
+              conversation={conversation}
               currentStatus={currentStatus}
               isDowndLoad={isDowndLoad}
               isShowFullChat={isShowFullChat}
@@ -134,7 +121,7 @@ export default function Analysis(props) {
                 />
                 : <ChatGPT
                   showChat={showPdf}
-                  fileUploadId={fileUploadId}
+                  fileUploadId={fieldId}
                   isShowFullChat={isShowFullChat}
                   setShowChat={setShowChat}
                   setIsShowFullChat={setIsShowFullChat}
@@ -152,7 +139,12 @@ export default function Analysis(props) {
               />
             }
           </Col>
-        </Row>}
+        </Row> :
+        <div className="analysis-index">
+          <h1>Analyses</h1>
+        </div>
+      }
+      
       {isDowndLoad &&
         <ExportPdf dataAnalysis={dataAnalysis} conversation={conversation} />
       }
