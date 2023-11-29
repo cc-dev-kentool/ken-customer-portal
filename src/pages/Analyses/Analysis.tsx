@@ -63,7 +63,7 @@ export default function Analysis(props) {
         runningTimeout = setTimeout(() => {
           dispatch(getAnalysisData(fieldId));
         }, 3000);
-      } else if (executionStatus === 'done') {
+      } else if (executionStatus === 'done' && uploadId) {
         dispatch(getListFile(false))
       }
 
