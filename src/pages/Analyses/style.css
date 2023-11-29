@@ -156,13 +156,13 @@
 }
 
 .conversation {
-  height: 70%;
+  height: 64%;
   overflow: auto;
   margin-top: 20px;
 }
 
 .height-full {
-  height: 88%;
+  height: 86%;
 }
 
 .conversation .question {
