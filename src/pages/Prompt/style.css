@@ -42,7 +42,11 @@
     background-color: #e5e5e5;
 }
 
-/* Add new user, Edit user */
+/* Edit Prompt */
+.modal-edit-prompt {
+    width: 90%;
+    left: 5%;
+}
 
 .edit-user .titile-add {
     padding-bottom: 10px;
@@ -51,7 +55,7 @@
 
 .edit-user .center_form {
     margin: 10px auto;
-    width: 80%;
+    width: 95%;
 }
 
 .edit-user .label-input {
@@ -61,7 +65,7 @@
 }
 
 .edit-user .btn-save {
-    margin-top: 10px;
+    margin-top: 5px;
     width: 120px;
     height: 35px;
     border: none;
