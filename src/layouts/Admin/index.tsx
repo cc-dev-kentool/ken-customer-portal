@@ -16,7 +16,6 @@ function AdminLayout(props) {
     setShowChat,
     setIsShowFullChat,
     setShowPdf,
-    setCurrentFileId,
   } = props;
 
   // Retrieve the value of "isLoading" from the app state using the useAppSelector hook
@@ -41,7 +40,6 @@ function AdminLayout(props) {
         setShowChat={setShowChat}
         setIsShowFullChat={setIsShowFullChat}
         setShowPdf={setShowPdf}
-        setCurrentFileId={setCurrentFileId}
       />
       <div className="main">
         <Navmenu

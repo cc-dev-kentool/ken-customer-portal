@@ -22,7 +22,6 @@ export default function Sidebar(props) {
     setShowChat,
     setIsShowFullChat,
     setShowPdf,
-    setCurrentFileId,
   } = props;
 
   // Parse the user object stored in localStorage
@@ -100,7 +99,6 @@ export default function Sidebar(props) {
               setIsShowFullChat={setIsShowFullChat}
               setShowPdf={setShowPdf}
               setshowModalUplaod={setShowModalUplaod}
-              setCurrentFileId={setCurrentFileId}
             />}
         </div>
       </div>

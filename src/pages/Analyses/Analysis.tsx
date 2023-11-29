@@ -28,7 +28,6 @@ export default function Analysis(props) {
   const [valueSearch, setValueSearch] = useState<string>("");
   const [isDowndLoad, setIsDowndLoad] = useState<boolean>(false);
   const [currentStatus, setCurrentStatus] = useState<string>("");
-  const [currentFileId, setCurrentFileId] = useState<string>("");
   const [dataAnalysis, setDataAnalysis] = useState<object[]>([]);
   const [isShowFullChat, setIsShowFullChat] = useState<boolean>(false);
 
@@ -45,11 +44,11 @@ export default function Analysis(props) {
   // The useEffect hook is used here to perform side effects after rendering.
   // It will run when the value of uploadId changes.
   useEffect(() => {
-    if (uploadId || currentFileId) {
-      uploadId && dispatch(getListFile(false));
-      history.push(`/analyses/${uploadId || currentFileId}`);
+    if (uploadId) {
+      dispatch(getListFile(false));
+      history.push(`/analyses/${uploadId}`);
     }
-  }, [uploadId, currentFileId])
+  }, [uploadId])
 
   // The useEffect hook is used here to perform side effects after rendering.
   // It will run when the value of dataAnaly changes.
@@ -103,7 +102,6 @@ export default function Analysis(props) {
       setShowChat={setShowChat}
       setIsShowFullChat={setIsShowFullChat}
       setShowPdf={setShowPdf}
-      setCurrentFileId={setCurrentFileId}
     >
       {dataAnalysis?.length > 0 ?
         <Row className="main-content">
