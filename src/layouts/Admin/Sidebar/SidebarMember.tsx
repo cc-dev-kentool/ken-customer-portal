@@ -4,7 +4,7 @@ import { labelDisplay } from "helpers/until";
 import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import { useEffect, useState } from "react";
 import { getListFile } from "store/actions/analysis";
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import icon_success from "assets/icon/icon_success.svg";
 import icon_error from "assets/icon/icon_error.svg";
 import icon_loading from "assets/icon/icon_loading.svg";
@@ -22,12 +22,12 @@ export default function SidebarMember(props) {
     setIsShowFullChat,
     setShowPdf,
     setshowModalUplaod,
+    setCurrentFileId,
   } = props;
 
   // Import the dispatch function from the Redux store
   const dispatch = useAppDispatch();
 
-  let history = useHistory();
   const { fieldId } = useParams();
 
   // Use the useAppSelector hook to get values from the state
@@ -76,7 +76,7 @@ export default function SidebarMember(props) {
     setShowChat(false);
     setIsShowFullChat(false);
     setShowPdf(true);
-    history.push(`/analyses/${fileId}`);
+    setCurrentFileId(fileId);
   }
 
   // Define a function called "getStatusFile" that returns an icon based on the status provided

@@ -189,6 +189,7 @@ export default function ListPrompt(props) {
           seconLabelButton={""}
           handleFirstButtonCalback={() => setIsShowEdit(false)}
           handleSeconButtonCalback={""}
+          modalContentClass="modal-edit-prompt"
         />
       </div>
     </AdminLayout>
