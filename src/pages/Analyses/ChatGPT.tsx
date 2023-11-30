@@ -13,6 +13,8 @@ export default function ChatGPT(props) {
   const [message, setMessage] = useState<string>("")
   const [message2, setMessage2] = useState<string>("")
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  const [isSendMessage, setIsSendMessage] = useState<boolean>(false);
+  const [dataConversation, setDataConversation] = useState<any>([]);
 
   // Retrieves the conversation array from the Redux store's state
   const [conversation, getConversationSuccess] = useAppSelector((state) => [
@@ -24,17 +26,19 @@ export default function ChatGPT(props) {
   useEffect(() => {
     if (getConversationSuccess) {
       setShowLoading(false);
+      setIsSendMessage(false);
+      setDataConversation(conversation)
       setMessage("");
       setMessage2("");
       scrollToBottom();
     }
-  }, [getConversationSuccess]);
+  }, [getConversationSuccess, conversation]);
 
   useEffect(() => {
-    if (showLoading) {
+    if (dataConversation.length > 0 || isSendMessage) {
       scrollToBottom();
     }
-  }, [showLoading])
+  }, [dataConversation.length, isSendMessage])
 
   const scrollToBottom = () => {
     const element = window.document.getElementById("conversation");
@@ -53,6 +57,7 @@ export default function ChatGPT(props) {
     if (message.trim()) {
       // Sets loading state to true and dispatches a postConversation action with the fileUploadId and message value
       setShowLoading(true);
+      setIsSendMessage(true);
       dispatch(postConversation(fileUploadId, message.trim()));
     }
   }
@@ -71,65 +76,64 @@ export default function ChatGPT(props) {
         aria-hidden="true"
         onClick={handleCloseChat}
       ></i>
-      {getConversationSuccess
-        ? <>
-          {!isShowFullChat
-            ? <i
-              className="fa-solid fa-expand icon-expand"
-              onClick={() => setIsShowFullChat(true)}
-            />
-            : <i
-              className="fa-solid fa-minus icon-expand"
-              onClick={() => setIsShowFullChat(false)}
-            />}
-          <div id={"conversation"} className={classNames("conversation", { "height-full": isShowFullChat })}>
-            {conversation?.map(item => {
-              return (
-                // Renders each conversation item with question and answer labels
-                <div key={item.uuid}>
-                  <p className="question">
-                    <label className="question-content">{item.question}</label>
-                  </p>
-                  <p className="answer">
-                    <label className="answer-content">{item.answer}</label>
-                  </p>
-                </div>
-              )
-            })}
-            {showLoading &&
-              <>
-                {/* Renders the user's message and a loading animation when showChat and showLoading are true */}
-                <p className="question">
-                  <label className="question-content">{message2 || message}</label>
-                </p>
-                <div className="dot-container">
-                  <div className="dot"></div>
-                  <div className="dot"></div>
-                  <div className="dot"></div>
-                </div>
-              </>
-            }
-          </div>
-          <div className="area-input">
-            {/* Sends the message when the send button is clicked */}
-            <button
-              type="submit"
-              onClick={handleSendMessage}
-              className="iconSend"
-              disabled={props.isDisabled}
-            >
-              <img src={icon_send} alt="" />
-            </button>
-            <textarea
-              rows={isShowFullChat ? 2 : 1}
-              className="field-input form-control"
-              value={showLoading ? "" : message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-          </div>
-        </>
-        : <div className="text-center iconLoading"><CircularProgress color="inherit" /></div>
+      {!isShowFullChat
+        ? <i
+          className="fa-solid fa-expand icon-expand"
+          onClick={() => setIsShowFullChat(true)}
+        />
+        : <i
+          className="fa-solid fa-minus icon-expand"
+          onClick={() => setIsShowFullChat(false)}
+        />}
+      <div id="conversation" className={classNames("conversation", { "height-full": isShowFullChat })}>
+        {dataConversation?.map(item => {
+          return (
+            // Renders each conversation item with question and answer labels
+            <div key={item.uuid}>
+              <p className="question">
+                <label className="question-content">{item.question}</label>
+              </p>
+              <p className="answer">
+                <label className="answer-content">{item.answer}</label>
+              </p>
+            </div>
+          )
+        })}
+        {showLoading &&
+          <>
+            {/* Renders the user's message and a loading animation when showChat and showLoading are true */}
+            <p className="question">
+              <label className="question-content">{message2 || message}</label>
+            </p>
+            <div className="dot-container">
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+            </div>
+          </>
+        }
+      </div>
+      <div className="area-input">
+        {/* Sends the message when the send button is clicked */}
+        <button
+          type="submit"
+          onClick={handleSendMessage}
+          className="iconSend"
+          disabled={props.isDisabled}
+        >
+          <img src={icon_send} alt="" />
+        </button>
+        <textarea
+          rows={isShowFullChat ? 2 : 1}
+          className="field-input form-control"
+          value={showLoading ? "" : message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+      </div>
+
+      {!isSendMessage && !getConversationSuccess && 
+        <div className="text-center iconLoading"><CircularProgress color="inherit" /></div>
       }
 
     </div>

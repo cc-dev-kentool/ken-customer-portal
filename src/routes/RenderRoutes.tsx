@@ -184,13 +184,9 @@ function RouteWithSubRoutes(route: routes) {
           }
         }
 
-        // Redirect to 403 page if user doesn't have required role for the current route
+        // Redirect to 404 page if user doesn't have required role for the current route
         if (localStorage.getItem("token") && !route.roles.includes(user.role)) {
-          if (user.role === 'member') {
-            window.location.href = "/analyses";
-          } else {
-            window.location.href = "/";
-          }
+          window.location.href = "/404";
         }
 
         // Render the given component and pass down the props and sub-routes

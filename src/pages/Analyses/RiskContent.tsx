@@ -80,23 +80,8 @@ export default function RiskContent(props) {
 
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
-
     const itemText = window.getSelection()?.toString().trim();
-
-    let isInSourceText = false;
-    dataAnalysis.map(data => {
-      data.analysis_result.source_text?.map(item => {
-        const sourceText = item.value?.replace(/\s+/g, '')
-        const selectedText = itemText?.replace(/\s+/g, '')
-        if (sourceText.includes(selectedText)) {
-          isInSourceText = true;
-        }
-      })
-    })
-
-    if (isInSourceText) {
-      itemText?.trim() ? setValueSearch(itemText) : setValueSearch(text);
-    }
+    itemText?.trim() ? setValueSearch(itemText) : setValueSearch(text);
   }
 
   // Define a function exportPDF that does the following:
@@ -191,12 +176,12 @@ export default function RiskContent(props) {
             </Row>
             {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} currentStatus={currentStatus} />}
           </div>
-          <div className="table-content" onMouseUp={() => handleSearch("")} style={{ height: `${getHeightRiskContent()}vh` }}>
+          <div className="table-content" style={{ height: `${getHeightRiskContent()}vh` }}>
             {dataAnalysis.map((data) => {
               if (data.executed_status === 'success') {
                 return (
                   <div key={data.uuid} className="risk-content-item">
-                    <Row className="risk-content-item-topic mb-4">
+                    <Row className="risk-content-item-topic">
                       <Col sm="10">
                         {data.analysis_result?.topic}
                       </Col>
@@ -213,9 +198,9 @@ export default function RiskContent(props) {
                     </Row>
                     {getStatusShowTopic(data.analysis_result?.topic) &&
                       <>
-                        <Row className="source-text m-0">
-                          <Col sm="2" className="title-left p-0">Source Text</Col>
-                          <Col sm="10" className="p-0">
+                        <Row className="source-text m-0" onMouseUp={() => handleSearch("")}>
+                          <Col sm="2" className="title-left p-0 pt-4 pb-2">Source Text</Col>
+                          <Col sm="10" className="pt-4 pb-2">
                             {data.analysis_result.source_text?.map((text, index) => {
                               return <div key={text.key}>
                                 {index >= 1 && <hr />}
@@ -231,7 +216,7 @@ export default function RiskContent(props) {
                         </Row>
                         <Row className="mt-3 m-0">
                           <Col sm="2" className="title-left p-0">Comment</Col>
-                          <Col sm="10" className="p-0">{genComment(data.analysis_result)}</Col>
+                          <Col sm="10">{genComment(data.analysis_result)}</Col>
                         </Row>
                       </>}
                   </div>

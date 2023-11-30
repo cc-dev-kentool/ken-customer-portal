@@ -52,7 +52,7 @@ export default function SidebarAdmin(props) {
         </li>
       )}
 
-      <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'utilities' })}>
+      <li className={classNames('sidebar-item d-none', { 'active-sidebar': routeName === 'utilities' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/utilities">
           <i className="fa-solid fa-paperclip" style={{ color: `${routeName === 'utilities' ? '#fff' : '#000'}` }}></i>
           {isShowFullSidebar && <span>Utilities</span>}

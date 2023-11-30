@@ -35,10 +35,10 @@ export default function SidebarMember(props) {
   let defaultValue: number;
   switch (role) {
     case 'super-admin':
-      defaultValue = 530;
+      defaultValue = 490;
       break;
     case 'admin':
-      defaultValue = 442;
+      defaultValue = 400;
       break;
     default:
       defaultValue = 210;
@@ -80,7 +80,7 @@ export default function SidebarMember(props) {
 
   // Define a function called "showDetailFile" that dispatches remove action and updates states based on the selected fileId
   const showDetailFile = (fileId) => {
-    let newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?fileId=' + fileId;
+    let newurl = window.location.protocol + "//" + window.location.host + '/analyses?fileId=' + fileId;
     window.history.pushState({ path: newurl }, '', newurl);
 
     dispatch(remove());
@@ -144,7 +144,7 @@ export default function SidebarMember(props) {
         </p>
         <div
           className={classNames("list-file", { "none-file": !isShowFiles })}
-          style={{ height: '88%' }}
+          style={{ height: '84%' }}
         >
           {files.map((file) => {
             return (
