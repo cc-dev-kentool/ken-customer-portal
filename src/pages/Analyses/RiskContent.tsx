@@ -1,9 +1,7 @@
 import { statusRisk } from "constants/riskAnalysis";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { useAppDispatch, useAppSelector } from "hooks";
-import { getConversation } from "store/actions/chatGpt";
-import generatePDF, { Margin } from 'react-to-pdf';
+import { useAppDispatch } from "hooks";
 import AnalysisProgress from "./AnalysisProgress";
 import classNames from "classnames";
 
@@ -13,21 +11,12 @@ export default function RiskContent(props) {
 
   // Destructure the "url" and "setValueSearch" props from the "props" object
   const {
-    fileUploadId,
     showChat,
     dataAnalysis,
-    conversation,
     currentStatus,
-    isDowndLoad,
     isShowFullChat,
-    setIsDowndLoad,
     setValueSearch,
   } = props;
-
-  // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
-  const [getConversationSuccess] = useAppSelector((state) => [
-    state.conversation.getConversationSuccess,
-  ]);
 
   const [isShowProgressBar, setIsShowProgressBar] = useState<boolean>(false);
 
@@ -84,21 +73,6 @@ export default function RiskContent(props) {
     itemText?.trim() ? setValueSearch(itemText) : setValueSearch(text);
   }
 
-  // Define a function exportPDF that does the following:
-  const exportPdf = () => {
-    conversation.length === 0 && dispatch(getConversation(fileUploadId));
-    setIsDowndLoad(true);
-  }
-
-  // Use the useEffect hook to run the provided callback when the isDowndLoad state changes
-  useEffect(() => {
-    if (isDowndLoad && getConversationSuccess) {
-      const getTargetElement = () => document.getElementById('divToPrint');
-      generatePDF(getTargetElement, { filename: 'page.pdf', page: { margin: Margin.MEDIUM } });
-      setIsDowndLoad(false);
-    }
-  }, [isDowndLoad, getConversationSuccess]);
-
   // Use the useEffect hook to run the provided callback when the currentStatus state changes
   useEffect(() => {
     if (currentStatus === 'running') {
@@ -152,14 +126,6 @@ export default function RiskContent(props) {
   return (
     <div className={classNames("risk-content", { "full-height": !showChat, "min-height": isShowFullChat })}>
       <p className="title-risk">Risk Analysis Data</p>
-      {dataAnalysis?.length > 0 && currentStatus === 'done' && (
-        <i
-          className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
-          style={{ color: "#26ADC9" }}
-          onClick={exportPdf}
-        />
-      )}
-
       {dataAnalysis?.length > 0 &&
         <>
           <div className='analysis-progress'>
