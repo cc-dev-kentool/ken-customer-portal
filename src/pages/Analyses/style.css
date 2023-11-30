@@ -104,7 +104,6 @@
 
 .source-text {
   border-bottom: 1px solid #cccccc;
-  padding-bottom: 10px;
 }
 
 .source-text .source-text-item:hover {
@@ -217,7 +216,7 @@
 }
 
 .iconLoading {
-  margin-top: 10%;
+  margin-top: -10%;
 }
 
 @keyframes dot-pulse {

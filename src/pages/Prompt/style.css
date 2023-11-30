@@ -48,24 +48,29 @@
     left: 5%;
 }
 
-.edit-user .titile-add {
+.edit-prompt .titile-add {
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
 
-.edit-user .center_form {
+.edit-prompt .center_form {
     margin: 10px auto;
-    width: 95%;
+    width: 98%;
 }
 
-.edit-user .label-input {
+.edit-prompt .content-prompt {
+    max-height: 65vh;
+    overflow: auto;
+}
+
+.edit-prompt .label-input {
     font-size: 16px !important;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
-.edit-user .btn-save {
-    margin-top: 5px;
+.edit-prompt .btn-save {
+    margin-top: 30px;
     width: 120px;
     height: 35px;
     border: none;
@@ -74,7 +79,7 @@
     color: #fff;
 }
 
-.edit-user .btn-save:hover {
+.edit-prompt .btn-save:hover {
     background: #A8DEE9;
 }
 
