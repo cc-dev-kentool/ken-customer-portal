@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
 import { getListPrompt } from "store/actions/prompt";
+import generatePDF, { Margin } from 'react-to-pdf';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
@@ -31,9 +32,10 @@ export default function Analysis(props) {
 
   // The useAppSelector hook is used here to extract data from the Redux store state.
   // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
-  const [dataAnaly, conversation] = useAppSelector((state) => [
+  const [dataAnaly, conversation, getConversationSuccess] = useAppSelector((state) => [
     state.analysis.dataAnalysis,
     state.conversation.conversation,
+    state.conversation.getConversationSuccess,
   ]);
 
   let runningTimeout: any = null;
@@ -78,6 +80,21 @@ export default function Analysis(props) {
     }
   }, [dataAnaly])
 
+  // Use the useEffect hook to run the provided callback when the isDowndLoad state changes
+  useEffect(() => {
+    if (isDowndLoad && getConversationSuccess) {
+      const getTargetElement = () => document.getElementById('divToPrint');
+      generatePDF(getTargetElement, { filename: 'page.pdf', page: { margin: Margin.MEDIUM } });
+      setIsDowndLoad(false);
+    }
+  }, [isDowndLoad, getConversationSuccess]);
+
+  // Define a function exportPDF that does the following:
+  const exportPdf = () => {
+    conversation.length === 0 && dispatch(getConversation(fieldId));
+    setIsDowndLoad(true);
+  }
+
   // This function handles showing the chat.
   const handleShowChat = () => {
     setShowChat(true);
@@ -96,22 +113,29 @@ export default function Analysis(props) {
       {dataAnalysis?.length > 0 ?
         <Row className="main-content">
           <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
+            {dataAnalysis?.length > 0 && currentStatus === 'done' && (
+              <i
+                className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
+                style={{ color: "#26ADC9" }}
+                onClick={exportPdf}
+              />
+            )}
             {!showPdf &&
               <i
-                className="fa-regular fa-file-pdf fa-2xl icon-show-pdf"
+                className={
+                  classNames("fa-regular fa-file-pdf fa-2xl icon-show-pdf", {
+                    "icon-pdf-expand": isShowFullChat
+                  })
+                }
                 style={{ color: "#26ADC9" }}
                 onClick={() => setShowPdf(true)}
               />
             }
             <RiskContent
-              fileUploadId={fieldId}
               showChat={showChat}
               dataAnalysis={dataAnalysis}
-              conversation={conversation}
               currentStatus={currentStatus}
-              isDowndLoad={isDowndLoad}
               isShowFullChat={isShowFullChat}
-              setIsDowndLoad={setIsDowndLoad}
               setValueSearch={setValueSearch}
             />
             {currentStatus && currentStatus !== 'running' && <>

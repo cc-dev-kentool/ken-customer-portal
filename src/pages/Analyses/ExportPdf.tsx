@@ -56,7 +56,7 @@ export default function ExportPdf(props) {
                       <div key={text.key}>
                         {index >= 1 && <hr />}
                         <p className="pt-2 mb-2">
-                          {text.value === 'n/a' ? <p>n/a</p> : text.value}
+                          {text.value === 'n/a' ? <span>n/a</span> : text.value}
                         </p>
                       </div>
                     ))}
