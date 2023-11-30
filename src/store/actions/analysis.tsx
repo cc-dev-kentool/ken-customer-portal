@@ -31,14 +31,18 @@ export function uploadPdf(file) {
 
     await API({ url: "/analysis", method: "post", data: formData })
       .then((result) => {
+        const fileId = result.data.data.file_upload_id
+        let newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?fileId=' + fileId;
+        window.history.pushState({ path: newurl }, '', newurl);
         dispatch({
           type: analysisActionType.UPLOAD_PDF,
-          payload: result.data.data.file_upload_id,
+          payload: fileId,
         });
         dispatch({
           type: analysisActionType.UPLOAD_PDF_SUCCESS,
           payload: true,
         });
+        dispatch(getListFile(false));
       })
       .catch((err) => {
         dispatch(onError(err));
@@ -50,7 +54,7 @@ export function uploadPdf(file) {
   };
 }
 
-export function getListFile(isLoading=true) {
+export function getListFile(isLoading = true) {
   return async function (dispatch) {
     isLoading && dispatch(setLoading(true));
     dispatch({

@@ -12,7 +12,7 @@ import SidebarMember from "./SidebarMember";
 export default function Sidebar(props) {
   // Get the dispatch function from the useAppDispatch hook
   const dispatch = useAppDispatch();
-
+  
   // Destructure the props object for easier access to its properties
   const {
     routeName,
@@ -49,6 +49,9 @@ export default function Sidebar(props) {
     if (file) {
       setUrl(URL.createObjectURL(file));
       setShowModalUplaod(false);
+      setShowPdf(true);
+      setShowChat(false);
+      setIsShowFullChat(false);
       dispatch(uploadPdf(file));
     }
   }
@@ -81,7 +84,7 @@ export default function Sidebar(props) {
             <i className={`fa fa-chevron-${isShowFullSidebar ? 'left' : 'right'}`} aria-hidden="true"></i>
           </span>
         </div>
-
+        
         <div className="list-group">
           {/* Render SidebarAdmin component if user role is "admin" or "super-admin" */}
           {["admin", "super-admin"].includes(user.role) &&

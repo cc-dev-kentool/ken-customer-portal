@@ -4,7 +4,6 @@ import { labelDisplay } from "helpers/until";
 import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import { useEffect, useState } from "react";
 import { getListFile } from "store/actions/analysis";
-import { useParams, useHistory } from 'react-router-dom';
 import icon_success from "assets/icon/icon_success.svg";
 import icon_error from "assets/icon/icon_error.svg";
 import icon_loading from "assets/icon/icon_loading.svg";
@@ -26,9 +25,6 @@ export default function SidebarMember(props) {
 
   // Import the dispatch function from the Redux store
   const dispatch = useAppDispatch();
-  let history = useHistory();
-
-  const { fieldId } = useParams();
 
   // Use the useAppSelector hook to get values from the state
   const [files] = useAppSelector((state) => [
@@ -51,16 +47,21 @@ export default function SidebarMember(props) {
   // Declare and initialize states using the useState hook
   const [heightMenu, setHeightMenu] = useState<number>(window.innerHeight - defaultValue)
   const [activeFile, setActiveFile] = useState<string>("");
+  const [isClickToFile, setIsClickToFile] = useState<boolean>(false);
+
+  const queryStr = window.location.search
+  useEffect(() => {
+    if (queryStr.includes("fileId")) {
+      const id = queryStr.slice(queryStr.indexOf("=") + 1);
+      setActiveFile(id);
+    }
+  }, [queryStr])
 
   // Set up side effect using the useEffect hook to fetch list of files when component mounts
   useEffect(() => {
     dispatch(getListFile());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    setActiveFile(fieldId)
-  }, [fieldId])
 
   // Set up side effect using the useEffect hook to update the heightMenu state when window resizes
   useEffect(() => {
@@ -69,14 +70,25 @@ export default function SidebarMember(props) {
     });
   }, []);
 
+  
+  const el: any = document.getElementById('activeFile');
+  useEffect(() => {
+    if (!isClickToFile) {
+      el?.scrollIntoView({ behavior: "smooth", block: "center"});
+    }
+  }, [el]);
+
   // Define a function called "showDetailFile" that dispatches remove action and updates states based on the selected fileId
   const showDetailFile = (fileId) => {
+    let newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?fileId=' + fileId;
+    window.history.pushState({ path: newurl }, '', newurl);
+
     dispatch(remove());
     setUrl("");
     setShowChat(false);
     setIsShowFullChat(false);
     setShowPdf(true);
-    history.push(`/analyses/${fileId}`);
+    setIsClickToFile(true);
   }
 
   // Define a function called "getStatusFile" that returns an icon based on the status provided
@@ -137,6 +149,7 @@ export default function SidebarMember(props) {
           {files.map((file) => {
             return (
               <button
+                id={`${file.uuid === activeFile ? 'activeFile' : ''}`}
                 className={classNames("mb-2", { "active-file": file.uuid === activeFile })}
                 key={file.uuid}
                 onClick={() => showDetailFile(file.uuid)}

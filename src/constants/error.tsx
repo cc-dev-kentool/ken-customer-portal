@@ -21,6 +21,7 @@ export const error = {
     "SampleBelongsToAnotherProject": "Cannot import this file. The sample already belongs to another project.",
     "TopicExistException": "Topic exist exception!",
     "User exists, canot register again!": "User exists, canot register again!",
+    "RecordNotFound": "File not found!",
 
 }
 

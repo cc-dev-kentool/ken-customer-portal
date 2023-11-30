@@ -256,6 +256,21 @@
   display: none;
 }
 
+.dropdown-index .dropdown-item:hover .acc-info {
+  display: block;
+}
+
+.acc-info {
+  list-style-type: none;
+  display: none;
+  position: absolute;
+  right: 50px;
+  padding: 10px;
+  margin-top: 3px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
 .error {
   color: red;
 }
