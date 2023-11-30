@@ -23,16 +23,10 @@ export default function Page404(props) {
             {/* The following code creates two buttons */}
             <div className="form-group button-style">
               <button
-                type="button" onClick={history.goBack}
-                className="btn submit-btn rounded-0 back-btn"
+                type="button" onClick={() => history.push('/analyses')}
+                className="btn-go-analyese"
               >
-                Go Back
-              </button>
-              <button
-                type="button" onClick={() => window.location.href = "/dashboard"}
-                className="btn btn-danger submit-btn rounded-0 not-hover"
-              >
-                Go To Home
+                Go To Analyses
               </button>
             </div>
           </div>

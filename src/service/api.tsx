@@ -60,10 +60,9 @@ const handleErrorRequest = (err) => {
     localStorage.setItem("isForceChangePassword", "true")
     window.location.href = "/login"
     return Promise.reject()
-  }
-  else if (err.response?.status === 403) {
+  } else if (err.response?.status === 404) {
     // Forbidden access to resource, redirect to 403 page
-    window.location.href = "/403"
+    window.location.href = "/404"
     return Promise.reject()
   }
   else return Promise.reject(err.response) // Otherwise, return the error response as the rejection reason
