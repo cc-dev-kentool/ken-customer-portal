@@ -3,7 +3,6 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
 import { getListPrompt } from "store/actions/prompt";
-import { useHistory, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
@@ -16,10 +15,8 @@ import "./style.css";
 
 // This is the Analysis component which is exported as default.
 export default function Analysis(props) {
-  const { fieldId } = useParams();
   // The useAppDispatch hook returns the dispatch function of the Redux store.
   const dispatch = useAppDispatch();
-  let history = useHistory();
 
   // The useState hook is used here to define state variables.
   const [url, setUrl] = useState<string>("");
@@ -30,25 +27,32 @@ export default function Analysis(props) {
   const [currentStatus, setCurrentStatus] = useState<string>("");
   const [dataAnalysis, setDataAnalysis] = useState<object[]>([]);
   const [isShowFullChat, setIsShowFullChat] = useState<boolean>(false);
+  const [fieldId, setFieldId] = useState<string>("");
 
   // The useAppSelector hook is used here to extract data from the Redux store state.
   // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
-  const [uploadId, dataAnaly, conversation] = useAppSelector((state) => [
-    state.analysis.uploadPdf,
+  const [dataAnaly, conversation] = useAppSelector((state) => [
     state.analysis.dataAnalysis,
     state.conversation.conversation,
   ]);
 
   let runningTimeout: any = null;
+  const queryStr = window.location.search
 
-  // The useEffect hook is used here to perform side effects after rendering.
-  // It will run when the value of uploadId changes.
   useEffect(() => {
-    if (uploadId) {
-      dispatch(getListFile(false));
-      history.push(`/analyses/${uploadId}`);
+    if (queryStr.includes("fileId")) {
+      const id = queryStr.slice(queryStr.indexOf("=") + 1);
+
+      dispatch(getAnalysisData(id, true));
+      setFieldId(id);
+      dispatch(getListPrompt(false));
+
+      if (runningTimeout) {
+        clearTimeout(runningTimeout);
+        runningTimeout = null;
+      }
     }
-  }, [uploadId])
+  }, [queryStr])
 
   // The useEffect hook is used here to perform side effects after rendering.
   // It will run when the value of dataAnaly changes.
@@ -63,7 +67,7 @@ export default function Analysis(props) {
         runningTimeout = setTimeout(() => {
           dispatch(getAnalysisData(fieldId));
         }, 3000);
-      } else if (executionStatus === 'done' && uploadId) {
+      } else if (executionStatus === 'done') {
         dispatch(getListFile(false))
       }
 
@@ -73,20 +77,6 @@ export default function Analysis(props) {
       setDataAnalysis(dataAnaly?.topic_executions?.[0].execution_details)
     }
   }, [dataAnaly])
-
-  // The useEffect hook is used here to perform side effects after rendering.
-  // It will run when the value of currentDocumentId changes.
-  useEffect(() => {
-    if (runningTimeout) {
-      clearTimeout(runningTimeout);
-      runningTimeout = null;
-    }
-    if (fieldId) {
-      setValueSearch("")
-      dispatch(getListPrompt(false));
-      dispatch(getAnalysisData(fieldId, true));
-    }
-  }, [fieldId])
 
   // This function handles showing the chat.
   const handleShowChat = () => {
@@ -155,7 +145,7 @@ export default function Analysis(props) {
           <h1>Analyses</h1>
         </div>
       }
-      
+
       {isDowndLoad &&
         <ExportPdf dataAnalysis={dataAnalysis} conversation={conversation} />
       }

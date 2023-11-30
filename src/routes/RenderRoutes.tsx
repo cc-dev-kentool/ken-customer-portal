@@ -86,17 +86,6 @@ const ROUTES: routes[] = [
     roles: ["admin", "super-admin", "member"],
   },
   {
-    path: "/analyses/:fieldId", // URL pattern for the dashboard route
-    key: "ROOT", // Unique identifier for this component instance
-    exact: true, // Exact match is required to load the component
-    component: Analysis, // Component that will be loaded on this route
-    routes: [], // Optional array of child routes if any
-    requiredAuth: true, // Indicates whether authentication is required or not
-    name: "analyses", // Identifier for this route
-    title: "Analyses Detail", // Title that will be displayed in the header
-    roles: ["admin", "super-admin", "member"],
-  },
-  {
     path: "/analyses", // URL pattern for the dashboard route
     key: "ROOT", // Unique identifier for this component instance
     exact: true, // Exact match is required to load the component
