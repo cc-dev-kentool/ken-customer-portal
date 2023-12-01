@@ -17,7 +17,7 @@ export function getAnalysisData(id, isLoading = false) {
       })
       .catch((err) => {
         isLoading && dispatch(setLoading(false));
-        dispatch(onError(err));
+        err !== "404" && dispatch(onError(err));
       });
   };
 }

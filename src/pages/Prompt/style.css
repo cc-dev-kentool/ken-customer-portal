@@ -1,22 +1,22 @@
-/* List user */
-.user-managerment {
+/* List prompt */
+.prompt-managerment {
     background-color: #fff;
     min-height: 90vh;
     width: 100%;
     padding: 20px;
 }
 
-.user-managerment .title {
+.prompt-managerment .title {
     font-size: 30px;
     font-weight: bold;
 }
 
-.user-managerment .add-prompt {
+.prompt-managerment .add-prompt {
     text-align: right;
     font-size: 30px;
 }
 
-.user-managerment .add-prompt button {
+.prompt-managerment .add-prompt button {
     background-color: #ccc;
     padding: 0px 17px 5px 17px;
     border-radius: 50%;
@@ -80,6 +80,10 @@
 }
 
 .edit-prompt .btn-save:hover {
+    background: #A8DEE9;
+}
+
+.edit-prompt .btn-disabled {
     background: #A8DEE9;
 }
 

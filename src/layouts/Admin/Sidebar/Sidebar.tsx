@@ -7,6 +7,7 @@ import classNames from "classnames";
 import UploadFile from "pages/Analyses/UploadFile";
 import SidebarAdmin from "./SidebarAdmin";
 import SidebarMember from "./SidebarMember";
+import logo from "../../../assets/images/logo.png"
 
 // Export the Sidebar component as the default export
 export default function Sidebar(props) {
@@ -25,13 +26,13 @@ export default function Sidebar(props) {
   } = props;
 
   // Parse the user object stored in localStorage
-  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const user = JSON.parse(localStorage.getItem('user') ?? '{}')
 
   // Define state variables
   const [showModalUplaod, setShowModalUplaod] = useState<boolean>(false);
   const [isShowFiles, setIsShowFiles] = useState<boolean>(true);
-  const [file, setFile] = useState<File>();
-  const [isEnableBtnAnalyze, setIsEnableBtnAnalyze] = useState<boolean>(true);
+  const [file, setFile] = useState<any>(null);
+  const [isEnableBtnAnalyze, setIsEnableBtnAnalyze] = useState<boolean>(false);
 
   // Define a function called "getContentPopupArea" that returns some JSX
   const getContentPopupArea = () => {
@@ -39,7 +40,7 @@ export default function Sidebar(props) {
       <UploadFile
         file={file}
         setFile={setFile}
-        setEnableBtnAnalyze={setIsEnableBtnAnalyze}
+        setIsEnableBtnAnalyze={setIsEnableBtnAnalyze}
       />
     )
   }
@@ -52,15 +53,22 @@ export default function Sidebar(props) {
       setShowPdf(true);
       setShowChat(false);
       setIsShowFullChat(false);
+      setFile(null);
       dispatch(uploadPdf(file));
     }
   }
 
   // Define a function called "handleClosePupopUpload" that resets state variables and dispatches an action
   const handleClosePupopUpload = () => {
-    setIsEnableBtnAnalyze(true);
+    setFile(null);
     setShowModalUplaod(false);
     dispatch(removeAlert());
+  }
+
+  const handleShowPopupUplaod = () => {
+    dispatch(removeAlert())
+    setIsEnableBtnAnalyze(false);
+    setShowModalUplaod(true)
   }
 
   // Render the following JSX
@@ -72,7 +80,7 @@ export default function Sidebar(props) {
       <div className="bg-white">
         <div className="logo">
           <a href="/">
-            <p>KEN</p>
+            <p className="mb-2"><img src={logo} alt="logo" width="70%"/></p>
           </a>
           <span
             className={classNames("sidebar-toggle", { "expand-sidebar": !isShowFullSidebar })}
@@ -101,7 +109,7 @@ export default function Sidebar(props) {
               setShowChat={setShowChat}
               setIsShowFullChat={setIsShowFullChat}
               setShowPdf={setShowPdf}
-              setshowModalUplaod={setShowModalUplaod}
+              handleShowPopupUplaod={handleShowPopupUplaod}
             />}
         </div>
       </div>

@@ -132,6 +132,7 @@ export default function Analysis(props) {
               />
             }
             <RiskContent
+              showPdf={showPdf}
               showChat={showChat}
               dataAnalysis={dataAnalysis}
               currentStatus={currentStatus}

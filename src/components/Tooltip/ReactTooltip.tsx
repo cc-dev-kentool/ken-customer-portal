@@ -40,7 +40,8 @@ export function ReactTooltip(props: Props) {
       style={{
         width: `${widthTooltip ?? currentWidth}px`,
         zIndex: 10,
-        wordBreak: "break-word"
+        wordBreak: "break-word",
+        backgroundColor: "rgb(85,85,85)",
       }}
     />
   )

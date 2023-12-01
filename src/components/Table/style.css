@@ -5,6 +5,7 @@
 .ant-table {
     border: 1px solid #E5E5E5 !important;
     border-radius: 8px !important;
+    font-family: Arial, sans-serif !important;
 }
 
 .ant-table-thead tr th {
@@ -15,6 +16,10 @@
 .ant-table-cell {
     height: 50px;
     padding: 0 10px !important;
+}
+
+.ant-table-cell p {
+    margin: 10px 0;
 }
 
 .ant-table-cell-row-hover {
