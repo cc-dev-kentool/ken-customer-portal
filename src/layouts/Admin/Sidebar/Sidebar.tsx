@@ -114,7 +114,7 @@ export default function Sidebar(props) {
         </div>
       </div>
 
-      <p className={classNames("version", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}>KEN &copy; 1.0.0.17</p>
+      <p className={classNames("version", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}>KEN &copy; 1.0.0.18</p>
 
       {/* Render PopupDialog component with specific props */}
       <PopupDialog
