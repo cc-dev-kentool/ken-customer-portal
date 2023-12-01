@@ -1,13 +1,10 @@
 import AdminLayout from "layouts/Admin"
 import page404 from 'assets/images/404.png'
-import { useHistory } from "react-router-dom"
 import './style.css'
 
 
 // This function component takes props as input and returns a JSX element that renders a 404 error page.
 export default function Page404(props) {
-  // The useHistory hook provides access to the browser's history, allowing the user to navigate back to the previous page when clicking on the "Go Back" button.
-  const history = useHistory()
 
   // The component returns a JSX element with the following structure:
   return (
@@ -23,7 +20,7 @@ export default function Page404(props) {
             {/* The following code creates two buttons */}
             <div className="form-group button-style">
               <button
-                type="button" onClick={() => history.push('/analyses')}
+                type="button" onClick={() => window.location.href = '/analyses'}
                 className="btn-go-analyese"
               >
                 Go To Analyses

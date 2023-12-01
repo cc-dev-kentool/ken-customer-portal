@@ -3,6 +3,7 @@ import { analysisActionType } from "../actionTypes"
 // Initial state of Modal
 const initialState = {
   dataAnalysis: [],
+  getDataAnalysisSuccess: false,
   filePath: "",
   uploadPdf: "",
   uploadPdfSuccess: false,
@@ -13,13 +14,16 @@ const initialState = {
 // Declaring the modal reducer function
 const getAnalysisData = (state = initialState, action) => {
   switch (action.type) {
-    // Set alert action case.
     case analysisActionType.GET_DATA_ANALYTICS:
       return {
         ...state,
         dataAnalysis: action.payload
       }
-    // Remove alert action case.
+    case analysisActionType.GET_DATA_ANALYTICS_SUCCESS:
+      return {
+        ...state,
+        getDataAnalysisSuccess: action.payload
+      }
     case analysisActionType.SET_FILE_PATH:
       return {
         ...state,
