@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "hooks";
-import { remove, remove as removeAlert } from "store/actions/alert"
+import { remove } from "store/actions/alert"
 import { labelDisplay } from "helpers/until";
 import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import { useEffect, useState } from "react";
@@ -20,6 +20,7 @@ export default function SidebarMember(props) {
     setShowChat,
     setIsShowFullChat,
     setShowPdf,
+    setValueSearch,
     handleShowPopupUplaod,
   } = props;
 
@@ -87,11 +88,12 @@ export default function SidebarMember(props) {
 
   // Define a function called "showDetailFile" that dispatches remove action and updates states based on the selected fileId
   const showDetailFile = (fileId) => {
+    dispatch(remove());
     let newurl = window.location.protocol + "//" + window.location.host + '/analyses?fileId=' + fileId;
     window.history.pushState({ path: newurl }, '', newurl);
 
-    dispatch(remove());
     setUrl("");
+    setValueSearch("");
     setShowChat(false);
     setIsShowFullChat(false);
     setShowPdf(true);

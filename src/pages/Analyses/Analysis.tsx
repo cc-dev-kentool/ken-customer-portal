@@ -110,6 +110,7 @@ export default function Analysis(props) {
       setShowChat={setShowChat}
       setIsShowFullChat={setIsShowFullChat}
       setShowPdf={setShowPdf}
+      setValueSearch={setValueSearch}
     >
       {dataAnalysis?.length > 0 ?
         <Row className="main-content">
