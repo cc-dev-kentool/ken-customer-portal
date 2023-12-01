@@ -1,5 +1,5 @@
 import { Button, Modal } from "react-bootstrap";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import "./style.css";
 
 /**

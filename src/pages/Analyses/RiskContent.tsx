@@ -11,6 +11,7 @@ export default function RiskContent(props) {
 
   // Destructure the "url" and "setValueSearch" props from the "props" object
   const {
+    showPdf,
     showChat,
     dataAnalysis,
     currentStatus,
@@ -140,7 +141,13 @@ export default function RiskContent(props) {
                 />
               </Col>
             </Row>
-            {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} currentStatus={currentStatus} />}
+            {isShowProgressBar && 
+              <AnalysisProgress 
+                showPdf={showPdf} 
+                dataTopics={dataAnalysis} 
+                currentStatus={currentStatus} 
+              />
+            }
           </div>
           <div className="table-content" style={{ height: `${getHeightRiskContent()}vh` }}>
             {dataAnalysis.map((data) => {

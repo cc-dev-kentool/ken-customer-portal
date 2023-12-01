@@ -14,6 +14,7 @@ export default function ChatGPT(props) {
   const [message2, setMessage2] = useState<string>("")
   const [showLoading, setShowLoading] = useState<boolean>(false);
   const [isSendMessage, setIsSendMessage] = useState<boolean>(false);
+  const [isDisabledBtnSend, setIsDisabledBtnSend] = useState<boolean>(true);
   const [dataConversation, setDataConversation] = useState<any>([]);
 
   // Retrieves the conversation array from the Redux store's state
@@ -58,6 +59,7 @@ export default function ChatGPT(props) {
       // Sets loading state to true and dispatches a postConversation action with the fileUploadId and message value
       setShowLoading(true);
       setIsSendMessage(true);
+      setIsDisabledBtnSend(true);
       dispatch(postConversation(fileUploadId, message.trim()));
     }
   }
@@ -68,6 +70,11 @@ export default function ChatGPT(props) {
       setMessage2(e.target.value.trim());
     }
   };
+  
+  const onChangeTextarea = (value) => {
+    setMessage(value)
+    value.trim() ? setIsDisabledBtnSend(false) : setIsDisabledBtnSend(true);
+  }
 
   return (
     <div className={classNames("chat-content", { "full-chat": isShowFullChat })}>
@@ -118,8 +125,8 @@ export default function ChatGPT(props) {
         <button
           type="submit"
           onClick={handleSendMessage}
-          className="iconSend"
-          disabled={props.isDisabled}
+          className={classNames("iconSend", {"disabled-icon-send" : isDisabledBtnSend})}
+          disabled={isDisabledBtnSend}
         >
           <img src={icon_send} alt="" />
         </button>
@@ -127,7 +134,7 @@ export default function ChatGPT(props) {
           rows={isShowFullChat ? 2 : 1}
           className="field-input form-control"
           value={showLoading ? "" : message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(e) => onChangeTextarea(e.target.value)}
           onKeyDown={handleKeyDown}
         />
       </div>

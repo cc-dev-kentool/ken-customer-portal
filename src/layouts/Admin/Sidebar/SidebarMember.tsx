@@ -20,7 +20,7 @@ export default function SidebarMember(props) {
     setShowChat,
     setIsShowFullChat,
     setShowPdf,
-    setshowModalUplaod,
+    handleShowPopupUplaod,
   } = props;
 
   // Import the dispatch function from the Redux store
@@ -35,13 +35,13 @@ export default function SidebarMember(props) {
   let defaultValue: number;
   switch (role) {
     case 'super-admin':
-      defaultValue = 490;
+      defaultValue = 460;
       break;
     case 'admin':
-      defaultValue = 400;
+      defaultValue = 420;
       break;
     default:
-      defaultValue = 210;
+      defaultValue = 240;
   }
 
   // Declare and initialize states using the useState hook
@@ -115,15 +115,16 @@ export default function SidebarMember(props) {
     return findIndex >= 0;
   }
 
+  const isActiveFile = (fileId) => {
+    return fileId === activeFile;
+  }
+
   // Return the following JSX
   return (
     <>
       <button
         className={classNames('btn-add-document', { 'btn-disabled': disableBtnNew() })}
-        onClick={() => {
-          dispatch(removeAlert())
-          setshowModalUplaod(true)
-        }}
+        onClick={handleShowPopupUplaod}
         disabled={disableBtnNew()}
       >
         <i className="fa-regular fa-plus fs-1"></i><br />
@@ -149,22 +150,22 @@ export default function SidebarMember(props) {
           {files.map((file) => {
             return (
               <button
-                id={`${file.uuid === activeFile ? 'activeFile' : ''}`}
-                className={classNames("mb-2", { "active-file": file.uuid === activeFile })}
+                id={`${isActiveFile(file.uuid) ? 'activeFile' : ''}`}
+                className={classNames("list-file-item", { "active-file": isActiveFile(file.uuid) })}
                 key={file.uuid}
-                onClick={() => showDetailFile(file.uuid)}
+                onClick={() => !isActiveFile(file.uuid) && showDetailFile(file.uuid)}
               >
                 <i className="fa-regular fa-file-lines m-2" style={{ color: "#26adc9" }}></i>
                 <span data-tooltip-id={`tooltip-1-${file.uuid}`}>
-                  {file.file_name?.length > 16 ? labelDisplay(file.file_name, 16) : file.file_name}
+                  {file.file_name?.length > 20 ? labelDisplay(file.file_name, 20) : file.file_name}
                 </span>
-                {file.file_name?.length > 16 &&
+                {file.file_name?.length > 20 &&
                   <ReactTooltip
                     id={`tooltip-1-${file.uuid}`}
                     content={file.file_name}
                     widthTooltip={220}
                   />}
-                <img src={getStatusFile(file.analysis_status)} className="icon-action" alt="" width="20px" />
+                <img src={getStatusFile(file.analysis_status)} className="icon-action" alt="" width="15px" />
               </button>
             )
           })}
