@@ -2,9 +2,6 @@ import { statusRisk } from "constants/riskAnalysis";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useAppDispatch } from "hooks";
-import { getConversation } from "store/actions/chatGpt";
-import { add as addAlert, remove } from "store/actions/alert"
-import generatePDF, { Margin } from 'react-to-pdf';
 import AnalysisProgress from "./AnalysisProgress";
 import classNames from "classnames";
 
@@ -14,13 +11,11 @@ export default function RiskContent(props) {
 
   // Destructure the "url" and "setValueSearch" props from the "props" object
   const {
-    fileUploadId,
+    showPdf,
     showChat,
     dataAnalysis,
     currentStatus,
-    isDowndLoad,
     isShowFullChat,
-    setIsDowndLoad,
     setValueSearch,
   } = props;
 
@@ -75,39 +70,9 @@ export default function RiskContent(props) {
 
   // Define a function named "handleSearch" that takes a "text" parameter and calls the "setValueSearch" prop with the provided text
   const handleSearch = (text) => {
-
     const itemText = window.getSelection()?.toString().trim();
-
-    let isInSourceText = false;
-    dataAnalysis.map(data => {
-      data.analysis_result.source_text?.map(item => {
-        const sourceText = item.value?.replace(/\s+/g, '')
-        const selectedText = itemText?.replace(/\s+/g, '')
-        if (sourceText.includes(selectedText)) {
-          isInSourceText = true;
-        }
-      })
-    })
-
-    if (isInSourceText) {
-      itemText?.trim() ? setValueSearch(itemText) : setValueSearch(text);
-    }
+    itemText?.trim() ? setValueSearch(itemText) : setValueSearch(text);
   }
-
-  // Define a function exportPDF that does the following:
-  const exportPdf = () => {
-    dispatch(getConversation(fileUploadId));
-    setIsDowndLoad(true);
-  }
-
-  // Use the useEffect hook to run the provided callback when the isDowndLoad state changes
-  useEffect(() => {
-    if (isDowndLoad) {
-      const getTargetElement = () => document.getElementById('divToPrint');
-      generatePDF(getTargetElement, { filename: 'page.pdf', page: { margin: Margin.MEDIUM } });
-      setIsDowndLoad(false);
-    }
-  }, [isDowndLoad]);
 
   // Use the useEffect hook to run the provided callback when the currentStatus state changes
   useEffect(() => {
@@ -162,14 +127,6 @@ export default function RiskContent(props) {
   return (
     <div className={classNames("risk-content", { "full-height": !showChat, "min-height": isShowFullChat })}>
       <p className="title-risk">Risk Analysis Data</p>
-      {dataAnalysis?.length > 0 && currentStatus === 'done' && (
-        <i
-          className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
-          style={{ color: "#26ADC9" }}
-          onClick={exportPdf}
-        />
-      )}
-
       {dataAnalysis?.length > 0 &&
         <>
           <div className='analysis-progress'>
@@ -184,14 +141,20 @@ export default function RiskContent(props) {
                 />
               </Col>
             </Row>
-            {isShowProgressBar && <AnalysisProgress dataTopics={dataAnalysis} currentStatus={currentStatus} />}
+            {isShowProgressBar && 
+              <AnalysisProgress 
+                showPdf={showPdf} 
+                dataTopics={dataAnalysis} 
+                currentStatus={currentStatus} 
+              />
+            }
           </div>
-          <div className="table-content" onMouseUp={() => handleSearch("")} style={{ height: `${getHeightRiskContent()}vh` }}>
+          <div className="table-content" style={{ height: `${getHeightRiskContent()}vh` }}>
             {dataAnalysis.map((data) => {
               if (data.executed_status === 'success') {
                 return (
                   <div key={data.uuid} className="risk-content-item">
-                    <Row className="risk-content-item-topic mb-4">
+                    <Row className="risk-content-item-topic">
                       <Col sm="10">
                         {data.analysis_result?.topic}
                       </Col>
@@ -208,24 +171,25 @@ export default function RiskContent(props) {
                     </Row>
                     {getStatusShowTopic(data.analysis_result?.topic) &&
                       <>
-                        <Row className="source-text m-0">
-                          <Col sm="2" className="title-left p-0">Source Text</Col>
-                          <Col sm="10" className="p-0">
+                        <Row className="source-text m-0" onMouseUp={() => handleSearch("")}>
+                          <Col sm="2" className="title-left p-0 pt-4 pb-2">Source Text</Col>
+                          <Col sm="10" className="pt-4 pb-2">
                             {data.analysis_result.source_text?.map((text, index) => {
-                              return <p
-                                key={text.key}
-                                className={classNames('pt-2 mb-2', { 'cursor-pointer source-text-item': checkSourceText(text.value) })}
-                                onClick={() => checkSourceText(text.value) && handleSearch(text.value)}
-                              >
+                              return <div key={text.key}>
                                 {index >= 1 && <hr />}
-                                {text.value}
-                              </p>
+                                <p
+                                  className={classNames('pt-2 mb-2', { 'cursor-pointer source-text-item': checkSourceText(text.value) })}
+                                  onClick={() => checkSourceText(text.value) && handleSearch(text.value)}
+                                >
+                                  {text.value}
+                                </p>
+                              </div>
                             })}
                           </Col>
                         </Row>
                         <Row className="mt-3 m-0">
                           <Col sm="2" className="title-left p-0">Comment</Col>
-                          <Col sm="10" className="p-0">{genComment(data.analysis_result)}</Col>
+                          <Col sm="10">{genComment(data.analysis_result)}</Col>
                         </Row>
                       </>}
                   </div>

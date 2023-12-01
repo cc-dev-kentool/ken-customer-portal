@@ -1,12 +1,12 @@
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { StepIconProps } from '@mui/material/StepIcon';
 import { labelDisplay } from 'helpers/until';
 import { ReactTooltip } from 'components/Tooltip/ReactTooltip';
 import { useAppSelector } from 'hooks';
+import { CircularProgress } from '@mui/material';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import icon_success from "assets/icon/icon_success.svg";
 import icon_error from "assets/icon/icon_error.svg";
@@ -15,12 +15,14 @@ import "./style.css"
 
 export default function AnalysisProgress(props) {
   // Destructure props
-  const { dataTopics, currentStatus } = props;
+  const { showPdf, dataTopics, currentStatus } = props;
 
   // Get listPrompt from app state using useAppSelector hook
   const [listPrompt] = useAppSelector((state) => [
     state.prompts.listPrompt,
   ]);
+
+  const defaultLengthText = showPdf ? 10 : 20
 
   // Sort the listPrompt array based on topic_order property
   listPrompt.sort(function (a, b) {
@@ -145,10 +147,10 @@ export default function AnalysisProgress(props) {
 
     return (
       <StepLabel StepIconComponent={icon}>
-        <p data-tooltip-id={`tooltip-${prompt.uuid}`} style={{ cursor: "pointer" }}>
-          {prompt?.topic_name.length > 5 ? labelDisplay(prompt?.topic_name, 5) : prompt?.topic_name}
+        <p data-tooltip-id={`tooltip-${prompt.uuid}`} style={{ cursor: "pointer", fontSize: "13px" }}>
+          {prompt?.topic_name.length > defaultLengthText ? labelDisplay(prompt?.topic_name, defaultLengthText) : prompt?.topic_name}
         </p>
-        {prompt?.topic_name.length > 5 &&
+        {prompt?.topic_name.length > defaultLengthText &&
           <ReactTooltip
             id={`tooltip-${prompt?.uuid}`}
             content={prompt?.topic_name}
@@ -158,47 +160,39 @@ export default function AnalysisProgress(props) {
     )
   }
 
-  const getContentLoadingPdf = () => {
+  const isReadFilePdf = () => {
     const waitting = dataTopics.every(topic => topic.executed_status === 'wait_to_run')
 
-    const icon = waitting && currentStatus === 'running' ? iconLoading : iconSuccess
-    
-    return (
-      <StepLabel StepIconComponent={icon}>
-        <p data-tooltip-id={`tooltip-waiting`} style={{ cursor: "pointer" }}>
-          {labelDisplay("Waiting to read pdf", 5)}
-        </p>
-        <ReactTooltip
-          id={`tooltip-waiting`}
-          content={"Waiting to read pdf"}
-          widthTooltip={200}
-        />
-      </StepLabel>
-    )
+    return waitting && currentStatus === 'running';
   }
 
   // Return the HTML for the AnalysisProgress component
   return (
     <div>
-      <Stepper alternativeLabel activeStep={6} connector={<ColorlibConnector />}>
-        <Step >
-          {getContentLoadingPdf()}
-        </Step>
-        {listPrompt.map((prompt, index) => (
-          (index < 6) && (<Step key={prompt.uuid}>
-            {contentStep(prompt)}
-          </Step>)
+      {isReadFilePdf() ?
+      <>
+        <p className="messUploading">Uploading this file and extracting the content is in progress to prepare for analysis...</p>
+        <div className="text-center m-5"><CircularProgress color="success" /></div>
+      </> :
+      <>
+        <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
+          {listPrompt.map((prompt, index) => (
+            (index < 6) && (<Step key={prompt.uuid}>
+              {contentStep(prompt)}
+            </Step>)
 
-        ))}
-      </Stepper>
-      <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
-        {listPrompt.map((prompt, index) => (
-          (index >= 6) && (<Step key={prompt.uuid}>
-            {contentStep(prompt)}
-          </Step>)
+          ))}
+        </Stepper>
+        <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
+          {listPrompt.map((prompt, index) => (
+            (index >= 6) && (<Step key={prompt.uuid}>
+              {contentStep(prompt)}
+            </Step>)
 
-        ))}
-      </Stepper>
+          ))}
+        </Stepper>
+      </>
+      }
     </div>
   );
 }

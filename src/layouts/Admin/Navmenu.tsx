@@ -3,6 +3,7 @@ import { NavDropdown } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { logout } from "store/actions/auth";
 import { useAppDispatch } from "hooks";
+import { upperFistChar } from "helpers/until";
 import avatar from "assets/images/avatar.png";
 
 // Define a function component named "Navmenu" and receive a single parameter called "props"
@@ -15,6 +16,8 @@ export default function Navmenu(props) {
 
   // Get the app dispatch from your custom hook or path
   const dispatch = useAppDispatch();
+
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
 
   // Define an "onLogout" function that dispatches the "logout" action 
   // and redirects to the home page ("/")
@@ -43,8 +46,12 @@ export default function Navmenu(props) {
                   </b>
                 }
               >
-                <NavDropdown.Item onClick={() => history.push("/")}>
+                <NavDropdown.Item>
                   My Account
+                  <ul className="acc-info">
+                    <li>Email: {user.email}</li>
+                    <li>Role: {upperFistChar(user.role)}</li>
+                  </ul>
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={() => onLogout()}>
                   Logout

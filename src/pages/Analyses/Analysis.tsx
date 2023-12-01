@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
 import { getListPrompt } from "store/actions/prompt";
+import generatePDF, { Margin } from 'react-to-pdf';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
@@ -24,35 +25,42 @@ export default function Analysis(props) {
   const [showChat, setShowChat] = useState<boolean>(false);
   const [valueSearch, setValueSearch] = useState<string>("");
   const [isDowndLoad, setIsDowndLoad] = useState<boolean>(false);
-  const [fileUploadId, setFileUploadId] = useState<string>("");
   const [currentStatus, setCurrentStatus] = useState<string>("");
   const [dataAnalysis, setDataAnalysis] = useState<object[]>([]);
-  const [currentDocumentId, setCurrentDocumentId] = useState<string>("");
   const [isShowFullChat, setIsShowFullChat] = useState<boolean>(false);
+  const [fieldId, setFieldId] = useState<string>("");
 
   // The useAppSelector hook is used here to extract data from the Redux store state.
   // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
-  const [uploadId, dataAnaly, conversation] = useAppSelector((state) => [
-    state.analysis.uploadPdf,
+  const [dataAnaly, getDataAnalysisSuccess, conversation, getConversationSuccess] = useAppSelector((state) => [
     state.analysis.dataAnalysis,
+    state.analysis.getDataAnalysisSuccess,
     state.conversation.conversation,
+    state.conversation.getConversationSuccess,
   ]);
 
   let runningTimeout: any = null;
+  const queryStr = window.location.search
 
-  // The useEffect hook is used here to perform side effects after rendering.
-  // It will run when the value of uploadId changes.
   useEffect(() => {
-    if (uploadId) {
-      setFileUploadId(uploadId)
-      setCurrentDocumentId(uploadId)
+    if (queryStr.includes("fileId")) {
+      const id = queryStr.slice(queryStr.indexOf("=") + 1);
+
+      dispatch(getAnalysisData(id, true));
+      setFieldId(id);
+      dispatch(getListPrompt(false));
+
+      if (runningTimeout) {
+        clearTimeout(runningTimeout);
+        runningTimeout = null;
+      }
     }
-  }, [uploadId])
+  }, [queryStr])
 
   // The useEffect hook is used here to perform side effects after rendering.
   // It will run when the value of dataAnaly changes.
   useEffect(() => {
-    if (currentDocumentId == dataAnaly?.uuid) {
+    if (fieldId == dataAnaly?.uuid) {
 
       const executionStatus = dataAnaly?.topic_executions?.[0].status
 
@@ -60,10 +68,9 @@ export default function Analysis(props) {
 
       if (executionStatus === 'running' && !runningTimeout) {
         runningTimeout = setTimeout(() => {
-          dispatch(getAnalysisData(fileUploadId));
+          dispatch(getAnalysisData(fieldId));
         }, 3000);
       } else if (executionStatus === 'done') {
-        setFileUploadId(dataAnaly.uuid);
         dispatch(getListFile(false))
       }
 
@@ -74,25 +81,25 @@ export default function Analysis(props) {
     }
   }, [dataAnaly])
 
-  // The useEffect hook is used here to perform side effects after rendering.
-  // It will run when the value of currentDocumentId changes.
+  // Use the useEffect hook to run the provided callback when the isDowndLoad state changes
   useEffect(() => {
-    if (runningTimeout) {
-      clearTimeout(runningTimeout);
-      runningTimeout = null;
+    if (isDowndLoad && getConversationSuccess) {
+      const getTargetElement = () => document.getElementById('divToPrint');
+      generatePDF(getTargetElement, { filename: 'page.pdf', page: { margin: Margin.MEDIUM } });
+      setIsDowndLoad(false);
     }
-    if (currentDocumentId) {
-      setValueSearch("")
-      setDataAnalysis([])
-      dispatch(getListPrompt(false));
-      dispatch(getAnalysisData(currentDocumentId, true));
-    }
-  }, [currentDocumentId])
+  }, [isDowndLoad, getConversationSuccess]);
+
+  // Define a function exportPDF that does the following:
+  const exportPdf = () => {
+    conversation.length === 0 && dispatch(getConversation(fieldId));
+    setIsDowndLoad(true);
+  }
 
   // This function handles showing the chat.
   const handleShowChat = () => {
     setShowChat(true);
-    dispatch(getConversation(fileUploadId))
+    dispatch(getConversation(fieldId))
   }
 
   // Return JSX elements to render the dashboard.
@@ -100,30 +107,38 @@ export default function Analysis(props) {
     <AdminLayout
       routeName={props.routeName}
       setUrl={setUrl}
-      setShowPdf={setShowPdf}
-      setDataAnalysis={setDataAnalysis}
       setShowChat={setShowChat}
       setIsShowFullChat={setIsShowFullChat}
-      setCurrentDocumentId={setCurrentDocumentId}
+      setShowPdf={setShowPdf}
+      setValueSearch={setValueSearch}
     >
-      {dataAnalysis?.length > 0 &&
+      {dataAnalysis?.length > 0 ?
         <Row className="main-content">
           <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
+            {dataAnalysis?.length > 0 && currentStatus === 'done' && (
+              <i
+                className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
+                style={{ color: "#26ADC9" }}
+                onClick={exportPdf}
+              />
+            )}
             {!showPdf &&
               <i
-                className="fa-regular fa-file-pdf fa-2xl icon-show-pdf"
+                className={
+                  classNames("fa-regular fa-file-pdf fa-2xl icon-show-pdf", {
+                    "icon-pdf-expand": isShowFullChat
+                  })
+                }
                 style={{ color: "#26ADC9" }}
                 onClick={() => setShowPdf(true)}
               />
             }
             <RiskContent
-              fileUploadId={fileUploadId}
+              showPdf={showPdf}
               showChat={showChat}
               dataAnalysis={dataAnalysis}
               currentStatus={currentStatus}
-              isDowndLoad={isDowndLoad}
               isShowFullChat={isShowFullChat}
-              setIsDowndLoad={setIsDowndLoad}
               setValueSearch={setValueSearch}
             />
             {currentStatus && currentStatus !== 'running' && <>
@@ -134,7 +149,7 @@ export default function Analysis(props) {
                 />
                 : <ChatGPT
                   showChat={showPdf}
-                  fileUploadId={fileUploadId}
+                  fileUploadId={fieldId}
                   isShowFullChat={isShowFullChat}
                   setShowChat={setShowChat}
                   setIsShowFullChat={setIsShowFullChat}
@@ -152,7 +167,12 @@ export default function Analysis(props) {
               />
             }
           </Col>
-        </Row>}
+        </Row> :
+        getDataAnalysisSuccess && <div className="analysis-index">
+          <h1>Analyses</h1>
+        </div>
+      }
+
       {isDowndLoad &&
         <ExportPdf dataAnalysis={dataAnalysis} conversation={conversation} />
       }

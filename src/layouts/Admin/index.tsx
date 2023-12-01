@@ -13,11 +13,10 @@ function AdminLayout(props) {
     routeName,
     children,
     setUrl,
-    setShowPdf,
-    setDataAnalysis,
     setShowChat,
     setIsShowFullChat,
-    setCurrentDocumentId,
+    setShowPdf,
+    setValueSearch,
   } = props;
 
   // Retrieve the value of "isLoading" from the app state using the useAppSelector hook
@@ -39,11 +38,10 @@ function AdminLayout(props) {
         isShowFullSidebar={isShowFullSidebar}
         toggleMenu={toggleMenu}
         setUrl={setUrl}
-        setShowPdf={setShowPdf}
-        setDataAnalysis={setDataAnalysis}
         setShowChat={setShowChat}
         setIsShowFullChat={setIsShowFullChat}
-        setCurrentDocumentId={setCurrentDocumentId}
+        setShowPdf={setShowPdf}
+        setValueSearch={setValueSearch}
       />
       <div className="main">
         <Navmenu

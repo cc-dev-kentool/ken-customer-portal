@@ -170,7 +170,7 @@ export default function ListPrompt(props) {
   return (
     // Renders an AdminLayout component with a prop called `routeName`
     <AdminLayout routeName={props.routeName}>
-      <div className="user-managerment">
+      <div className="prompt-managerment">
         <Row>
           <Col sm={10} className="title">Prompt Management</Col>
           <Col sm={2} className="add-prompt"><button disabled>+</button></Col>
@@ -189,6 +189,7 @@ export default function ListPrompt(props) {
           seconLabelButton={""}
           handleFirstButtonCalback={() => setIsShowEdit(false)}
           handleSeconButtonCalback={""}
+          modalContentClass="modal-edit-prompt"
         />
       </div>
     </AdminLayout>

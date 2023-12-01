@@ -12,7 +12,7 @@ export default function UploadFile(props) {
   const dispatch = useAppDispatch();
 
   // Destructure the "file", "setFile", and "setEnableBtnAnalyze" props from the passed-in "props" object
-  const { file, setFile, setEnableBtnAnalyze } = props;
+  const { file, setFile, setIsEnableBtnAnalyze } = props;
 
   // Define a function called "handleChange" that sets the selected file using the setFile function
   const handleChange = async (file) => {
@@ -23,7 +23,7 @@ export default function UploadFile(props) {
       // Check if the file type is not a PDF
       if (file.type !== "application/pdf") {
         // Disable the Analyze button and display an alert for invalid file type
-        setEnableBtnAnalyze(false);
+        setIsEnableBtnAnalyze(false);
         return dispatch(addAlert("Invalid file, only .pdf file uploads are accepted.", "danger"))
       }
 
@@ -36,12 +36,12 @@ export default function UploadFile(props) {
       // Check if the PDF has more than 150 pages
       if (pdf.getPageCount() > 150) {
         // Disable the Analyze button and display an alert for exceeding page limit
-        setEnableBtnAnalyze(false);
+        setIsEnableBtnAnalyze(false);
         return dispatch(addAlert("Unable to upload. The number of pages in the file exceeds the allowed limit (150 pages).", "danger"))
       }
       
       // Enable the Analyze button and set the selected file using the setFile function
-      setEnableBtnAnalyze(true);
+      setIsEnableBtnAnalyze(true);
       setFile(file);
     }
   };

@@ -7,6 +7,7 @@ import classNames from "classnames";
 import UploadFile from "pages/Analyses/UploadFile";
 import SidebarAdmin from "./SidebarAdmin";
 import SidebarMember from "./SidebarMember";
+import logo from "../../../assets/images/logo.png"
 
 // Export the Sidebar component as the default export
 export default function Sidebar(props) {
@@ -19,22 +20,20 @@ export default function Sidebar(props) {
     isShowFullSidebar,
     toggleMenu,
     setUrl,
-    setShowPdf,
-    setDataAnalysis,
     setShowChat,
     setIsShowFullChat,
-    setCurrentDocumentId,
+    setShowPdf,
+    setValueSearch,
   } = props;
 
   // Parse the user object stored in localStorage
-  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const user = JSON.parse(localStorage.getItem('user') ?? '{}')
 
   // Define state variables
   const [showModalUplaod, setShowModalUplaod] = useState<boolean>(false);
   const [isShowFiles, setIsShowFiles] = useState<boolean>(true);
-  const [file, setFile] = useState<File>();
-  const [isEnableBtnAnalyze, setIsEnableBtnAnalyze] = useState<boolean>(true);
-  const [isNewUplaod, setIsNewUplaod] = useState<boolean>(false);
+  const [file, setFile] = useState<any>(null);
+  const [isEnableBtnAnalyze, setIsEnableBtnAnalyze] = useState<boolean>(false);
 
   // Define a function called "getContentPopupArea" that returns some JSX
   const getContentPopupArea = () => {
@@ -42,7 +41,7 @@ export default function Sidebar(props) {
       <UploadFile
         file={file}
         setFile={setFile}
-        setEnableBtnAnalyze={setIsEnableBtnAnalyze}
+        setIsEnableBtnAnalyze={setIsEnableBtnAnalyze}
       />
     )
   }
@@ -53,19 +52,24 @@ export default function Sidebar(props) {
       setUrl(URL.createObjectURL(file));
       setShowModalUplaod(false);
       setShowPdf(true);
-      setIsNewUplaod(true);
       setShowChat(false);
       setIsShowFullChat(false);
-      setDataAnalysis([]);
+      setFile(null);
       dispatch(uploadPdf(file));
     }
   }
 
   // Define a function called "handleClosePupopUpload" that resets state variables and dispatches an action
   const handleClosePupopUpload = () => {
-    setIsEnableBtnAnalyze(true);
+    setFile(null);
     setShowModalUplaod(false);
     dispatch(removeAlert());
+  }
+
+  const handleShowPopupUplaod = () => {
+    dispatch(removeAlert())
+    setIsEnableBtnAnalyze(false);
+    setShowModalUplaod(true)
   }
 
   // Render the following JSX
@@ -76,8 +80,8 @@ export default function Sidebar(props) {
     >
       <div className="bg-white">
         <div className="logo">
-          <a href="/">
-            <p>KEN</p>
+          <a href={`${user.role === "member" ? "/analyses" : "/"}`}>
+            <p className="mb-2"><img src={logo} alt="logo" width="70%"/></p>
           </a>
           <span
             className={classNames("sidebar-toggle", { "expand-sidebar": !isShowFullSidebar })}
@@ -97,24 +101,22 @@ export default function Sidebar(props) {
           }
 
           {/* Render SidebarMember component if user role is "member" or ("admin" or "super-admin" and routeName is "analyses") */}
-          {(user.role === "member" || (["admin", "super-admin"].includes(user.role) && routeName === "analyses")) &&
+          {(user.role === "member" || (["admin", "super-admin"].includes(user.role))) && routeName === "analyses" &&
             <SidebarMember
               role={user.role}
               isShowFiles={isShowFiles}
               isShowFullSidebar={isShowFullSidebar}
-              isNewUplaod={isNewUplaod}
-              setshowModalUplaod={setShowModalUplaod}
-              setIsShowFiles={setIsShowFiles}
-              setIsNewUplaod={setIsNewUplaod}
+              setUrl={setUrl}
               setShowChat={setShowChat}
               setIsShowFullChat={setIsShowFullChat}
-              setCurrentDocumentId={setCurrentDocumentId}
-              setUrl={setUrl}
+              setShowPdf={setShowPdf}
+              setValueSearch={setValueSearch}
+              handleShowPopupUplaod={handleShowPopupUplaod}
             />}
         </div>
       </div>
 
-      <p className={classNames("version", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}>KEN &copy; 1.0.0.14</p>
+      <p className={classNames("version", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}>KEN &copy; 1.0.0.18</p>
 
       {/* Render PopupDialog component with specific props */}
       <PopupDialog

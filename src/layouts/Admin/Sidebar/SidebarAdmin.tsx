@@ -1,4 +1,16 @@
 import classNames from "classnames";
+import home from "../../../assets/icon/icon_home.svg";
+import home_2 from "../../../assets/icon/icon_home_2.svg";
+import icon_user from "../../../assets/icon/icon_users.svg";
+import icon_user_2 from "../../../assets/icon/icon_users_2.svg";
+import icon_lock from "../../../assets/icon/icon_clock.svg";
+import icon_lock_2 from "../../../assets/icon/icon_clock_2.svg";
+import icon_chat from "../../../assets/icon/icon_chat.svg";
+import icon_chat_2 from "../../../assets/icon/icon_chat_2.svg";
+import icon_setting from "../../../assets/icon/icon_setting.svg";
+import icon_setting_2 from "../../../assets/icon/icon_setting_2.svg";
+import icon_analysis from "../../../assets/icon/icon_analysis.svg";
+import icon_analysis_2 from "../../../assets/icon/icon_analysis_2.svg";
 
 // Define a function called "Sidebar" which receives a single parameter called "props"
 export default function SidebarAdmin(props) {
@@ -13,21 +25,21 @@ export default function SidebarAdmin(props) {
     <ul className="sidebar-nav text-left mt-0">
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'dashboard' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/">
-          <i className="fa-solid fa-house" style={{ color: `${routeName === 'dashboard' ? '#fff' : '#000'}` }}></i>
+          <img src={`${routeName === 'dashboard' ? home_2 : home}`} alt="home" width="18px" className="icon-home" />
           {isShowFullSidebar && <span>Dashboard</span>}
         </a>
       </li>
 
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'users' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/users">
-          <i className="fa-solid fa-user-group" style={{ color: `${routeName === 'users' ? '#fff' : '#000'}` }}></i>
+          <img src={`${routeName === 'users' ? icon_user_2 : icon_user}`} alt="users" width="18px" className="icon-home" />
           {isShowFullSidebar && <span>User Management</span>}
         </a>
       </li>
 
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'contracts' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/contracts">
-          <i className="fa-solid fa-clock-rotate-left" style={{ color: `${routeName === 'contracts' ? '#fff' : '#000'}` }}></i>
+          <img src={`${routeName === 'contracts' ? icon_lock_2 : icon_lock}`} alt="history" width="18px" className="icon-home" />
           {isShowFullSidebar && <span>Contracts History</span>}
         </a>
       </li>
@@ -36,7 +48,7 @@ export default function SidebarAdmin(props) {
       {user.role == "super-admin" && (
         <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'prompts' })}>
           <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/prompts">
-            <i className="fa-regular fa-comment" style={{ color: `${routeName === 'prompts' ? '#fff' : '#000'}` }}></i>
+            <img src={`${routeName === 'prompts' ? icon_chat_2 : icon_chat}`} alt="prompts" width="18px" className="icon-home" />
             {isShowFullSidebar && <span>Prompt Management</span>}
           </a>
         </li>
@@ -44,15 +56,15 @@ export default function SidebarAdmin(props) {
 
       {/* Check if the user's role is "super-admin" */}
       {user.role == "super-admin" && (
-        <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'configuations' })}>
+        <li className={classNames('sidebar-item d-none', { 'active-sidebar': routeName === 'configuations' })}>
           <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/configuations">
-            <i className="fa-solid fa-cog" style={{ color: `${routeName === 'configuations' ? '#fff' : '#000'}` }}></i>
+            <img src={`${routeName === 'configuations' ? icon_setting_2 : icon_setting}`} alt="prompts" width="18px" className="icon-home" />
             {isShowFullSidebar && <span>Configuration</span>}
           </a>
         </li>
       )}
 
-      <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'utilities' })}>
+      <li className={classNames('sidebar-item d-none', { 'active-sidebar': routeName === 'utilities' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/utilities">
           <i className="fa-solid fa-paperclip" style={{ color: `${routeName === 'utilities' ? '#fff' : '#000'}` }}></i>
           {isShowFullSidebar && <span>Utilities</span>}
@@ -61,7 +73,7 @@ export default function SidebarAdmin(props) {
 
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'analyses' })}>
         <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/analyses">
-          <i className="fa-solid fa-chart-bar" style={{ color: `${routeName === 'analyses' ? '#fff' : '#000'}` }}></i>
+        <img src={`${routeName === 'analyses' ? icon_analysis_2 : icon_analysis}`} alt="prompts" width="18px" className="icon-home" />
           {isShowFullSidebar && <span>Analyses</span>}
         </a>
       </li>

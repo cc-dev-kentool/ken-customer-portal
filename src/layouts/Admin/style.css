@@ -18,7 +18,7 @@
   text-align: center;
   border-bottom: 1px solid #f2f2f2;
   margin-bottom: 30px;
-  padding-top: 30px;
+  padding-top: 10px;
 }
 
 .sidebar .logo a {
@@ -41,17 +41,18 @@
   border-radius: 50%;
   padding-top: 2px;
   width: 28px;
-  margin: -45px 10px 0 0;
+  margin: -65px -10px 0 0;
   background-color: #fff;
 }
 
 .sidebar .expand-sidebar {
-  margin-right: -10px;
+  margin-top: -44px;
 }
 
 .sidebar .btn-add-document {
   background-color: #26ADC9;
   width: 100%;
+  height: 60px;
   border-radius: 10px;
   border: 1px solid #26ADC9;
   color: white;
@@ -76,7 +77,7 @@
 .sidebar .sidebar-nav {
   margin-bottom: 15px;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .sidebar .sidebar-item {
@@ -87,6 +88,15 @@
   background-color: transparent;
   color: #000;
   padding: 10px;
+}
+
+.sidebar .icon-admin {
+  width: 20px;
+}
+
+.sidebar .sidebar-link .icon-home {
+  margin-right: 10px;
+  margin-top: -6px;
 }
 
 .sidebar .active-sidebar {
@@ -107,16 +117,29 @@
   margin-top: 15px;
   border-radius: 10px;
   padding: 10px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .sidebar .main-menu-title {
   font-weight: bold;
+  cursor: pointer;
 }
 
-.sidebar .main-menu-extended {
-  width: 270px;
+.sidebar .main-menu-extended, .sidebar .main-menu:hover {
+  width: 240px;
   z-index: 2;
+}
+
+.sidebar .main-menu:hover .list-file {
+  display: block;
+}
+
+.sidebar .list-file-item {
+  font-size: 13px;
+}
+
+.sidebar .main-menu .none-file {
+  display: none;
 }
 
 .sidebar .list-file {
@@ -153,7 +176,7 @@
 /* Popup upload */
 .content-popup-upload,
 .area-upload p {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .area-upload {
@@ -244,6 +267,21 @@
 
 .custom-nav-dropdown .dropdown-toggle::after {
   display: none;
+}
+
+.dropdown-index .dropdown-item:hover .acc-info {
+  display: block;
+}
+
+.acc-info {
+  list-style-type: none;
+  display: none;
+  position: absolute;
+  right: 50px;
+  padding: 10px;
+  margin-top: 3px;
+  background-color: #fff;
+  border: 1px solid #ccc;
 }
 
 .error {

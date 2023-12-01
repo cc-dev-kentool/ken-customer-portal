@@ -1,3 +1,12 @@
+/* analysis-index */
+.analysis-index {
+  background-color: #fff;
+  height: 90vh;
+  border-radius: 10px;
+  text-align: center;
+  padding-top: 10px;
+}
+
 /* Main Content */
 .main-content {
   overflow-y: auto;
@@ -20,15 +29,34 @@
 }
 
 .main-content .icon-show-pdf {
-  float: right;
-  margin: 35px 10px 0 0;
+  right: 10px;
+  margin-top: 25px;
   cursor: pointer;
+  position: absolute;
+  z-index: 9;
+}
+
+.main-content .icon-pdf-expand {
+  right: auto;
+  margin-left: 40px;
+}
+
+.main-content .icon-download-pdf {
+  margin: 25px 0 0 10px;
+  cursor: pointer;
+  position: absolute;
+  z-index: 9;
 }
 
 /* Progress Aanalysis */
 
 .analysis-progress {
   padding-top: 10px;
+}
+
+.messUploading {
+  font-size: 15px;
+  margin: 20px;
 }
 
 /* Risk content */
@@ -53,12 +81,6 @@
   font-weight: 600;
   line-height: 28px;
   margin: 10px;
-}
-
-.risk-content .icon-download-pdf {
-  float: left;
-  margin: -23px 5px 0 0;
-  cursor: pointer;
 }
 
 .table-content {
@@ -95,7 +117,6 @@
 
 .source-text {
   border-bottom: 1px solid #cccccc;
-  padding-bottom: 10px;
 }
 
 .source-text .source-text-item:hover {
@@ -117,10 +138,11 @@
   border-radius: 15px;
   height: 28vh;
   margin-top: 10px;
+  position: relative;
 }
 
 .full-chat {
-  height: 88vh;
+  height: 89vh;
   margin-top: 0;
 }
 
@@ -146,13 +168,13 @@
 }
 
 .conversation {
-  height: 65%;
+  height: 64%;
   overflow: auto;
-  margin-top: 20px;
+  margin-top: 35px;
 }
 
 .height-full {
-  height: 88%;
+  height: 83%;
 }
 
 .conversation .question {
@@ -181,14 +203,20 @@
   border-radius: 8px;
 }
 
+.area-input {
+  position: absolute;
+  bottom: 10px;
+  width: -webkit-fill-available;
+  margin-right: 10px;
+}
+
 .field-input {
-  width: 99%;
-  background-color: #f4fbfc;
+  background-color: #f4fbfc !important;
   border: none !important;
+  box-shadow: none !important;
   border-radius: 10px;
-  height: 40px;
   margin-right: 3px;
-  padding: 0 45px 0 10px;
+  padding: 10px 45px 10px 10px;
 }
 
 .iconSend {
@@ -200,8 +228,12 @@
   z-index: 10;
 }
 
+.disabled-icon-send {
+  opacity: 0.5;
+}
+
 .iconLoading {
-  margin-top: 10%;
+  margin-top: -10%;
 }
 
 @keyframes dot-pulse {

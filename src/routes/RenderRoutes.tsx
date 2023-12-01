@@ -11,6 +11,7 @@ const Analysis = lazy(() => import("pages/Analyses/Analysis"));
 const Dashboard = lazy(() => import("pages/Dashboard"));
 const Configuation = lazy(() => import("pages/Configuation"));
 const Utilities = lazy(() => import("pages/Utilities/Utilities"));
+const Page404 = lazy(() => import("pages/OtherPage/Page404"));
 
 // Defines a type for individual route objects
 type routeItem = {
@@ -120,6 +121,18 @@ const ROUTES: routes[] = [
     title: "Ken", // Title that will be displayed in the header
     roles: ["super-admin"],
   },
+  // Route for displaying "permission denied" message
+  {
+    path: "/404", // URL path
+    name: "permission-denined", // identifier for this route
+    key: "ROOT", // unique identifier for this component instance
+    exact: true, // exact match is required to load the component
+    component: Page404, // component that will be loaded on this route
+    routes: [], // child routes if any
+    requiredAuth: true, // only authenticated users can access this route
+    title: "Page404", // title that will be displayed in the header
+    roles: ["admin", "super-admin", "member"], // array of user roles who can access this route
+  },
 ];
 
 // Exporting an object that contains all the routes for the application
@@ -171,13 +184,9 @@ function RouteWithSubRoutes(route: routes) {
           }
         }
 
-        // Redirect to 403 page if user doesn't have required role for the current route
+        // Redirect to 404 page if user doesn't have required role for the current route
         if (localStorage.getItem("token") && !route.roles.includes(user.role)) {
-          if (user.role === 'member') {
-            window.location.href = "/analyses";
-          } else {
-            window.location.href = "/";
-          }
+          window.location.href = "/404";
         }
 
         // Render the given component and pass down the props and sub-routes

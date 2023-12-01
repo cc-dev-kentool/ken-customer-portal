@@ -1,7 +1,7 @@
 import { authActionType } from "../actionTypes";
 import { add as addAlert } from "store/actions/alert";
 import { setLoading, setStatus } from "store/actions/app";
-import { error, code } from "constants/error";
+import { error } from "constants/error";
 import { onError } from "./base";
 import API from "service/api";
 
@@ -16,48 +16,49 @@ export function login(data) {
       email: data.username,
       password: data.password,
     }
-    if (navigator.onLine) {
+    fetch('https://example.com', {
+      mode: 'no-cors' // Để tránh lỗi CORS trong ví dụ này
+    }).then(async () => {
       await API({ url: "/login", method: "POST", data })
-      .then((result) => {
-        // Set loading state to false
-        dispatch(setLoading(false));
+        .then((result) => {
+          // Set loading state to false
+          dispatch(setLoading(false));
 
-        // Otherwise, set user information in local storage and set login success state
-        localStorage.setItem("token", result.data.data.token);
-        localStorage.setItem("user", JSON.stringify(result.data.data.user));
+          // Otherwise, set user information in local storage and set login success state
+          localStorage.setItem("token", result.data.data.token);
+          localStorage.setItem("user", JSON.stringify(result.data.data.user));
 
-        dispatch({
-          type: authActionType.LOGIN_SUCCESS,
-          payload: true,
-        });
-        dispatch({
-          type: authActionType.ERROR_LOGIN,
-          payload: "",
-        });
+          dispatch({
+            type: authActionType.LOGIN_SUCCESS,
+            payload: true,
+          });
+          dispatch({
+            type: authActionType.ERROR_LOGIN,
+            payload: "",
+          });
 
-        const role = result.data.data.user.role
-        if ( role === "admin" || role === "super-admin") {
-          window.location.href = "/";
-        } else {
-          window.location.href = "/analyses";
-        }
-      })
-      .catch((err) => {
-        // If there is an error, set loading state to false and set error message
-        dispatch(setLoading(false));
-        dispatch({
-          type: authActionType.ERROR_LOGIN,
-          payload: "The email or password you entered is incorrect. Please try again!",
+          const role = result.data.data.user.role
+          if (role === "admin" || role === "super-admin") {
+            window.location.href = "/";
+          } else {
+            window.location.href = "/analyses";
+          }
+        })
+        .catch((err) => {
+          // If there is an error, set loading state to false and set error message
+          dispatch(setLoading(false));
+          dispatch({
+            type: authActionType.ERROR_LOGIN,
+            payload: "The email or password you entered is incorrect. Please try again!",
+          });
         });
-      });
-    } else {
+    }).catch(() => {
       dispatch(setLoading(false));
       dispatch({
         type: authActionType.ERROR_LOGIN,
         payload: "Please check your Internet connection and try again.",
       });
-    }
-    
+    });
   };
 }
 
@@ -75,7 +76,7 @@ export function logout() {
         dispatch({
           type: authActionType.LOGOUT,
           payload: false,
-        }); 
+        });
         localStorage.clear();
       })
       .catch((err) => dispatch(onError(err)));

@@ -110,7 +110,7 @@ export default function ContractHistory(props) {
         },
       },
       render: (_, { num_of_questionmark, uuid, file_name }) => (
-        <p className="question" onClick={() => getListTopic(uuid, file_name)}>
+        <p className="question" onClick={() => {Number(num_of_questionmark) > 0 && getListTopic(uuid, file_name)}}>
           {num_of_questionmark}
         </p>
       ),

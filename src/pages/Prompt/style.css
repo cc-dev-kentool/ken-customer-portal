@@ -1,22 +1,22 @@
-/* List user */
-.user-managerment {
+/* List prompt */
+.prompt-managerment {
     background-color: #fff;
     min-height: 90vh;
     width: 100%;
     padding: 20px;
 }
 
-.user-managerment .title {
+.prompt-managerment .title {
     font-size: 30px;
     font-weight: bold;
 }
 
-.user-managerment .add-prompt {
+.prompt-managerment .add-prompt {
     text-align: right;
     font-size: 30px;
 }
 
-.user-managerment .add-prompt button {
+.prompt-managerment .add-prompt button {
     background-color: #ccc;
     padding: 0px 17px 5px 17px;
     border-radius: 50%;
@@ -42,26 +42,35 @@
     background-color: #e5e5e5;
 }
 
-/* Add new user, Edit user */
+/* Edit Prompt */
+.modal-edit-prompt {
+    width: 90%;
+    left: 5%;
+}
 
-.edit-user .titile-add {
+.edit-prompt .titile-add {
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
 }
 
-.edit-user .center_form {
+.edit-prompt .center_form {
     margin: 10px auto;
-    width: 80%;
+    width: 98%;
 }
 
-.edit-user .label-input {
+.edit-prompt .content-prompt {
+    max-height: 65vh;
+    overflow: auto;
+}
+
+.edit-prompt .label-input {
     font-size: 16px !important;
     margin-bottom: 5px;
     font-weight: bold;
 }
 
-.edit-user .btn-save {
-    margin-top: 10px;
+.edit-prompt .btn-save {
+    margin-top: 30px;
     width: 120px;
     height: 35px;
     border: none;
@@ -70,7 +79,11 @@
     color: #fff;
 }
 
-.edit-user .btn-save:hover {
+.edit-prompt .btn-save:hover {
+    background: #A8DEE9;
+}
+
+.edit-prompt .btn-disabled {
     background: #A8DEE9;
 }
 

@@ -16,12 +16,12 @@ export default function ExportPdf(props) {
     if (data.topic === 'Readability') {
       return (
         <div>
-          <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br/>
+          <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br />
           <span>Three worst clauses: </span>
-          {data.comment["Three worst clauses"].length === 0 
+          {data.comment["Three worst clauses"].length === 0
             ? "N/A"
             : data.comment["Three worst clauses"].map((item, index) => (
-              <><br /><span key={index} className="m-3"> - {item[`worst clause ${index+1}`]} ({item.score})</span></>
+              <><br /><span key={index} className="m-3"> - {item[`worst clause ${index + 1}`]} ({item.score})</span></>
             ))
           }
         </div>
@@ -53,14 +53,12 @@ export default function ExportPdf(props) {
                   <Col sm="2" className="title-left p-0">Source Text</Col>
                   <Col sm="10" className="p-0">
                     {data?.analysis_result?.source_text?.map((text, index) => (
-                      <p
-                        key={text.key}
-                        className="pt-2 mb-2"
-                      >
+                      <div key={text.key}>
                         {index >= 1 && <hr />}
-                        {text.value === 'n/a' ? <p>n/a</p> : text.value}
-                      </p>
-                        
+                        <p className="pt-2 mb-2">
+                          {text.value === 'n/a' ? <span>n/a</span> : text.value}
+                        </p>
+                      </div>
                     ))}
                   </Col>
                 </Row>

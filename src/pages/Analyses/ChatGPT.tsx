@@ -8,10 +8,14 @@ import classNames from "classnames";
 export default function ChatGPT(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
-  const { showChat, isShowFullChat, fileUploadId, setShowChat, setIsShowFullChat } = props;
+  const { isShowFullChat, fileUploadId, setShowChat, setIsShowFullChat } = props;
 
   const [message, setMessage] = useState<string>("")
+  const [message2, setMessage2] = useState<string>("")
   const [showLoading, setShowLoading] = useState<boolean>(false);
+  const [isSendMessage, setIsSendMessage] = useState<boolean>(false);
+  const [isDisabledBtnSend, setIsDisabledBtnSend] = useState<boolean>(true);
+  const [dataConversation, setDataConversation] = useState<any>([]);
 
   // Retrieves the conversation array from the Redux store's state
   const [conversation, getConversationSuccess] = useAppSelector((state) => [
@@ -19,11 +23,30 @@ export default function ChatGPT(props) {
     state.conversation.getConversationSuccess,
   ]);
 
+  // Effect hook to scroll to bottom of messages container whenever enquiry state changes.
   useEffect(() => {
-    // Resets loading state and message input when conversation changes
-    setShowLoading(false);
-    setMessage("")
-  }, [conversation])
+    if (getConversationSuccess) {
+      setShowLoading(false);
+      setIsSendMessage(false);
+      setDataConversation(conversation)
+      setMessage("");
+      setMessage2("");
+      scrollToBottom();
+    }
+  }, [getConversationSuccess, conversation]);
+
+  useEffect(() => {
+    if (dataConversation.length > 0 || isSendMessage) {
+      scrollToBottom();
+    }
+  }, [dataConversation.length, isSendMessage])
+
+  const scrollToBottom = () => {
+    const element = window.document.getElementById("conversation");
+    if (element) {
+      element.scrollTop = element.scrollHeight
+    }
+  }
 
   const handleCloseChat = () => {
     // Closes the chat window and sets isShowFullChat to false
@@ -32,9 +55,25 @@ export default function ChatGPT(props) {
   }
 
   const handleSendMessage = () => {
-    // Sets loading state to true and dispatches a postConversation action with the fileUploadId and message value
-    setShowLoading(true);
-    dispatch(postConversation(fileUploadId, message.trim()));
+    if (message.trim()) {
+      // Sets loading state to true and dispatches a postConversation action with the fileUploadId and message value
+      setShowLoading(true);
+      setIsSendMessage(true);
+      setIsDisabledBtnSend(true);
+      dispatch(postConversation(fileUploadId, message.trim()));
+    }
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
+      setMessage2(e.target.value.trim());
+    }
+  };
+  
+  const onChangeTextarea = (value) => {
+    setMessage(value)
+    value.trim() ? setIsDisabledBtnSend(false) : setIsDisabledBtnSend(true);
   }
 
   return (
@@ -44,67 +83,64 @@ export default function ChatGPT(props) {
         aria-hidden="true"
         onClick={handleCloseChat}
       ></i>
-      {getConversationSuccess
-        ? <>
-          {!isShowFullChat
-            ? <i
-              className="fa-solid fa-expand icon-expand"
-              onClick={() => setIsShowFullChat(true)}
-            />
-            : <i
-              className="fa-solid fa-minus icon-expand"
-              onClick={() => setIsShowFullChat(false)}
-            />}
-          <div className={classNames("conversation", { "height-full": isShowFullChat })}>
-            {conversation?.map(item => {
-              return (
-                // Renders each conversation item with question and answer labels
-                <div key={item.uuid}>
-                  <p className="question">
-                    <label className="question-content">{item.question}</label>
-                  </p>
-                  <p className="answer">
-                    <label className="answer-content">{item.answer}</label>
-                  </p>
-                </div>
-              )
-            })}
-            {showChat && showLoading &&
-              <>
-                {/* Renders the user's message and a loading animation when showChat and showLoading are true */}
-                <p className="question">
-                  <label className="question-content">{message}</label>
-                </p>
-                <div className="dot-container">
-                  <div className="dot"></div>
-                  <div className="dot"></div>
-                  <div className="dot"></div>
-                </div>
-              </>
-            }
-          </div>
-          <div className="area-input">
-            {/* Sends the message when the send button is clicked */}
-            <button
-              type="submit"
-              onClick={handleSendMessage}
-              className="iconSend"
-              disabled={props.isDisabled}
-            >
-              <img src={icon_send} alt="" />
-            </button>
-            <input
-              type="text"
-              className="field-input form-control"
-              value={showLoading ? "" : message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyDown={(event) => {
-                event.key === 'Enter' && handleSendMessage()
-              }}
-            />
-          </div>
-        </>
-        : <div className="text-center iconLoading"><CircularProgress color="inherit" /></div>
+      {!isShowFullChat
+        ? <i
+          className="fa-solid fa-expand icon-expand"
+          onClick={() => setIsShowFullChat(true)}
+        />
+        : <i
+          className="fa-solid fa-minus icon-expand"
+          onClick={() => setIsShowFullChat(false)}
+        />}
+      <div id="conversation" className={classNames("conversation", { "height-full": isShowFullChat })}>
+        {dataConversation?.map(item => {
+          return (
+            // Renders each conversation item with question and answer labels
+            <div key={item.uuid}>
+              <p className="question">
+                <label className="question-content">{item.question}</label>
+              </p>
+              <p className="answer">
+                <label className="answer-content">{item.answer}</label>
+              </p>
+            </div>
+          )
+        })}
+        {showLoading &&
+          <>
+            {/* Renders the user's message and a loading animation when showChat and showLoading are true */}
+            <p className="question">
+              <label className="question-content">{message2 || message}</label>
+            </p>
+            <div className="dot-container">
+              <div className="dot"></div>
+              <div className="dot"></div>
+              <div className="dot"></div>
+            </div>
+          </>
+        }
+      </div>
+      <div className="area-input">
+        {/* Sends the message when the send button is clicked */}
+        <button
+          type="submit"
+          onClick={handleSendMessage}
+          className={classNames("iconSend", {"disabled-icon-send" : isDisabledBtnSend})}
+          disabled={isDisabledBtnSend}
+        >
+          <img src={icon_send} alt="" />
+        </button>
+        <textarea
+          rows={isShowFullChat ? 2 : 1}
+          className="field-input form-control"
+          value={showLoading ? "" : message}
+          onChange={(e) => onChangeTextarea(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+      </div>
+
+      {!isSendMessage && !getConversationSuccess && 
+        <div className="text-center iconLoading"><CircularProgress color="inherit" /></div>
       }
 
     </div>
