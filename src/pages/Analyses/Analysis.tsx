@@ -32,8 +32,9 @@ export default function Analysis(props) {
 
   // The useAppSelector hook is used here to extract data from the Redux store state.
   // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
-  const [dataAnaly, conversation, getConversationSuccess] = useAppSelector((state) => [
+  const [dataAnaly, getDataAnalysisSuccess, conversation, getConversationSuccess] = useAppSelector((state) => [
     state.analysis.dataAnalysis,
+    state.analysis.getDataAnalysisSuccess,
     state.conversation.conversation,
     state.conversation.getConversationSuccess,
   ]);
@@ -110,7 +111,7 @@ export default function Analysis(props) {
       setIsShowFullChat={setIsShowFullChat}
       setShowPdf={setShowPdf}
     >
-      {dataAnalysis?.length > 0 ?
+      {getDataAnalysisSuccess && dataAnalysis?.length > 0 ?
         <Row className="main-content">
           <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
             {dataAnalysis?.length > 0 && currentStatus === 'done' && (
@@ -166,7 +167,7 @@ export default function Analysis(props) {
             }
           </Col>
         </Row> :
-        <div className="analysis-index">
+        getDataAnalysisSuccess && <div className="analysis-index">
           <h1>Analyses</h1>
         </div>
       }

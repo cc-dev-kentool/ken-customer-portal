@@ -79,7 +79,7 @@ export default function Sidebar(props) {
     >
       <div className="bg-white">
         <div className="logo">
-          <a href="/">
+          <a href={`${user.role === "member" ? "/analyses" : "/"}`}>
             <p className="mb-2"><img src={logo} alt="logo" width="70%"/></p>
           </a>
           <span
@@ -100,7 +100,7 @@ export default function Sidebar(props) {
           }
 
           {/* Render SidebarMember component if user role is "member" or ("admin" or "super-admin" and routeName is "analyses") */}
-          {(user.role === "member" || (["admin", "super-admin"].includes(user.role) && routeName === "analyses")) &&
+          {(user.role === "member" || (["admin", "super-admin"].includes(user.role))) && routeName === "analyses" &&
             <SidebarMember
               role={user.role}
               isShowFiles={isShowFiles}

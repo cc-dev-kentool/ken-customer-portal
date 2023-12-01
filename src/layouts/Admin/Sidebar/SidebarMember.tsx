@@ -35,13 +35,13 @@ export default function SidebarMember(props) {
   let defaultValue: number;
   switch (role) {
     case 'super-admin':
-      defaultValue = 460;
-      break;
-    case 'admin':
       defaultValue = 420;
       break;
+    case 'admin':
+      defaultValue = 380;
+      break;
     default:
-      defaultValue = 240;
+      defaultValue = 200;
   }
 
   // Declare and initialize states using the useState hook
@@ -59,22 +59,29 @@ export default function SidebarMember(props) {
 
   // Set up side effect using the useEffect hook to fetch list of files when component mounts
   useEffect(() => {
-    dispatch(getListFile());
+    dispatch(getListFile(files.length <= 0));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Set up side effect using the useEffect hook to update the heightMenu state when window resizes
   useEffect(() => {
     window.addEventListener('resize', function () {
-      setHeightMenu(window.innerHeight - defaultValue);
+      setHeightMenu(window.innerHeight - defaultValue - 40);
     });
   }, []);
 
-  
+  useEffect(() => {
+    if (!isShowFullSidebar) {
+      setHeightMenu(heightMenu + 40)
+    } else {
+      setHeightMenu(heightMenu - 40)
+    }
+  }, [isShowFullSidebar])
+
   const el: any = document.getElementById('activeFile');
   useEffect(() => {
     if (!isClickToFile) {
-      el?.scrollIntoView({ behavior: "smooth", block: "center"});
+      el?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [el]);
 
