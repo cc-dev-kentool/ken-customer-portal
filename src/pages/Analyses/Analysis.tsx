@@ -111,7 +111,7 @@ export default function Analysis(props) {
       setIsShowFullChat={setIsShowFullChat}
       setShowPdf={setShowPdf}
     >
-      {getDataAnalysisSuccess && dataAnalysis?.length > 0 ?
+      {dataAnalysis?.length > 0 ?
         <Row className="main-content">
           <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
             {dataAnalysis?.length > 0 && currentStatus === 'done' && (
