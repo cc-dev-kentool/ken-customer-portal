@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
-import { getListPrompt } from "store/actions/prompt";
+import { getListTopic } from "store/actions/prompt";
 import generatePDF, { Margin } from 'react-to-pdf';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -49,7 +49,7 @@ export default function Analysis(props) {
 
       dispatch(getAnalysisData(id, true));
       setFieldId(id);
-      dispatch(getListPrompt(false));
+      dispatch(getListTopic(false));
 
       if (runningTimeout) {
         clearTimeout(runningTimeout);

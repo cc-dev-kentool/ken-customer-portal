@@ -18,14 +18,14 @@ export default function AnalysisProgress(props) {
   const { showPdf, dataTopics, currentStatus } = props;
 
   // Get listPrompt from app state using useAppSelector hook
-  const [listPrompt] = useAppSelector((state) => [
-    state.prompts.listPrompt,
+  const [topics] = useAppSelector((state) => [
+    state.prompts.topics,
   ]);
 
   const defaultLengthText = showPdf ? 10 : 20
 
   // Sort the listPrompt array based on topic_order property
-  listPrompt.sort(function (a, b) {
+  topics.sort(function (a, b) {
     if (a.topic_order < b.topic_order) {
       return -1;
     }
@@ -176,7 +176,7 @@ export default function AnalysisProgress(props) {
       </> :
       <>
         <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
-          {listPrompt.map((prompt, index) => (
+          {topics.map((prompt, index) => (
             (index < 6) && (<Step key={prompt.uuid}>
               {contentStep(prompt)}
             </Step>)
@@ -184,7 +184,7 @@ export default function AnalysisProgress(props) {
           ))}
         </Stepper>
         <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
-          {listPrompt.map((prompt, index) => (
+          {topics.map((prompt, index) => (
             (index >= 6) && (<Step key={prompt.uuid}>
               {contentStep(prompt)}
             </Step>)
