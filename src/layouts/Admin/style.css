@@ -95,8 +95,8 @@
 }
 
 .sidebar .sidebar-link .icon-home {
-  margin-right: 10px;
-  margin-top: -6px;
+  margin: -6px 10px 0 0;
+  width: 18px;
 }
 
 .sidebar .active-sidebar {
@@ -164,13 +164,36 @@
   margin-top: 7px;
 }
 
-.sidebar .version {
+.sidebar .footer {
   position: fixed;
   bottom: 0;
-  text-align: center;
   background-color: #fff;
-  margin: 0;
-  padding: 13px 0;
+  padding-top: 10px;
+}
+
+.sidebar .btn-contact {
+  background-color: transparent;
+  border: none;
+  padding-left: 24px;
+  margin-bottom: 5px;
+}
+
+.small-sidebar .btn-contact {
+  padding-left: 54px;
+}
+
+.sidebar .icon-contact {
+  margin-top: -5px;
+  margin-right: 10px;
+}
+
+.sidebar .version {
+  padding-left: 23px;
+  text-align: left;
+}
+
+.small-sidebar .version {
+  padding-left: 15px;
 }
 
 /* Popup upload */

@@ -36,17 +36,17 @@ export default function SidebarMember(props) {
   let defaultValue: number;
   switch (role) {
     case 'super-admin':
-      defaultValue = 420;
+      defaultValue = 485;
       break;
     case 'admin':
-      defaultValue = 380;
+      defaultValue = 445;
       break;
     default:
-      defaultValue = 200;
+      defaultValue = 265;
   }
 
   // Declare and initialize states using the useState hook
-  const [heightMenu, setHeightMenu] = useState<number>(window.innerHeight - defaultValue)
+  const [heightMenu, setHeightMenu] = useState<number>(0)
   const [activeFile, setActiveFile] = useState<string>("");
   const [isClickToFile, setIsClickToFile] = useState<boolean>(false);
 
@@ -64,10 +64,20 @@ export default function SidebarMember(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const element = window.document.getElementById("sidebar");
+  useEffect(() => {
+    if (element) {
+      setHeightMenu(element.scrollHeight - defaultValue)
+    }
+  }, [element])
+
   // Set up side effect using the useEffect hook to update the heightMenu state when window resizes
   useEffect(() => {
     window.addEventListener('resize', function () {
-      setHeightMenu(window.innerHeight - defaultValue - 40);
+      const element = window.document.getElementById("sidebar");
+      if (element) {
+        setHeightMenu(element.scrollHeight - defaultValue);
+      }
     });
   }, []);
 
@@ -140,13 +150,13 @@ export default function SidebarMember(props) {
         {isShowFullSidebar && <span>New Document</span>}
       </button>
 
-      {files?.length > 0 && <div
+      {files?.length > 0 && 
+      <div
         className={
           classNames("main-menu pr-0",
             { "main-menu-extended": (isShowFiles && !isShowFullSidebar) }
           )
         }
-        style={{ height: heightMenu }}
       >
         <p className="main-menu-title">
           <i className="fa-solid fa-chevron-down" />
@@ -154,7 +164,7 @@ export default function SidebarMember(props) {
         </p>
         <div
           className={classNames("list-file", { "none-file": !isShowFiles })}
-          style={{ height: '84%' }}
+          style={{ maxHeight: `${heightMenu - 55}px` }}
         >
           {files.map((file) => {
             return (
