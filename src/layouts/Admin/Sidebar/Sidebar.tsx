@@ -121,7 +121,7 @@ export default function Sidebar(props) {
         "full-sidebar": isShowFullSidebar,
         "small-sidebar": !isShowFullSidebar
       })}>
-        <a href="/analyses">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfUdRoTe2bYxoZJdLNtJ174Ctd8Pd9jyccadmSlgBbqX4_OUQ/viewform" target="_blank">
           <button className={`btn-contact ${!isShowFullSidebar && 'text-center'}`}>
             <img src={icon_email} alt="logo" width="15px" className="icon-contact" />
             {isShowFullSidebar && <span>Contact Administrator</span>}
