@@ -9,9 +9,10 @@ import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
 import PdfDocument from "./PdfDocument";
 import ChatGPT from "./ChatGPT";
-import classNames from "classnames";
 import AdminLayout from "layouts/Admin";
 import ExportPdf from "./ExportPdf";
+import Page404Component from "components/Page404/Page404Component";
+import classNames from "classnames";
 import "./style.css";
 
 // This is the Analysis component which is exported as default.
@@ -32,9 +33,9 @@ export default function Analysis(props) {
 
   // The useAppSelector hook is used here to extract data from the Redux store state.
   // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
-  const [dataAnaly, getDataAnalysisSuccess, conversation, getConversationSuccess] = useAppSelector((state) => [
+  const [dataAnaly, hasPermission, conversation, getConversationSuccess] = useAppSelector((state) => [
     state.analysis.dataAnalysis,
-    state.analysis.getDataAnalysisSuccess,
+    state.analysis.hasPermission,
     state.conversation.conversation,
     state.conversation.getConversationSuccess,
   ]);
@@ -112,7 +113,7 @@ export default function Analysis(props) {
       setShowPdf={setShowPdf}
       setValueSearch={setValueSearch}
     >
-      {dataAnalysis?.length > 0 ?
+      {hasPermission && dataAnalysis?.length > 0 ?
         <Row className="main-content">
           <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
             {dataAnalysis?.length > 0 && currentStatus === 'done' && (
@@ -168,10 +169,12 @@ export default function Analysis(props) {
             }
           </Col>
         </Row> :
-        getDataAnalysisSuccess && <div className="analysis-index">
+        hasPermission && <div className="analysis-index">
           <h1>Analyses</h1>
         </div>
       }
+
+      {!hasPermission && <Page404Component />}
 
       {isDowndLoad &&
         <ExportPdf dataAnalysis={dataAnalysis} conversation={conversation} />

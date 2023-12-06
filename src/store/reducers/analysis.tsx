@@ -4,6 +4,7 @@ import { analysisActionType } from "../actionTypes"
 const initialState = {
   dataAnalysis: [],
   getDataAnalysisSuccess: false,
+  hasPermission: true,
   filePath: "",
   uploadPdf: "",
   uploadPdfSuccess: false,
@@ -23,6 +24,11 @@ const getAnalysisData = (state = initialState, action) => {
       return {
         ...state,
         getDataAnalysisSuccess: action.payload
+      }
+    case analysisActionType.HAS_PERMISSION:
+      return {
+        ...state,
+        hasPermission: action.payload
       }
     case analysisActionType.SET_FILE_PATH:
       return {

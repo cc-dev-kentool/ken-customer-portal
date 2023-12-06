@@ -11,6 +11,10 @@ export function getAnalysisData(id, isLoading = false) {
       type: analysisActionType.GET_DATA_ANALYTICS_SUCCESS,
       payload: false,
     });
+    dispatch({
+      type: analysisActionType.HAS_PERMISSION,
+      payload: true,
+    });
     await API({ url: `/analysis/${id}`, method: "get" })
       .then((result) => {
         isLoading && dispatch(setLoading(false));
@@ -29,7 +33,14 @@ export function getAnalysisData(id, isLoading = false) {
           type: analysisActionType.GET_DATA_ANALYTICS_SUCCESS,
           payload: false,
         });
-        err !== "404" && dispatch(onError(err));
+        if (err.status === 404) {
+          dispatch({
+            type: analysisActionType.HAS_PERMISSION,
+            payload: false,
+          });
+        } else {
+          dispatch(onError(err));
+        }
       });
   };
 }

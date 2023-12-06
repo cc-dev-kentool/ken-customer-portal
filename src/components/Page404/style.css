@@ -1,0 +1,23 @@
+.container-fluid {
+    background-color: #fff;
+    min-height: 90vh;
+    border-radius: 10px;
+}
+
+.page404 {
+    width: 450px;
+    margin-top: 200px;
+}
+
+.btn-go-analyese {
+    background-color: #26ADC9;
+    border: 1px solid #26ADC9;
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: #fff;
+}
+
+.btn-go-analyese:hover {
+    background-color: #A8DEE9;
+    border-color: #A8DEE9;
+  }

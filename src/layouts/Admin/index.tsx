@@ -50,7 +50,7 @@ function AdminLayout(props) {
         />
         <main>
           <Backdrop
-            sx={{ color: '#fff', zIndex: 2 }}
+            sx={{ color: '#fff', zIndex: 99 }}
             open={isLoading}
           >
             <CircularProgress color="inherit" />

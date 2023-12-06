@@ -8,12 +8,13 @@ import UploadFile from "pages/Analyses/UploadFile";
 import SidebarAdmin from "./SidebarAdmin";
 import SidebarMember from "./SidebarMember";
 import logo from "../../../assets/images/logo.png"
+import icon_email from "../../../assets/icon/icon_email.svg";
 
 // Export the Sidebar component as the default export
 export default function Sidebar(props) {
   // Get the dispatch function from the useAppDispatch hook
   const dispatch = useAppDispatch();
-  
+
   // Destructure the props object for easier access to its properties
   const {
     routeName,
@@ -81,7 +82,7 @@ export default function Sidebar(props) {
       <div className="bg-white">
         <div className="logo">
           <a href={`${user.role === "member" ? "/analyses" : "/"}`}>
-            <p className="mb-2"><img src={logo} alt="logo" width="70%"/></p>
+            <p className="mb-2"><img src={logo} alt="logo" width="70%" /></p>
           </a>
           <span
             className={classNames("sidebar-toggle", { "expand-sidebar": !isShowFullSidebar })}
@@ -93,7 +94,7 @@ export default function Sidebar(props) {
             <i className={`fa fa-chevron-${isShowFullSidebar ? 'left' : 'right'}`} aria-hidden="true"></i>
           </span>
         </div>
-        
+
         <div className="list-group">
           {/* Render SidebarAdmin component if user role is "admin" or "super-admin" */}
           {["admin", "super-admin"].includes(user.role) &&
@@ -116,7 +117,20 @@ export default function Sidebar(props) {
         </div>
       </div>
 
-      <p className={classNames("version", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}>KEN &copy; 1.0.0.18</p>
+      <div className={classNames("footer", {
+        "full-sidebar": isShowFullSidebar,
+        "small-sidebar": !isShowFullSidebar
+      })}>
+        <a href="/analyses">
+          <button className={`btn-contact ${!isShowFullSidebar && 'text-center'}`}>
+            <img src={icon_email} alt="logo" width="15px" className="icon-contact" />
+            {isShowFullSidebar && <span>Contact Administrator</span>}
+          </button>
+        </a>
+        <p className="version">
+          KEN &copy; 1.0.0.18
+        </p>
+      </div>
 
       {/* Render PopupDialog component with specific props */}
       <PopupDialog
