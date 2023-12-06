@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { PopupDialog } from "components/Modals/PopUpDialog";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { ContentTable } from "components/Table/ContentTable";
-import { getListPrompt } from "store/actions/prompt";
+import { getListTopic } from "store/actions/prompt";
 import { labelDisplay } from "helpers/until";
 import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import type { ColumnsType } from 'antd/es/table';
@@ -14,12 +14,10 @@ import './style.css';
 
 interface DataType {
   uuid: string;
-  topic_name: string;
-  prompt_text_1: string;
-  prompt_text_2: string;
-  prompt_text_3: string;
+  name: string;
+  prompts: any;
   update_at: string;
-  user_email: string;
+  updated_by: any;
 }
 
 // Defines a React functional component called "List" that takes props as its parameter
@@ -27,8 +25,8 @@ export default function ListPrompt(props) {
   // Retrieves the Redux store's state and dispatch function
   const dispatch = useAppDispatch();
 
-  const [listPrompt] = useAppSelector((state) => [
-    state.prompts.listPrompt,
+  const [topics] = useAppSelector((state) => [
+    state.prompts.topics,
   ]);
 
   const [isShowEdit, setIsShowEdit] = useState<boolean>(false);
@@ -36,104 +34,40 @@ export default function ListPrompt(props) {
 
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
-    dispatch(getListPrompt());
+    dispatch(getListTopic());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns: ColumnsType<DataType> = [
     {
       title: 'Topic',
-      dataIndex: 'topic_name',
-      key: 'topic_name',
+      dataIndex: 'name',
+      key: 'name',
       defaultSortOrder: 'descend',
-      width: '15%',
       sorter: {
         compare: (a, b) => {
-          return a.topic_name > b.topic_name ? 1 : -1;
+          return a.name > b.name ? 1 : -1;
         },
       },
-    },
-    {
-      title: 'Text 1',
-      dataIndex: 'prompt_text_1',
-      key: 'prompt_text_1',
-      sorter: {
-        compare: (a, b) => {
-          return a.prompt_text_1 > b.prompt_text_1 ? 1 : -1;
-        },
-      },
-      render: (_, { prompt_text_1, uuid }) => {
-        return <>
-          <p data-tooltip-id={`tooltip-1-${uuid}`}>
-            {prompt_text_1?.length > 100 ? labelDisplay(prompt_text_1, 100) : prompt_text_1}
-          </p>
-          {prompt_text_1?.length > 100 &&
-            <ReactTooltip
-              id={`tooltip-1-${uuid}`}
-              content={prompt_text_1}
-            />}
-        </>
-      }
-    },
-    {
-      title: 'Text 2',
-      dataIndex: 'prompt_text_2',
-      key: 'prompt_text_2',
-      sorter: {
-        compare: (a, b) => {
-          return a.prompt_text_2 > b.prompt_text_2 ? 1 : -1;
-        },
-      },
-      render: (_, { prompt_text_2, uuid }) => {
-        return <>
-          <p data-tooltip-id={`tooltip-2-${uuid}`}>
-            {prompt_text_2?.length > 100 ? labelDisplay(prompt_text_2, 100) : prompt_text_2}
-          </p>
-          {prompt_text_2?.length > 100 &&
-            <ReactTooltip
-              id={`tooltip-2-${uuid}`}
-              content={prompt_text_2}
-            />}
-        </>
-      }
-    },
-    {
-      title: 'Text 3',
-      dataIndex: 'prompt_text_3',
-      key: 'prompt_text_3',
-      sorter: {
-        compare: (a, b) => {
-          return a.prompt_text_3 > b.prompt_text_3 ? 1 : -1;
-        },
-      },
-      render: (_, { prompt_text_3, uuid }) => {
-        return <>
-          <p data-tooltip-id={`tooltip-3-${uuid}`}>
-            {prompt_text_3?.length > 100 ? labelDisplay(prompt_text_3, 100) : prompt_text_3}
-          </p>
-          {prompt_text_3?.length > 100 &&
-            <ReactTooltip
-              id={`tooltip-3-${uuid}`}
-              content={prompt_text_3}
-            />}
-        </>
-      }
+      width: '40%',
     },
     {
       title: 'Update By',
-      dataIndex: 'user_email',
-      key: 'user_email',
-      width: '10%',
+      dataIndex: 'updated_by',
+      key: 'updated_by',
       sorter: {
         compare: (a, b) => {
-          return a.user_email > b.user_email ? 1 : -1;
+          return a.updated_by?.email > b.updated_by?.email ? 1 : -1;
         },
       },
+      render: (_, { updated_by }) => (
+        <p>{updated_by?.email}</p>
+      ),
+      width: '30%',
     },
     {
       title: 'Update Date',
       dataIndex: 'update_at',
-      width: '11%',
       sorter: {
         compare: (a, b) => {
           return a.update_at > b.update_at ? 1 : -1;
@@ -142,11 +76,12 @@ export default function ListPrompt(props) {
       render: (_, { update_at }) => (
         <p>{moment.utc(update_at).format("YYYY/MM/DD")}</p>
       ),
-      className: "date-update"
+      className: "date-update",
+      width: '20%',
     },
     {
       title: 'Action',
-      width: '7%',
+      width: '10%',
       render: (prompt) => (
         <i
           className="fa-solid fa-pen"
@@ -177,7 +112,7 @@ export default function ListPrompt(props) {
         </Row>
         <ContentTable
           columns={columns}
-          listUser={listPrompt}
+          listUser={topics}
           currentWidth={900}
         />
 
