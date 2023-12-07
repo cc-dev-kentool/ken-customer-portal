@@ -37,6 +37,7 @@ function AdminLayout(props) {
         routeName={routeName}
         isShowFullSidebar={isShowFullSidebar}
         toggleMenu={toggleMenu}
+        setIsShowFullSidebar={setIsShowFullSidebar}
         setUrl={setUrl}
         setShowChat={setShowChat}
         setIsShowFullChat={setIsShowFullChat}
@@ -44,10 +45,7 @@ function AdminLayout(props) {
         setValueSearch={setValueSearch}
       />
       <div className="main">
-        <Navmenu
-          isShowFullSidebar={isShowFullSidebar}
-          toggleMenu={toggleMenu}
-        />
+        <Navmenu isShowFullSidebar={isShowFullSidebar} />
         <main>
           <Backdrop
             sx={{ color: '#fff', zIndex: 99 }}

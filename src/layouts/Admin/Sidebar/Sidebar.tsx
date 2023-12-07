@@ -1,5 +1,5 @@
 import { PopupDialog } from "components/Modals/PopUpDialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "hooks";
 import { uploadPdf } from "store/actions/analysis";
 import { remove as removeAlert } from "store/actions/alert"
@@ -20,6 +20,7 @@ export default function Sidebar(props) {
     routeName,
     isShowFullSidebar,
     toggleMenu,
+    setIsShowFullSidebar,
     setUrl,
     setShowChat,
     setIsShowFullChat,
@@ -35,6 +36,15 @@ export default function Sidebar(props) {
   const [isShowFiles, setIsShowFiles] = useState<boolean>(true);
   const [file, setFile] = useState<any>(null);
   const [isEnableBtnAnalyze, setIsEnableBtnAnalyze] = useState<boolean>(false);
+
+  const queryStr = window.location.search
+  useEffect(() => {
+    if (queryStr.includes("sidebar-full")) {
+      const checkFull = queryStr.substring(queryStr.indexOf("=") + 1) === "true";
+      setIsShowFullSidebar(checkFull);
+      setIsShowFiles(checkFull);
+    }
+  }, [queryStr])
 
   // Define a function called "getContentPopupArea" that returns some JSX
   const getContentPopupArea = () => {
@@ -73,6 +83,9 @@ export default function Sidebar(props) {
     setShowModalUplaod(true)
   }
 
+  const basePath = user.role === "member" ? "/analyses" : "/";
+  const hrefValue = `${basePath}?sidebar-full=${isShowFullSidebar}`;
+
   // Render the following JSX
   return (
     <nav
@@ -81,7 +94,7 @@ export default function Sidebar(props) {
     >
       <div className="bg-white">
         <div className="logo">
-          <a href={`${user.role === "member" ? "/analyses" : "/"}`}>
+          <a href={hrefValue}>
             <p className="mb-2"><img src={logo} alt="logo" width="70%" /></p>
           </a>
           <span

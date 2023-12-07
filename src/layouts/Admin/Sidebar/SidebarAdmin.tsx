@@ -24,21 +24,21 @@ export default function SidebarAdmin(props) {
   return (
     <ul className="sidebar-nav text-left mt-0">
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'dashboard' })}>
-        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/">
+        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href={`/?sidebar-full=${isShowFullSidebar}`}>
           <img src={`${routeName === 'dashboard' ? home_2 : home}`} alt="home" className="icon-home" />
           {isShowFullSidebar && <span>Dashboard</span>}
         </a>
       </li>
 
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'users' })}>
-        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/users">
+        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href={`/users?sidebar-full=${isShowFullSidebar}`}>
           <img src={`${routeName === 'users' ? icon_user_2 : icon_user}`} alt="users" className="icon-home" />
           {isShowFullSidebar && <span>User Management</span>}
         </a>
       </li>
 
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'contracts' })}>
-        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/contracts">
+        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href={`/contracts?sidebar-full=${isShowFullSidebar}`}>
           <img src={`${routeName === 'contracts' ? icon_lock_2 : icon_lock}`} alt="history" className="icon-home" />
           {isShowFullSidebar && <span>Contracts History</span>}
         </a>
@@ -47,7 +47,7 @@ export default function SidebarAdmin(props) {
       {/* Check if the user's role is "super-admin" */}
       {user.role == "super-admin" && (
         <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'prompts' })}>
-          <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/prompts">
+          <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href={`/prompts?sidebar-full=${isShowFullSidebar}`}>
             <img src={`${routeName === 'prompts' ? icon_chat_2 : icon_chat}`} alt="prompts" className="icon-home" />
             {isShowFullSidebar && <span>Prompt Management</span>}
           </a>
@@ -57,7 +57,7 @@ export default function SidebarAdmin(props) {
       {/* Check if the user's role is "super-admin" */}
       {user.role == "super-admin" && (
         <li className={classNames('sidebar-item d-none', { 'active-sidebar': routeName === 'configuations' })}>
-          <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/configuations">
+          <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href={`/configuations?sidebar-full=${isShowFullSidebar}`}>
             <img src={`${routeName === 'configuations' ? icon_setting_2 : icon_setting}`} alt="prompts" className="icon-home" />
             {isShowFullSidebar && <span>Configuration</span>}
           </a>
@@ -65,14 +65,14 @@ export default function SidebarAdmin(props) {
       )}
 
       <li className={classNames('sidebar-item d-none', { 'active-sidebar': routeName === 'utilities' })}>
-        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/utilities">
+        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href={`/utilities?sidebar-full=${isShowFullSidebar}`}>
           <i className="fa-solid fa-paperclip" style={{ color: `${routeName === 'utilities' ? '#fff' : '#000'}` }}></i>
           {isShowFullSidebar && <span>Utilities</span>}
         </a>
       </li>
 
       <li className={classNames('sidebar-item', { 'active-sidebar': routeName === 'analyses' })}>
-        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href="/analyses">
+        <a className={`sidebar-link ${!isShowFullSidebar && 'text-center'}`} href={`/analyses?sidebar-full=${isShowFullSidebar}`}>
         <img src={`${routeName === 'analyses' ? icon_analysis_2 : icon_analysis}`} alt="prompts" className="icon-home" />
           {isShowFullSidebar && <span>Analyses</span>}
         </a>
