@@ -62,6 +62,15 @@ export function Dashboard(props) {
   const options = {
     colors: colors,
     labels: labelsChart,
+    tooltip: {
+      y: {
+        formatter: (value) => {
+          const total = valuesChart.reduce((a, b) => a + b, 0);
+          const percent = ((value / total) * 100).toFixed(1); // Rounds to two decimal places
+          return `${value} (${percent}%)`;
+        }
+      }
+    }
   };
 
   // This function is used to reset the statistics for the user.
@@ -247,4 +256,3 @@ export function Dashboard(props) {
     </AdminLayout>
   );
 }
-
