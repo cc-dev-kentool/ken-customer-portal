@@ -126,7 +126,7 @@ export default function AnalysisProgress(props) {
   // Return the content for each step based on the dataProgress and listPrompt
   const contentStep = (prompt) => {
     let icon = iconNone;
-    const findTopic = dataTopics.find(topic => topic.topic === prompt.topic_id)
+    const findTopic = dataTopics.find(topic => topic.topic === prompt.uuid)
 
     if (findTopic) {
       switch (findTopic.executed_status) {
@@ -148,12 +148,12 @@ export default function AnalysisProgress(props) {
     return (
       <StepLabel StepIconComponent={icon}>
         <p data-tooltip-id={`tooltip-${prompt.uuid}`} style={{ cursor: "pointer", fontSize: "13px" }}>
-          {prompt?.topic_name.length > defaultLengthText ? labelDisplay(prompt?.topic_name, defaultLengthText) : prompt?.topic_name}
+          {prompt?.name.length > defaultLengthText ? labelDisplay(prompt?.name, defaultLengthText) : prompt?.name}
         </p>
-        {prompt?.topic_name.length > defaultLengthText &&
+        {prompt?.name.length > defaultLengthText &&
           <ReactTooltip
             id={`tooltip-${prompt?.uuid}`}
-            content={prompt?.topic_name}
+            content={prompt?.name}
             widthTooltip={200}
           />}
       </StepLabel>
