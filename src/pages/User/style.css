@@ -138,6 +138,10 @@
     font-weight: bold;
 }
 
+.edit-user .feild-pass {
+    padding-right: 25px;
+}
+
 .edit-user .btn-save {
     margin-top: 10px;
     width: 120px;
@@ -152,7 +156,7 @@
     background: #A8DEE9;
 }
 
-.fa-eye {
+.iconShowPass {
     float: right;
     margin: -23px 5px 0 0;
     cursor: pointer;

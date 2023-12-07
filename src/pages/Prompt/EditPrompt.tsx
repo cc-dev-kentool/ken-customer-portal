@@ -51,22 +51,43 @@ export default function EditPrompt(props) {
     setIsShowEdit(false);
   };
 
-  const checkDisableBtnSave = () => {
-    let isDisable = true;
-
-    const name = getValues("name")?.trim();
-    if (name !== currentPrompt?.topic_name) {
-      isDisable = false;
+  const checkNameChange = () => {
+    const name = getValues("name");
+    if (name?.trim() !== currentPrompt?.name) {
+      return true;
     }
+    return false;
+  }
 
+  const checkPrompt = (order = null) => {
+    let isChange = false;
     currentPrompt?.prompts.map(prompt => {
-      const prompt_text = getValues(`prompt_text_${prompt.order}`)?.trim();
-      if (prompt_text !== prompt.prompt_text) {
-        isDisable = false;
+      const prompt_text = getValues(`prompt_text_${prompt.order}`);
+      if (order && order !== prompt.order && prompt_text?.trim() !== prompt.prompt_text) {
+        isChange = true;
       }
     })
+    return isChange;
+  }
 
-    setDisableBtnSave(isDisable);
+  const checkDisableBtnSave = (field, text, order) => {
+    let isEnable = false;
+
+    if (field === 'name') {
+      const isChangePrompt = checkPrompt();
+      const isFeildChange = text.trim() !== currentPrompt?.name;
+      isEnable = isFeildChange || isChangePrompt;
+
+    } else if (field === 'prompt_text') {
+
+      const isChangeName = checkNameChange();
+      const isChangePrompt = checkPrompt(order);
+      const isFeildChange = text.trim() !== currentPrompt?.prompts?.find(prompt => prompt.order === order)?.prompt_text;
+
+      isEnable = isFeildChange || isChangeName || isChangePrompt;
+    }
+
+    setDisableBtnSave(!isEnable);
   }
 
   const getCurrentHeight = (key) => {
@@ -90,7 +111,7 @@ export default function EditPrompt(props) {
             <input
               type="text"
               {...register("name")}
-              onChange={(e) => checkDisableBtnSave()}
+              onChange={(e) => checkDisableBtnSave("name", e.target.value, 0)}
               className={`form-control ${errors.name ? "is-invalid" : ""}`}
               name="name"
               defaultValue={currentPrompt?.name}
@@ -108,7 +129,7 @@ export default function EditPrompt(props) {
                 <textarea
                   id={`textarea${prompt.order}`}
                   {...register(`prompt_text_${prompt.order}`)}
-                  onChange={(e) => checkDisableBtnSave()}
+                  onChange={(e) => checkDisableBtnSave("prompt_text", e.target.value, prompt.order)}
                   className={`form-control ${errors.prompt_text_1 ? "is-invalid" : ""}`}
                   name={`prompt_text_${prompt.order}`}
                   defaultValue={prompt?.prompt_text}
@@ -117,51 +138,6 @@ export default function EditPrompt(props) {
               </div>
             )
           })}
-          {/* <div className="mb-3">
-            <label className="label-input">Text 1</label>
-            <textarea
-              id="textarea1Element"
-              {...register("prompt_text_1")}
-              onChange={(e) => checkDisableBtnSave("prompt_text_1", e.target.value.trim())}
-              className={`form-control ${errors.prompt_text_1 ? "is-invalid" : ""}`}
-              name="prompt_text_1"
-              defaultValue={currentPrompt?.prompts[0]?.prompt_text}
-              style={{ height: textarea1Height, overflow: 'hidden' }}
-            />
-            <div className="invalid-feedback">
-              {errors.prompt_text_1?.message}
-            </div>
-          </div>
-          <div className="mb-3">
-            <label className="label-input">Text 2</label>
-            <textarea
-              id="textarea2Element"
-              {...register("prompt_text_2")}
-              onChange={(e) => checkDisableBtnSave("prompt_text_2", e.target.value.trim())}
-              className={`form-control ${errors.prompt_text_2 ? "is-invalid" : ""}`}
-              name="prompt_text_2"
-              defaultValue={currentPrompt?.prompts[1]?.prompt_text}
-              style={{ height: textarea2Height, overflow: 'hidden' }}
-            />
-            <div className="invalid-feedback">
-              {errors.prompt_text_2?.message}
-            </div>
-          </div>
-          <div className="">
-            <label className="label-input">Text 3</label>
-            <textarea
-              id="textarea3Element"
-              {...register("prompt_text_3")}
-              onChange={(e) => checkDisableBtnSave("prompt_text_3", e.target.value.trim())}
-              className={`form-control ${errors.prompt_text_3 ? "is-invalid" : ""}`}
-              name="prompt_text_3"
-              defaultValue={currentPrompt?.prompts[2]?.prompt_text}
-              style={{ height: textarea3Height, overflow: 'hidden' }}
-            />
-            <div className="invalid-feedback">
-              {errors.prompt_text_3?.message}
-            </div>
-          </div> */}
         </div>
         <div className="text-center">
           <button

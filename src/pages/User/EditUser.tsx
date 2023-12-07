@@ -56,13 +56,13 @@ export default function EditUser(props) {
           <input
             type={`${isShowPassword ? "text" : "password"}`}
             {...register("password")}
-            className={`form-control ${errors.password ? "is-invalid" : ""}`}
+            className={`form-control feild-pass ${errors.password ? "is-invalid" : ""}`}
             name="password"
             placeholder="********"
             value={currentUser?.hashed_password}
           />
           {!errors.password?.message && <i
-            className="fa-regular fa-eye"
+            className={`iconShowPass fa-regular fa-eye${isShowPassword ? "-slash" : ""}`}
             onClick={() => setIsShowPassword(!isShowPassword)}
           />}
           <div className="invalid-feedback">{errors.password?.message}</div>

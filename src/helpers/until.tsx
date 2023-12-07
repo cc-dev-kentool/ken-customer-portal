@@ -28,13 +28,12 @@ export const getDateDiff = (time1, time2, isCheckWithNow) => {
 
   const years = diffDuration.years() > 0 ? `${diffDuration.years()} years` : '';
   const months = diffDuration.months() > 0 ? `${diffDuration.months()} months` : '';
-  const weeks = diffDuration.weeks() > 0 ? `${diffDuration.weeks()} weeks` : '';
   const days = diffDuration.days() > 0 ? `${diffDuration.days()} days` : '';
   const hours = diffDuration.hours() > 0 ? `${diffDuration.hours()} hours` : '';
   const minutes = diffDuration.minutes() > 0 ? `${diffDuration.minutes()} minutes` : '';
   const seconds = diffDuration.seconds() > 0 ? `${diffDuration.seconds()} seconds` : '';
 
-  return `${years} ${months} ${weeks} ${days} ${hours} ${minutes} ${seconds} ${isCheckWithNow ? 'ago' : ''}`;
+  return `${years} ${months} ${days} ${hours} ${minutes} ${seconds} ${isCheckWithNow ? 'ago' : ''}`;
 }
 
 // Function to display the label in shortened form with an ellipsis (...) after a certain length

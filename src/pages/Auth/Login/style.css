@@ -48,6 +48,10 @@
   color: #999 !important;
 }
 
+.center_form .feild-pass {
+  padding-right: 30px;
+}
+
 .center_form .btn-login {
   width: 100%;
   border-radius: 8px;
@@ -63,7 +67,7 @@
   color: red;
 }
 
-.login-form .fa-eye {
+.login-form .iconShowPass {
   float: right;
   margin: -28px 5px 0 0;
   cursor: pointer;
