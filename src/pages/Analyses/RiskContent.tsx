@@ -166,9 +166,9 @@ export default function RiskContent(props) {
                         />
                       </Col>
                     </Row>
-                    <Row className="d-none">
+                    {/* <Row className="d-none">
                       {data.chatgpt_result}
-                    </Row>
+                    </Row> */}
                     {getStatusShowTopic(data.analysis_result?.topic) &&
                       <>
                         <Row className="source-text m-0" onMouseUp={() => handleSearch("")}>
