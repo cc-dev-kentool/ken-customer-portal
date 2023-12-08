@@ -100,15 +100,15 @@ export default function RiskContent(props) {
       return (
         <div>
           <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br />
-          <span>Three worst clauses: </span>
-          {data.comment["Three worst clauses"].length === 0
+          <span>Three worst clauses: N/A</span>
+          {/* {data.comment["Three worst clauses"].length === 0
             ? "N/A"
             : <ul>
               {data.comment["Three worst clauses"].map((item, index) => (
                 <li key={index} className="item-comment">{item[`worst clause ${index + 1}`]} ({item.score})</li>
               ))}
             </ul>
-          }
+          } */}
         </div>
       );
     } else {
@@ -166,9 +166,9 @@ export default function RiskContent(props) {
                         />
                       </Col>
                     </Row>
-                    {/* <Row className="d-none">
+                    <Row className="d-none">
                       {data.chatgpt_result}
-                    </Row> */}
+                    </Row>
                     {getStatusShowTopic(data.analysis_result?.topic) &&
                       <>
                         <Row className="source-text m-0" onMouseUp={() => handleSearch("")}>
