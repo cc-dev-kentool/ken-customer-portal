@@ -141,7 +141,7 @@ export default function Sidebar(props) {
           </button>
         </a>
         <p className="version">
-          KEN &copy; 1.0.0.18
+          KEN &copy; 1.0.0.19
         </p>
       </div>
 
