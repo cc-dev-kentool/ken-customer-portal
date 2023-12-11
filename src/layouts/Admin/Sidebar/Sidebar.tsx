@@ -66,6 +66,7 @@ export default function Sidebar(props) {
       setShowChat(false);
       setIsShowFullChat(false);
       setFile(null);
+      setValueSearch("");
       dispatch(uploadPdf(file));
     }
   }
