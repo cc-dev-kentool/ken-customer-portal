@@ -286,6 +286,7 @@
   flex-direction: column;
   height: 89vh;
   border-radius: 15px;
+  min-width: 360px;
 }
 
 .header-pdf {
@@ -294,6 +295,22 @@
   display: flex;
   padding: 5px;
   border-radius: 15px 15px 0 0;
+}
+
+.header-pdf .icon-search {
+  width: 25px;
+  cursor: pointer;
+  z-index: 99;
+  padding: 3px;
+}
+
+.header-pdf .icon-search:hover {
+  background-color: #229bb5;
+  border-radius: 5px;
+}
+
+.header-pdf .rpv-toolbar {
+  margin-left: -15px;
 }
 
 .header-pdf .rpv-core__textbox {
@@ -320,11 +337,13 @@
   display: none;
 }
 
+.pop-search .rpv-core__icon {
+  color: #000;
+}
+
 .header-pdf .btn-closePdf {
-  padding: 0 2px;
-  font-size: 20px;
-  margin-right: 3px;
   cursor: pointer;
+  margin-left: -5px;
 }
 
 .header-pdf .btn-closePdf:hover {
@@ -335,6 +354,50 @@
 .content-pdf {
   overflow: hidden;
   flex: 1;
+}
+
+.header-pdf .pop-search {
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 4px;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 3;
+}
+
+.header-pdf .rpv-core__popover-body-arrow {
+  border-color: #e5e5e5 !important;
+  margin-top: -1px;
+}
+
+.header-pdf .inputSearch {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  width: 200px;
+  margin-top: 3px;
+  outline: none;
+}
+
+.header-pdf .result {
+  align-items: center;
+  padding: 8px 8px 0 8px;
+}
+
+.header-pdf .btnCloseSearch {
+  position: absolute;
+  right: 10px;
+  margin-top: 3px;
+  background-color: #229bb5;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  padding: 3px 8px;
+}
+
+.header-pdf .btnCloseSearch:hover {
+  background-color: #A8DEE9;
 }
 
 /* scroll */
