@@ -272,7 +272,7 @@ export default function PdfDocument(props) {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && renderSearchProps.keyword) {
                         renderSearchProps.search();
-                        setTimeout(() => { setReadyToSearch(true); }, 1000)
+                        setTimeout(() => { setReadyToSearch(true); }, 1500)
 
                       }
                     }}
