@@ -22,19 +22,21 @@ type Props = {
   
   // Optional callback function to handle data changes in the table.
   onChange?: any;
+
+  defaultHeightTop?: number;
 }
 
 // ContentTable component that renders a table with provided columns and user list.
 export function ContentTable(props: Props) {
-  const { columns, listUser, currentHeight, currentWidth, onChange } = props
+  const { columns, listUser, currentHeight, currentWidth, onChange, defaultHeightTop } = props
 
   // State variable to store the height of the table.
-  const [heightTable, setHeightTable] = useState<number>(window.innerHeight - 310);
+  const [heightTable, setHeightTable] = useState<number>(window.innerHeight - (defaultHeightTop ?? 310) );
 
   // useEffect hook to update the height of the table when window is resized.
   useEffect(() => {
     window.addEventListener('resize', function () {
-      setHeightTable(this.window.innerHeight - 310);
+      setHeightTable(window.innerHeight - (defaultHeightTop ?? 310));
     });
   }, [])
 

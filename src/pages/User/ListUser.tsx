@@ -275,7 +275,12 @@ export default function ListUser(props) {
             <button className="btn-reset" onClick={() => onReset()}> Reset </button>
           </Col>
         </Row>
-        <ContentTable columns={columns} listUser={currentData} onChange={handleChange} />
+        <ContentTable 
+          columns={columns} 
+          listUser={currentData} 
+          onChange={handleChange} 
+          defaultHeightTop={350}
+        />
         <PopupDialog
           isShow={isShowAdd}
           title={"Add User"}
