@@ -114,6 +114,7 @@ export default function ListPrompt(props) {
           columns={columns}
           listUser={topics}
           currentWidth={900}
+          defaultHeightTop={280}
         />
 
         <PopupDialog
