@@ -23,6 +23,15 @@ export function Dashboard(props) {
   // Define states using the useState hook
   const [labelsChart, setLabelsChart] = useState<string[]>([])
   const [valuesChart, setValuesChart] = useState<number[]>([])
+  const [showSidebar, setShowSidebar] = useState<boolean>(true);
+
+  const queryStr = window.location.search
+  useEffect(() => {
+    if (queryStr.includes("sidebar-full")) {
+      const checkFull = queryStr.substring(queryStr.indexOf("=") + 1) === "true";
+      setShowSidebar(checkFull);
+    }
+  }, [queryStr])
 
   // Sets up side effect using async `getMasterdata()` action creator to fetch user settings from backend API
   useEffect(() => {
@@ -122,14 +131,14 @@ export function Dashboard(props) {
 
   // Return JSX elements to render the dashboard.
   return (
-    <AdminLayout routeName={props.routeName}>
+    <AdminLayout routeName={props.routeName} setShowSidebar={setShowSidebar}>
       <div className="dashboard">
         <Row className="content-db">
           <Col lg={6}>
             <div className="left-content">
               <Row>
                 <Col>
-                  <a href="/users" className="icon-users">
+                  <a href={`/users?sidebar-full=${showSidebar}`} className="icon-users">
                     <i className="fa-solid fa-user-clock fa-2xl"></i>
                     <span className="label">Users</span>
                   </a>
@@ -174,7 +183,7 @@ export function Dashboard(props) {
             <div className="right-content">
               <Row >
                 <Col>
-                  <a href="/contracts" className="icon-users">
+                  <a href={`/contracts?sidebar-full=${showSidebar}`} className="icon-users">
                     <i className="fa-solid fa-file-contract fa-2xl"></i>
                     <span className="label">Contracts</span>
                   </a>
