@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { postConversation } from "store/actions/chatGpt";
 import { CircularProgress } from "@mui/material";
+import { progressText } from "helpers/until";
 import icon_send from "assets/icon/icon_send.svg";
 import classNames from "classnames";
-import { progressText } from "helpers/until";
 
 export default function ChatGPT(props) {
   // Retrieves the Redux store's state and dispatch function
@@ -71,7 +71,7 @@ export default function ChatGPT(props) {
       setMessage2(e.target.value.trim());
     }
   };
-  
+
   const onChangeTextarea = (value) => {
     setMessage(value)
     value.trim() ? setIsDisabledBtnSend(false) : setIsDisabledBtnSend(true);
@@ -140,7 +140,7 @@ export default function ChatGPT(props) {
         />
       </div>
 
-      {!isSendMessage && !getConversationSuccess && 
+      {!isSendMessage && !getConversationSuccess &&
         <div className="text-center iconLoading"><CircularProgress color="inherit" /></div>
       }
 

@@ -143,5 +143,20 @@ export const progressText = (text) => {
     </p>
   ));
 
-  return <div>{paragraphs}</div>;
+  return paragraphs
+};
+
+export const progressTextReadability = (text) => {
+  // Split text by double newlines or dot followed by newline, then map through pieces and separate with <br /> elements
+  const paragraphs = text.split(/\n/).map((part, index) => (
+    <p key={index} className="m-0">
+      {part.split(/\n/).map((line, lineIndex) => (
+        <p key={lineIndex} className="m-0">
+          {line}
+        </p>
+      ))}
+    </p>
+  ));
+
+  return paragraphs
 };
