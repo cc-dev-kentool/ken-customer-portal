@@ -2,6 +2,7 @@ import { statusRisk } from "constants/riskAnalysis";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useAppDispatch } from "hooks";
+import { progressText } from "helpers/until";
 import AnalysisProgress from "./AnalysisProgress";
 import classNames from "classnames";
 
@@ -97,10 +98,13 @@ export default function RiskContent(props) {
 
   const genComment = (data) => {
     if (data.topic === 'Readability') {
+      // const originalText = "This is the first line1\nThis is the first line.\nThis is the second line.\n\nThis is a new paragraph.";
       return (
         <div>
+          {/* <span>{progressText(originalText)}</span> */}
           <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br />
           <span>Three worst clauses: N/A</span>
+          
           {/* {data.comment["Three worst clauses"].length === 0
             ? "N/A"
             : <ul>
@@ -112,7 +116,7 @@ export default function RiskContent(props) {
         </div>
       );
     } else {
-      return data.comment;
+      return progressText(data.comment);
     }
   }
 
@@ -181,7 +185,7 @@ export default function RiskContent(props) {
                                   className={classNames('pt-2 mb-2', { 'cursor-pointer source-text-item': checkSourceText(text.value) })}
                                   onClick={() => checkSourceText(text.value) && handleSearch(text.value)}
                                 >
-                                  {text.value}
+                                  {progressText(text.value)}
                                 </p>
                               </div>
                             })}
