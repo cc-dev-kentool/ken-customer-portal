@@ -2,7 +2,7 @@ import { statusRisk } from "constants/riskAnalysis";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useAppDispatch } from "hooks";
-import { progressText } from "helpers/until";
+import { progressText, progressTextReadability } from "helpers/until";
 import AnalysisProgress from "./AnalysisProgress";
 import classNames from "classnames";
 
@@ -103,16 +103,16 @@ export default function RiskContent(props) {
         <div>
           {/* <span>{progressText(originalText)}</span> */}
           <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br />
-          <span>Three worst clauses: N/A</span>
-          
-          {/* {data.comment["Three worst clauses"].length === 0
-            ? "N/A"
-            : <ul>
-              {data.comment["Three worst clauses"].map((item, index) => (
-                <li key={index} className="item-comment">{item[`worst clause ${index + 1}`]} ({item.score})</li>
-              ))}
-            </ul>
-          } */}
+          <span>Three worst clauses: </span>
+          {typeof data.comment["Three worst clauses"] == "string" ? "N/A" :
+            data.comment["Three worst clauses"].length === 0
+              ? "N/A"
+              : <ul>
+                {data.comment["Three worst clauses"]?.map((item, index) => (
+                  <li key={index} className="item-comment">{progressTextReadability(item.clause)} ({item.score})</li>
+                ))}
+              </ul>
+          }
         </div>
       );
     } else {
@@ -145,11 +145,11 @@ export default function RiskContent(props) {
                 />
               </Col>
             </Row>
-            {isShowProgressBar && 
-              <AnalysisProgress 
-                showPdf={showPdf} 
-                dataTopics={dataAnalysis} 
-                currentStatus={currentStatus} 
+            {isShowProgressBar &&
+              <AnalysisProgress
+                showPdf={showPdf}
+                dataTopics={dataAnalysis}
+                currentStatus={currentStatus}
               />
             }
           </div>
