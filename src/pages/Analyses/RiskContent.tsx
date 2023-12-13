@@ -179,7 +179,7 @@ export default function RiskContent(props) {
                           <Col sm="2" className="title-left p-0 pt-4 pb-2">Source Text</Col>
                           <Col sm="10" className="pt-4 pb-2">
                             {data.analysis_result.source_text?.map((text, index) => {
-                              return <div key={text.key}>
+                              if (text.value) return <div key={text.key}>
                                 {index >= 1 && <hr />}
                                 <p
                                   className={classNames('pt-2 mb-2', { 'cursor-pointer source-text-item': checkSourceText(text.value) })}
