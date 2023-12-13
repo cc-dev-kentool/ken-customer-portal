@@ -130,3 +130,18 @@ export const isOnTabletOrIpad = () => {
 export const getLocalDate = (dateTime) => {
   return moment.utc(dateTime).local().format("DD-MM-YYYY");
 };
+
+export const progressText = (text) => {
+  // Split text by double newlines or dot followed by newline, then map through pieces and separate with <br /> elements
+  const paragraphs = text.split(/\n\n|\.\n/).map((part, index) => (
+    <p key={index} className="m-0">
+      {part.split(/\n\n|\.\n/).map((line, lineIndex) => (
+        <p key={lineIndex} className="m-0">
+          {line}
+        </p>
+      ))}
+    </p>
+  ));
+
+  return <div>{paragraphs}</div>;
+};
