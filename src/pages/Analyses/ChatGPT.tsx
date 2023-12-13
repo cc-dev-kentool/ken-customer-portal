@@ -4,6 +4,7 @@ import { postConversation } from "store/actions/chatGpt";
 import { CircularProgress } from "@mui/material";
 import icon_send from "assets/icon/icon_send.svg";
 import classNames from "classnames";
+import { progressText } from "helpers/until";
 
 export default function ChatGPT(props) {
   // Retrieves the Redux store's state and dispatch function
@@ -98,10 +99,10 @@ export default function ChatGPT(props) {
             // Renders each conversation item with question and answer labels
             <div key={item.uuid}>
               <p className="question">
-                <label className="question-content">{item.question}</label>
+                <label className="question-content">{progressText(item.question)}</label>
               </p>
               <p className="answer">
-                <label className="answer-content">{item.answer}</label>
+                <label className="answer-content">{progressText(item.answer)}</label>
               </p>
             </div>
           )
