@@ -1,4 +1,5 @@
 import { statusRisk } from "constants/riskAnalysis";
+import { progressText } from "helpers/until";
 import { Col, Row } from "react-bootstrap";
 
 export default function ExportPdf(props) {
@@ -27,7 +28,7 @@ export default function ExportPdf(props) {
         </div>
       );
     } else {
-      return data.comment;
+      return progressText(data.comment);
     }
   }
 
@@ -52,14 +53,14 @@ export default function ExportPdf(props) {
                 <Row className="source-text m-0">
                   <Col sm="2" className="title-left p-0">Source Text</Col>
                   <Col sm="10" className="p-0">
-                    {data?.analysis_result?.source_text?.map((text, index) => (
-                      <div key={text.key}>
+                    {data?.analysis_result?.source_text?.map((text, index) => {
+                      if (text.value) return <div key={text.key}>
                         {index >= 1 && <hr />}
                         <p className="pt-2 mb-2">
-                          {text.value === 'n/a' ? <span>n/a</span> : text.value}
+                          {text.value === 'n/a' ? <span>n/a</span> : progressText(text.value)}
                         </p>
                       </div>
-                    ))}
+                    })}
                   </Col>
                 </Row>
                 <Row className="mt-3 m-0">
@@ -77,10 +78,10 @@ export default function ExportPdf(props) {
           return (
             <div key={item.uuid}>
               <p className="question">
-                <label className="question-content">{item.question}</label>
+                <label className="question-content">{progressText(item.question)}</label>
               </p>
               <p className="answer">
-                <label className="answer-content">{item.answer}</label>
+                <label className="answer-content">{progressText(item.answer)}</label>
               </p>
             </div>
           )
