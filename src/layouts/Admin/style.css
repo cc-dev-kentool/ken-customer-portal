@@ -165,10 +165,10 @@
 }
 
 .sidebar .footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   background-color: #fff;
-  padding-top: 10px;
+  padding-top: 7px;
 }
 
 .sidebar .btn-contact {
