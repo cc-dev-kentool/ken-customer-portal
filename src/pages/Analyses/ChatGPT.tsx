@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { postConversation } from "store/actions/chatGpt";
 import { CircularProgress } from "@mui/material";
-import { progressText } from "helpers/until";
 import icon_send from "assets/icon/icon_send.svg";
 import classNames from "classnames";
 
@@ -108,10 +107,10 @@ export default function ChatGPT(props) {
             // Renders each conversation item with question and answer labels
             <div key={item.uuid}>
               <p className="question">
-                <label className="question-content">{progressText(item.question)}</label>
+                <label className="question-content">{item.question}</label>
               </p>
               <p className="answer">
-                <label className="answer-content">{progressText(item.answer)}</label>
+                <label className="answer-content">{item.answer}</label>
               </p>
             </div>
           )
