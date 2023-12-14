@@ -17,12 +17,21 @@ export default function ChatGPT(props) {
   const [isSendMessage, setIsSendMessage] = useState<boolean>(false);
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState<boolean>(true);
   const [dataConversation, setDataConversation] = useState<any>([]);
+  const [heightConversation, setHeightConversation] = useState<number>(0);
+
+  const element = window.document.getElementById("chat-content");
 
   // Retrieves the conversation array from the Redux store's state
   const [conversation, getConversationSuccess] = useAppSelector((state) => [
     state.conversation.conversation,
     state.conversation.getConversationSuccess,
   ]);
+
+  useEffect(() => {
+    if (element) {
+      setHeightConversation(element.scrollHeight - (isShowFullChat ? 125 : 105))
+    }
+  }, [element, isShowFullChat])
 
   // Effect hook to scroll to bottom of messages container whenever enquiry state changes.
   useEffect(() => {
@@ -40,7 +49,7 @@ export default function ChatGPT(props) {
     if (dataConversation.length > 0 || isSendMessage) {
       scrollToBottom();
     }
-  }, [dataConversation.length, isSendMessage])
+  }, [dataConversation.length, isSendMessage, isShowFullChat])
 
   const scrollToBottom = () => {
     const element = window.document.getElementById("conversation");
@@ -77,23 +86,23 @@ export default function ChatGPT(props) {
     value.trim() ? setIsDisabledBtnSend(false) : setIsDisabledBtnSend(true);
   }
 
+  const handleExpandChat = () => {
+    setIsShowFullChat(!isShowFullChat);
+    setHeightConversation(0);
+  }
+
   return (
-    <div className={classNames("chat-content", { "full-chat": isShowFullChat })}>
+    <div id={"chat-content"} className={classNames("chat-content", { "full-chat": isShowFullChat })}>
       <i
         className="fa fa-times icon-close"
         aria-hidden="true"
         onClick={handleCloseChat}
       ></i>
-      {!isShowFullChat
-        ? <i
-          className="fa-solid fa-expand icon-expand"
-          onClick={() => setIsShowFullChat(true)}
-        />
-        : <i
-          className="fa-solid fa-minus icon-expand"
-          onClick={() => setIsShowFullChat(false)}
-        />}
-      <div id="conversation" className={classNames("conversation", { "height-full": isShowFullChat })}>
+      <i
+        className={`fa-solid ${isShowFullChat ? 'fa-minus' : 'fa-expand'}  icon-expand`}
+        onClick={handleExpandChat}
+      />
+      <div id="conversation" className="conversation" style={{ maxHeight: `${heightConversation}px` }}>
         {dataConversation?.map(item => {
           return (
             // Renders each conversation item with question and answer labels
@@ -126,7 +135,7 @@ export default function ChatGPT(props) {
         <button
           type="submit"
           onClick={handleSendMessage}
-          className={classNames("iconSend", {"disabled-icon-send" : isDisabledBtnSend})}
+          className={classNames("iconSend", { "disabled-icon-send": isDisabledBtnSend })}
           disabled={isDisabledBtnSend}
         >
           <img src={icon_send} alt="" />

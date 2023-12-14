@@ -168,13 +168,8 @@
 }
 
 .conversation {
-  height: 64%;
   overflow: auto;
   margin-top: 35px;
-}
-
-.height-full {
-  height: 83%;
 }
 
 .conversation .question {
