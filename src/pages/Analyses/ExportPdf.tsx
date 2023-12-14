@@ -78,10 +78,10 @@ export default function ExportPdf(props) {
           return (
             <div key={item.uuid}>
               <p className="question">
-                <label className="question-content">{progressText(item.question)}</label>
+                <label className="question-content">{item.question}</label>
               </p>
               <p className="answer">
-                <label className="answer-content">{progressText(item.answer)}</label>
+                <label className="answer-content">{item.answer}</label>
               </p>
             </div>
           )
