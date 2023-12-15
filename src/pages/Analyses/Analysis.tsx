@@ -3,14 +3,13 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
 import { getListTopic } from "store/actions/prompt";
-import generatePDF, { Margin } from 'react-to-pdf';
+import { exportPdf } from "./ExportPdf";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
 import PdfDocument from "./PdfDocument";
 import ChatGPT from "./ChatGPT";
 import AdminLayout from "layouts/Admin";
-import ExportPdf from "./ExportPdf";
 import Page404Component from "components/Page404/Page404Component";
 import classNames from "classnames";
 import "./style.css";
@@ -25,7 +24,6 @@ export default function Analysis(props) {
   const [showPdf, setShowPdf] = useState<boolean>(true);
   const [showChat, setShowChat] = useState<boolean>(false);
   const [valueSearch, setValueSearch] = useState<string>("");
-  const [isDowndLoad, setIsDowndLoad] = useState<boolean>(false);
   const [currentStatus, setCurrentStatus] = useState<string>("");
   const [dataAnalysis, setDataAnalysis] = useState<object[]>([]);
   const [isShowFullChat, setIsShowFullChat] = useState<boolean>(false);
@@ -33,11 +31,10 @@ export default function Analysis(props) {
 
   // The useAppSelector hook is used here to extract data from the Redux store state.
   // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
-  const [dataAnaly, hasPermission, conversation, getConversationSuccess] = useAppSelector((state) => [
+  const [dataAnaly, hasPermission, conversation] = useAppSelector((state) => [
     state.analysis.dataAnalysis,
     state.analysis.hasPermission,
     state.conversation.conversation,
-    state.conversation.getConversationSuccess,
   ]);
 
   let runningTimeout: any = null;
@@ -50,6 +47,7 @@ export default function Analysis(props) {
       dispatch(getAnalysisData(id, true));
       setFieldId(id);
       dispatch(getListTopic(false));
+      dispatch(getConversation(id))
 
       if (runningTimeout) {
         clearTimeout(runningTimeout);
@@ -81,20 +79,10 @@ export default function Analysis(props) {
       setDataAnalysis(dataAnaly?.topic_executions?.[0].execution_details)
     }
   }, [dataAnaly])
-
-  // Use the useEffect hook to run the provided callback when the isDowndLoad state changes
-  useEffect(() => {
-    if (isDowndLoad && getConversationSuccess) {
-      const getTargetElement = () => document.getElementById('divToPrint');
-      generatePDF(getTargetElement, { filename: 'page.pdf', page: { margin: Margin.MEDIUM } });
-      setIsDowndLoad(false);
-    }
-  }, [isDowndLoad, getConversationSuccess]);
-
+  
   // Define a function exportPDF that does the following:
-  const exportPdf = () => {
-    conversation.length === 0 && dispatch(getConversation(fieldId));
-    setIsDowndLoad(true);
+  const handleExportPdf = () => {
+    exportPdf(dataAnalysis, conversation)
   }
 
   // This function handles showing the chat.
@@ -120,7 +108,7 @@ export default function Analysis(props) {
               <i
                 className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
                 style={{ color: "#26ADC9" }}
-                onClick={exportPdf}
+                onClick={handleExportPdf}
               />
             )}
             {!showPdf &&
@@ -176,9 +164,6 @@ export default function Analysis(props) {
 
       {!hasPermission && <Page404Component />}
 
-      {isDowndLoad &&
-        <ExportPdf dataAnalysis={dataAnalysis} conversation={conversation} />
-      }
     </AdminLayout>
   );
 }
