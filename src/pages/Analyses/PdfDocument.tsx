@@ -67,17 +67,21 @@ export default function PdfDocument(props) {
     let startIndex = 0;
     const len = calcLength(text);
 
-    const result: any = [];
+    let result: any = [];
     while (startIndex < text.length) {
-      if (text.charAt(startIndex) === '(') {
-        startIndex++;
-      }
-      let endIndex = startIndex + len < text.length ? startIndex + len : text.length - 1;
+      let endIndex = startIndex + len < text.length ? startIndex + len : text.length;
       const newEnd = getEndIndex(text, endIndex);
 
       result.push(text.substring(startIndex, newEnd));
       startIndex = newEnd + 1;
     }
+
+    result = result.map((item, index) => {
+      if (index === result.length - 1 && item.charAt(item.length - 1) === '.') {
+        return item.slice(0, -1);
+      }
+      return item;
+    });
 
     return result;
   }
