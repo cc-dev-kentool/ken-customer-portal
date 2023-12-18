@@ -73,6 +73,7 @@ export const exportPdf = (dataAnalysis, conversation) => {
     head: headers,
     body: dataExport,
     theme: 'grid',
+    showHead: 'firstPage',
     headStyles: {
       fillColor: [38, 173, 201],
       lineColor: [203, 203, 203],
@@ -94,8 +95,20 @@ export const exportPdf = (dataAnalysis, conversation) => {
     startY: 20,
   });
 
-  let finalY = pdf.lastAutoTable?.finalY ?? pdf.internal.pageSize.getHeight();
-  pdf.text('Chat Data', 90, finalY + 20);
+  autoTable(pdf, {
+    head: [["Chat Data"]],
+    body: [],
+    theme: 'grid',
+    showHead: 'firstPage',
+    headStyles: {
+      fillColor: [255, 255, 255],
+      textColor: [0, 0, 0],
+      fontSize: 16,
+      fontStyle: 'normal',
+      halign: 'center',
+      cellPadding: [5, 0, -3, 0],
+    },
+  });
 
   const headersChat = [["Question", "Answer"]];
   let dataChat: any = [];
@@ -110,12 +123,12 @@ export const exportPdf = (dataAnalysis, conversation) => {
     head: headersChat,
     body: dataChat,
     theme: 'grid',
+    showHead: 'firstPage',
     headStyles: {
       fillColor: [38, 173, 201],
       lineColor: [203, 203, 203],
       lineWidth: 0.1,
     },
-    startY: finalY + 25,
   });
 
   // Save the PDF file
