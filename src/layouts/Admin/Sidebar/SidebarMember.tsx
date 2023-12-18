@@ -36,17 +36,17 @@ export default function SidebarMember(props) {
   let defaultValue: number;
   switch (role) {
     case 'super-admin':
-      defaultValue = 485;
+      defaultValue = 200;
       break;
     case 'admin':
-      defaultValue = 445;
+      defaultValue = 275;
       break;
     default:
-      defaultValue = 265;
-  }
+      defaultValue = 455;
+  } 
 
   // Declare and initialize states using the useState hook
-  const [heightMenu, setHeightMenu] = useState<number>(0)
+  const [heightMenu, setHeightMenu] = useState<number>(defaultValue)
   const [activeFile, setActiveFile] = useState<string>("");
   const [isClickToFile, setIsClickToFile] = useState<boolean>(false);
 
@@ -64,28 +64,11 @@ export default function SidebarMember(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const element = window.document.getElementById("sidebar");
-  useEffect(() => {
-    if (element) {
-      setHeightMenu(element.scrollHeight - defaultValue)
-    }
-  }, [element])
-
-  // Set up side effect using the useEffect hook to update the heightMenu state when window resizes
-  useEffect(() => {
-    window.addEventListener('resize', function () {
-      const element = window.document.getElementById("sidebar");
-      if (element) {
-        setHeightMenu(element.scrollHeight - defaultValue);
-      }
-    });
-  }, []);
-
   useEffect(() => {
     if (!isShowFullSidebar) {
-      setHeightMenu(heightMenu + 40)
+      setHeightMenu(heightMenu + 45)
     } else {
-      setHeightMenu(heightMenu - 40)
+      setHeightMenu(heightMenu - 45)
     }
   }, [isShowFullSidebar])
 
@@ -164,7 +147,7 @@ export default function SidebarMember(props) {
         </p>
         <div
           className={classNames("list-file", { "none-file": !isShowFiles })}
-          style={{ maxHeight: `${heightMenu - 55}px` }}
+          style={{ maxHeight: `${heightMenu}px` }}
         >
           {files.map((file) => {
             return (

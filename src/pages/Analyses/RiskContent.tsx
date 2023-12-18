@@ -153,7 +153,11 @@ export default function RiskContent(props) {
               />
             }
           </div>
-          <div className="table-content" style={{ height: `${getHeightRiskContent()}vh` }}>
+          <div className={classNames("table-content", {
+            "tb-content-middle": !showChat && isShowProgressBar,
+            "tb-content-medium" : showChat && !isShowProgressBar,
+            "tb-content-min" : showChat && isShowProgressBar,
+            })}>
             {dataAnalysis.map((data) => {
               if (data.executed_status === 'success') {
                 return (

@@ -16,21 +16,13 @@ export default function ChatGPT(props) {
   const [isSendMessage, setIsSendMessage] = useState<boolean>(false);
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState<boolean>(true);
   const [dataConversation, setDataConversation] = useState<any>([]);
-  const [heightConversation, setHeightConversation] = useState<number>(0);
-
-  const element = window.document.getElementById("chat-content");
+  const [heightTextarea, setHeightTextarea] = useState(30);
 
   // Retrieves the conversation array from the Redux store's state
   const [conversation, getConversationSuccess] = useAppSelector((state) => [
     state.conversation.conversation,
     state.conversation.getConversationSuccess,
   ]);
-
-  useEffect(() => {
-    if (element) {
-      setHeightConversation(element.scrollHeight - (isShowFullChat ? 125 : 105))
-    }
-  }, [element, isShowFullChat])
 
   // Effect hook to scroll to bottom of messages container whenever enquiry state changes.
   useEffect(() => {
@@ -87,8 +79,28 @@ export default function ChatGPT(props) {
 
   const handleExpandChat = () => {
     setIsShowFullChat(!isShowFullChat);
-    setHeightConversation(0);
+    isShowFullChat && heightTextarea > 130 && setHeightTextarea(130)
   }
+
+  const handleMouseDown = (e) => {
+    const startY = e.clientY;
+    const startHeight = heightTextarea;
+    const maxHeight = isShowFullChat ? 550 : 130
+
+    const doMouseMove = (e) => {
+      const newHeight = startHeight - (e.clientY  - startY);
+      setHeightTextarea(Math.max(newHeight > maxHeight ? maxHeight : newHeight, 30)); // Enforcing the minimum height of 30px
+    };
+
+    const doMouseUp = () => {
+      document.removeEventListener('mousemove', doMouseMove);
+      document.removeEventListener('mouseup', doMouseUp);
+    };
+
+    document.addEventListener('mousemove', doMouseMove);
+    document.addEventListener('mouseup', doMouseUp);
+  };
+
 
   return (
     <div id={"chat-content"} className={classNames("chat-content", { "full-chat": isShowFullChat })}>
@@ -101,7 +113,7 @@ export default function ChatGPT(props) {
         className={`fa-solid ${isShowFullChat ? 'fa-minus' : 'fa-expand'}  icon-expand`}
         onClick={handleExpandChat}
       />
-      <div id="conversation" className="conversation" style={{ maxHeight: `${heightConversation}px` }}>
+      <div id="conversation" className={classNames("conversation", {"fh-conversation": isShowFullChat})}>
         {dataConversation?.map(item => {
           return (
             // Renders each conversation item with question and answer labels
@@ -130,6 +142,15 @@ export default function ChatGPT(props) {
         }
       </div>
       <div className="area-input">
+        <div className="resize-icon" onMouseDown={handleMouseDown}>⇱</div>
+        <textarea
+          className="field-input form-control"
+          value={showLoading ? "" : message}
+          onChange={(e) => onChangeTextarea(e.target.value)}
+          onKeyDown={handleKeyDown}
+          style={{ height: `${heightTextarea}px` }}
+        >
+        </textarea>
         {/* Sends the message when the send button is clicked */}
         <button
           type="submit"
@@ -139,13 +160,6 @@ export default function ChatGPT(props) {
         >
           <img src={icon_send} alt="" />
         </button>
-        <textarea
-          rows={isShowFullChat ? 2 : 1}
-          className="field-input form-control"
-          value={showLoading ? "" : message}
-          onChange={(e) => onChangeTextarea(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
       </div>
 
       {!isSendMessage && !getConversationSuccess &&
