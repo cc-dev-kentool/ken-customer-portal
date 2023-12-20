@@ -85,20 +85,10 @@ export default function RiskContent(props) {
     }
   }, [currentStatus]);
 
-  // Define a function getHeightRiskContent that calculates and returns the height value based on conditions
-  const getHeightRiskContent = () => {
-    let height: number;
-    if (isShowProgressBar) {
-      height = showChat ? 18 : 47;
-    } else {
-      height = showChat ? 43 : 72;
-    }
-    return height;
-  }
+  const topicCommentArr = ['RUB', 'Communicable disease', 'Sanctions', 'NCBR', 'War', 'Cyber'];
 
   const genComment = (data) => {
     if (data.topic === 'Readability') {
-      // const originalText = "This is the first line1\nThis is the first line.\nThis is the second line.\n\nThis is a new paragraph.";
       return (
         <div>
           {/* <span>{progressText(originalText)}</span> */}
@@ -115,18 +105,21 @@ export default function RiskContent(props) {
           }
         </div>
       );
-    } else if (!data.comment.has_identical_clause) {
-      return progressText(data.comment);
-    } else {
+    } else if ( !topicCommentArr.includes(data.topic)) {
+      return data.comment;
+    } else if (data.comment["has_identical_clause"]){
       return (
         <div>
-          <span>{data.comment.key}: </span>
-          {data.comment.value.forEach((item, index) => {
+          <span>{data.comment["key"]}: </span>
+          {/* {data.comment["value"]?.forEach((item, index) => {
             return <span key={index}>- {progressTextReadability(item)}</span>
-          })}
+          })} */}
         </div>
       )
-    }
+    } 
+    else {
+      return data.comment["value"];
+    }    
   }
 
   const checkSourceText = (text) => {
@@ -171,9 +164,9 @@ export default function RiskContent(props) {
           </div>
           <div className={classNames("table-content", {
             "tb-content-middle": !showChat && isShowProgressBar,
-            "tb-content-medium" : showChat && !isShowProgressBar,
-            "tb-content-min" : showChat && isShowProgressBar,
-            })}>
+            "tb-content-medium": showChat && !isShowProgressBar,
+            "tb-content-min": showChat && isShowProgressBar,
+          })}>
             {dataAnalysis.map((data) => {
               if (data.executed_status === 'success') {
                 return (
