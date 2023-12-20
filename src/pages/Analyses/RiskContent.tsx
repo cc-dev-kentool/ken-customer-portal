@@ -1,4 +1,4 @@
-import { statusRisk } from "constants/riskAnalysis";
+import { statusRisk, topicCommentArr } from "constants/riskAnalysis";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { progressText, progressTextReadability } from "helpers/until";
@@ -84,17 +84,17 @@ export default function RiskContent(props) {
     }
   }, [currentStatus]);
 
-  const topicCommentArr = ['RUB', 'Communicable disease', 'Sanctions', 'NCBR', 'War', 'Cyber'];
-
   const genComment = (data) => {
-    if (data.topic === 'Readability') {
+    const topicName = data.topic;
+
+    const emtyValue = typeof data.comment["Three worst clauses"] == "string" || data.comment["Three worst clauses"]?.length === 0
+
+    if (topicName === 'Readability') {
       return (
         <div>
-          {/* <span>{progressText(originalText)}</span> */}
           <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br />
           <span>Three worst clauses: </span>
-          {typeof data.comment["Three worst clauses"] == "string" ? "N/A" :
-            data.comment["Three worst clauses"].length === 0
+          {emtyValue
               ? "N/A"
               : <ul>
                 {data.comment["Three worst clauses"]?.map((item, index) => (
@@ -104,23 +104,24 @@ export default function RiskContent(props) {
           }
         </div>
       );
-    } else if (!topicCommentArr.includes(data.topic)) {
+    }
+
+    if (!topicCommentArr.includes(topicName)) {
       return data.comment;
-    } else if (data.comment["has_identical_clause"]) {
+    } else if (!data.comment["has_identical_clause"] || typeof data.comment["value"] === "string") {
+      return data.comment["value"];
+    } else {
       return (
         <div>
           <span>{data.comment["key"]}: </span>
-          {/* {data.comment["value"]?.map((item, index) => {
+          {data.comment["value"]?.map((item, index) => {
             return <>
               <br />
               <span key={index}>- {item}</span>
             </>
-          })} */}
+          })}
         </div>
       )
-    }
-    else {
-      return data.comment["value"];
     }
   }
 
@@ -215,7 +216,7 @@ export default function RiskContent(props) {
                         </Row>
                         <Row className="mt-3 m-0">
                           <Col sm="2" className="title-left p-0">Comment</Col>
-                          <Col sm="10">{genComment(data.analysis_result)}</Col>
+                          <Col sm="10" className="content-comment">{genComment(data.analysis_result)}</Col>
                         </Row>
                       </>}
                   </div>

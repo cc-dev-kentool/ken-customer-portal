@@ -147,6 +147,10 @@
   background-color: #ffff99;
 }
 
+.source-text hr {
+  margin: 0.5rem 0;
+}
+
 .source-text .source-text-item:hover {
   color: #26ADC9;
 }
@@ -157,6 +161,10 @@
 
 .item-comment {
   font-style: italic;
+}
+
+.content-comment {
+  padding-left: 20px;
 }
 
 .cursor-pointer {

@@ -1,5 +1,6 @@
 
-import { statusExport } from 'constants/riskAnalysis';
+import { statusExport, topicCommentArr } from 'constants/riskAnalysis';
+import { progressTextReadability } from 'helpers/until';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 interface CustomJsPDF extends jsPDF {
@@ -27,8 +28,9 @@ export const exportPdf = (dataAnalysis, conversation) => {
 
   const genComment = (data) => {
     let comment = '';
-    if (data.topic === 'Readability') {
-      comment += 'Readability score for whole document: '
+    const topicName = data.topic
+    if (topicName === 'Readability') {
+      comment = 'Readability score for whole document: '
         + data.comment["Readability score for whole document"]
         + '\n'
         + 'Three worst clauses: ';
@@ -39,8 +41,15 @@ export const exportPdf = (dataAnalysis, conversation) => {
           comment += `\n- ` + item.clause + ' ' + item.score
         })
       }
-    } else {
+    } else if (!topicCommentArr.includes(topicName)){
       comment = data.comment;
+    } else if (!data.comment["has_identical_clause"] || typeof data.comment["value"] === "string") {
+      comment = data.comment["value"]
+    } else {
+      comment = data.comment["key"] + ": \n";
+      data.comment["value"]?.forEach(item => {
+        comment += "- " + item + "\n";
+      })
     }
     return comment;
   }
