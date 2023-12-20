@@ -115,8 +115,17 @@ export default function RiskContent(props) {
           }
         </div>
       );
-    } else {
+    } else if (!data.comment.has_identical_clause) {
       return progressText(data.comment);
+    } else {
+      return (
+        <div>
+          <span>{data.comment.key}: </span>
+          {data.comment.value.forEach((item, index) => {
+            return <span key={index}>- {progressTextReadability(item)}</span>
+          })}
+        </div>
+      )
     }
   }
 
@@ -125,6 +134,13 @@ export default function RiskContent(props) {
       return false;
     }
     return true;
+  }
+
+  const checkSourceHasValue = (text) => {
+    if (text && text.trim().toLowerCase() !== 'n/a') {
+      return true;
+    }
+    return false;
   }
 
   // Return the following JSX
@@ -183,13 +199,13 @@ export default function RiskContent(props) {
                           <Col sm="2" className="title-left p-0 pt-4 pb-2">Source Text</Col>
                           <Col sm="10" className="pt-4 pb-2">
                             {data.analysis_result.source_text?.map((text, index) => {
-                              if (text.value) return <div key={text.key}>
+                              if (checkSourceHasValue(text)) return <div key={index}>
                                 {index >= 1 && <hr />}
                                 <p
-                                  className={classNames('pt-2 mb-2', { 'cursor-pointer source-text-item': checkSourceText(text.value) })}
-                                  onClick={() => checkSourceText(text.value) && handleSearch(text.value)}
+                                  className={classNames('pt-2 mb-2', { 'cursor-pointer source-text-item': checkSourceText(text) })}
+                                  onClick={() => checkSourceText(text) && handleSearch(text)}
                                 >
-                                  {progressText(text.value)}
+                                  {progressText(text)}
                                 </p>
                               </div>
                             })}

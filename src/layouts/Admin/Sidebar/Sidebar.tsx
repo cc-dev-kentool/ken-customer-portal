@@ -96,7 +96,7 @@ export default function Sidebar(props) {
       <div className="bg-white">
         <div className="logo">
           <a href={hrefValue}>
-            <p className="mb-2"><img src={logo} alt="logo" width="70%" /></p>
+            <p className="mb-2"><img src={logo} alt="logo" width={isShowFullSidebar ? "200px" : "90px"} /></p>
           </a>
           <span
             className={classNames("sidebar-toggle", { "expand-sidebar": !isShowFullSidebar })}

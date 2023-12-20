@@ -94,7 +94,7 @@ export default function PdfDocument(props) {
     const words = searchText.trim().split(/\s+/);
 
     function getRightChar(charVal) {
-      const specialChars = ['(', ')', '[', ']'];
+      const specialChars = ['(', ')', '[', ']', '.', ',', ';'];
       return specialChars.find(p => p === charVal) ? "\\" + charVal : charVal;
     }
 

@@ -1,7 +1,7 @@
 /* analysis-index */
 .analysis-index {
   background-color: #fff;
-  height: 817px;
+  height: 835px;
   border-radius: 10px;
   text-align: center;
   padding-top: 10px;
@@ -71,7 +71,7 @@
 }
 
 .full-height {
-  height: 819px;
+  height: 835px;
 }
 
 .min-height {
@@ -89,11 +89,11 @@
 .table-content {
   overflow-y: auto;
   overflow-x: hidden;
-  height: 705px;
+  height: 720px;
 }
 
 .tb-content-middle {
-  height: 565px;
+  height: 550px;
 }
 
 .tb-content-medium {
@@ -152,7 +152,7 @@
   background-color: #fff;
   padding: 10px;
   border-radius: 15px;
-  height: 209px;
+  height: 225px;
   margin-top: 10px;
   position: relative;
 }
@@ -313,7 +313,7 @@ textarea {
 .component-pdf {
   display: flex;
   flex-direction: column;
-  height: 820px;
+  height: 835px;
   border-radius: 15px;
   min-width: 360px;
 }
