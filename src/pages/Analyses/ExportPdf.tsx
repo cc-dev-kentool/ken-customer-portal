@@ -16,10 +16,10 @@ export const exportPdf = (dataAnalysis, conversation) => {
 
   const getSourceTexe = (data) => {
     let text = '';
-    let isCount = data.length > 1 && data.every(item => item.value)
+    let isCount = data.length > 1 && data.every(item => item)
     data.forEach((item) => {
-      if (item.value) {
-        text += `${isCount ? '- ' : ''}` + item.value + '\n';
+      if (item) {
+        text += `${isCount ? '- ' : ''}` + item + '\n';
       }
     })
     return text;

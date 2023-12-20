@@ -5,6 +5,11 @@
 }
 
 /* Side bar */
+.sidebar {
+  position: relative;
+  min-height: 910px;
+}
+
 .full-sidebar {
   width: 260px;
 }
@@ -19,14 +24,6 @@
   border-bottom: 1px solid #f2f2f2;
   margin-bottom: 30px;
   padding-top: 10px;
-}
-
-.sidebar .logo a {
-  text-decoration: none;
-  color: #000;
-  font-size: 24px;
-  line-height: 32px;
-  font-weight: bold;
 }
 
 .sidebar .list-group {
@@ -154,6 +151,16 @@
   text-align: left;
 }
 
+.sidebar .fileName {
+  max-width: 155px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: -5px;
+  cursor: pointer;
+}
+
 .sidebar .active-file {
   background-color: #a8dee9 !important;
   border-radius: 5px;
@@ -165,11 +172,11 @@
 }
 
 .sidebar .footer {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   background-color: #fff;
   padding-top: 7px;
-  z-index: 3;
+  z-index: 1;
 }
 
 .sidebar .btn-contact {
@@ -265,7 +272,7 @@
 
 .navbar {
   box-shadow: none !important;
-  height: 9vh;
+  height: 65px;
   background: #F2F2F2;
   padding-left: 0;
   width: 100%;
