@@ -135,6 +135,18 @@
   border-bottom: 1px solid #cccccc;
 }
 
+.area-source-text {
+  padding: 20px;
+}
+
+.area-source-text p {
+  margin-bottom: 0;
+}
+
+.area-source-text p::selection {
+  background-color: #ffff99;
+}
+
 .source-text .source-text-item:hover {
   color: #26ADC9;
 }
@@ -145,6 +157,22 @@
 
 .item-comment {
   font-style: italic;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-pointer:hover {
+  cursor: pointer;
+}
+
+.cursor-text {
+  cursor: text;
+}
+
+.cursor-text:hover {
+  cursor: text;
 }
 
 /* ChatGPT Content */
