@@ -175,6 +175,7 @@ export default function PdfDocument(props) {
             matchCase: true,
           },
         ]);
+        scrollToHighlight()
         isFounded = true;
       });
     }
@@ -191,6 +192,10 @@ export default function PdfDocument(props) {
 
     setValueSearch("");
   }
+
+  const scrollToHighlight = () => {
+    window.scrollTo(0, 0);
+  };
 
   // Uses the useEffect hook to perform the highlight when the valueSearch changes
   useEffect(() => {
