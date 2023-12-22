@@ -47,7 +47,7 @@ export default function ContractHistory(props) {
   // Sets up side effect using async `getListUser()` action creator to fetch user settings from backend API
   useEffect(() => {
     dispatch(getContracts());
-    dispatch(getStatisticsContract());
+    dispatch(getStatisticsContract(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -173,6 +173,7 @@ export default function ContractHistory(props) {
         <ContentTable
           columns={columns}
           listUser={contracts}
+          defaultHeightTop={310}
         />
       </div>
 

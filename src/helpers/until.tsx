@@ -28,13 +28,12 @@ export const getDateDiff = (time1, time2, isCheckWithNow) => {
 
   const years = diffDuration.years() > 0 ? `${diffDuration.years()} years` : '';
   const months = diffDuration.months() > 0 ? `${diffDuration.months()} months` : '';
-  const weeks = diffDuration.weeks() > 0 ? `${diffDuration.weeks()} weeks` : '';
   const days = diffDuration.days() > 0 ? `${diffDuration.days()} days` : '';
   const hours = diffDuration.hours() > 0 ? `${diffDuration.hours()} hours` : '';
   const minutes = diffDuration.minutes() > 0 ? `${diffDuration.minutes()} minutes` : '';
   const seconds = diffDuration.seconds() > 0 ? `${diffDuration.seconds()} seconds` : '';
 
-  return `${years} ${months} ${weeks} ${days} ${hours} ${minutes} ${seconds} ${isCheckWithNow ? 'ago' : ''}`;
+  return `${years} ${months} ${days} ${hours} ${minutes} ${seconds} ${isCheckWithNow ? 'ago' : ''}`;
 }
 
 // Function to display the label in shortened form with an ellipsis (...) after a certain length
@@ -130,4 +129,34 @@ export const isOnTabletOrIpad = () => {
 // Returns the DD - MM -YYY
 export const getLocalDate = (dateTime) => {
   return moment.utc(dateTime).local().format("DD-MM-YYYY");
+};
+
+export const progressText = (text) => {
+  // Split text by double newlines or dot followed by newline, then map through pieces and separate with <br /> elements
+  const paragraphs = text.split(/\n\n|\.\n/).map((part, index) => (
+    <p key={index} className="m-0">
+      {part.split(/\n\n|\.\n/).map((line, lineIndex) => (
+        <p key={lineIndex} className="m-0">
+          {line}
+        </p>
+      ))}
+    </p>
+  ));
+
+  return paragraphs
+};
+
+export const progressTextReadability = (text) => {
+  // Split text by double newlines or dot followed by newline, then map through pieces and separate with <br /> elements
+  const paragraphs = text.split(/\n/).map((part, index) => (
+    <p key={index} className="m-0">
+      {part.split(/\n/).map((line, lineIndex) => (
+        <p key={lineIndex} className="m-0">
+          {line}
+        </p>
+      ))}
+    </p>
+  ));
+
+  return paragraphs
 };

@@ -1,14 +1,12 @@
-import { statusRisk } from "constants/riskAnalysis";
+import { statusRisk, topicCommentArr } from "constants/riskAnalysis";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { useAppDispatch } from "hooks";
+import { progressText, progressTextReadability } from "helpers/until";
 import AnalysisProgress from "./AnalysisProgress";
 import classNames from "classnames";
 
 // Define a function component named "RiskContent" and receive a single parameter called "props"
 export default function RiskContent(props) {
-  const dispatch = useAppDispatch();
-
   // Destructure the "url" and "setValueSearch" props from the "props" object
   const {
     showPdf,
@@ -20,6 +18,7 @@ export default function RiskContent(props) {
   } = props;
 
   const [isShowProgressBar, setIsShowProgressBar] = useState<boolean>(false);
+  const [isSelecting, setIsSelecting] = useState<boolean>(false);
 
   // Define a state variable named "topic" using the useState hook with an initial value of an array of objects
   const [topic, setTopic] = useState<Array<object>>([
@@ -72,6 +71,7 @@ export default function RiskContent(props) {
   const handleSearch = (text) => {
     const itemText = window.getSelection()?.toString().trim();
     itemText?.trim() ? setValueSearch(itemText) : setValueSearch(text);
+    setIsSelecting(false)
   }
 
   // Use the useEffect hook to run the provided callback when the currentStatus state changes
@@ -84,35 +84,62 @@ export default function RiskContent(props) {
     }
   }, [currentStatus]);
 
-  // Define a function getHeightRiskContent that calculates and returns the height value based on conditions
-  const getHeightRiskContent = () => {
-    let height: number;
-    if (isShowProgressBar) {
-      height = showChat ? 18 : 47;
-    } else {
-      height = showChat ? 43 : 72;
-    }
-    return height;
-  }
-
   const genComment = (data) => {
-    if (data.topic === 'Readability') {
+    const topicName = data.topic;
+
+    const emtyValue = typeof data.comment["Three worst clauses"] == "string" || data.comment["Three worst clauses"]?.length === 0
+
+    if (topicName === 'Readability') {
       return (
         <div>
           <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br />
           <span>Three worst clauses: </span>
-          {data.comment["Three worst clauses"].length === 0
-            ? "N/A"
-            : <ul>
-              {data.comment["Three worst clauses"].map((item, index) => (
-                <li key={index} className="item-comment">{item[`worst clause ${index + 1}`]} ({item.score})</li>
-              ))}
-            </ul>
+          {emtyValue
+              ? "N/A"
+              : <ul>
+                {data.comment["Three worst clauses"]?.map((item, index) => (
+                  <li key={index} className="item-comment">{progressTextReadability(item.clause)} ({item.score})</li>
+                ))}
+              </ul>
           }
         </div>
       );
-    } else {
+    }
+
+    if (topicName === 'Unused definitions') {
+      if (typeof data.comment === "string") {
+        return data.comment
+      } else {
+        return (
+          <div>
+          <span>{data.comment["key"]}: </span>
+          {data.comment["value"]?.map((item, index) => {
+            return <>
+              <br />
+              <span key={index}>- {item}</span>
+            </>
+          })}
+        </div>
+        )
+      }
+    }
+
+    if (!topicCommentArr.includes(topicName)) {
       return data.comment;
+    } else if (!data.comment["has_identical_clause"] || typeof data.comment["value"] === "string") {
+      return data.comment["value"];
+    } else {
+      return (
+        <div>
+          <span>{data.comment["key"]}: </span>
+          {data.comment["value"]?.map((item, index) => {
+            return <>
+              <br />
+              <span key={index}>- {item}</span>
+            </>
+          })}
+        </div>
+      )
     }
   }
 
@@ -122,6 +149,15 @@ export default function RiskContent(props) {
     }
     return true;
   }
+
+  const checkSourceHasValue = (text) => {
+    if (text && text.trim().toLowerCase() !== 'n/a') {
+      return true;
+    }
+    return false;
+  }
+
+  const getCursorClassName = () => (isSelecting ? 'cursor-text' : 'cursor-pointer');
 
   // Return the following JSX
   return (
@@ -141,15 +177,19 @@ export default function RiskContent(props) {
                 />
               </Col>
             </Row>
-            {isShowProgressBar && 
-              <AnalysisProgress 
-                showPdf={showPdf} 
-                dataTopics={dataAnalysis} 
-                currentStatus={currentStatus} 
+            {isShowProgressBar &&
+              <AnalysisProgress
+                showPdf={showPdf}
+                dataTopics={dataAnalysis}
+                currentStatus={currentStatus}
               />
             }
           </div>
-          <div className="table-content" style={{ height: `${getHeightRiskContent()}vh` }}>
+          <div className={classNames("table-content", {
+            "tb-content-middle": !showChat && isShowProgressBar,
+            "tb-content-medium": showChat && !isShowProgressBar,
+            "tb-content-min": showChat && isShowProgressBar,
+          })}>
             {dataAnalysis.map((data) => {
               if (data.executed_status === 'success') {
                 return (
@@ -171,17 +211,22 @@ export default function RiskContent(props) {
                     </Row>
                     {getStatusShowTopic(data.analysis_result?.topic) &&
                       <>
-                        <Row className="source-text m-0" onMouseUp={() => handleSearch("")}>
+                        <Row className="source-text m-0">
                           <Col sm="2" className="title-left p-0 pt-4 pb-2">Source Text</Col>
-                          <Col sm="10" className="pt-4 pb-2">
+                          <Col
+                            sm="10"
+                            className={`area-source-text ${getCursorClassName()}`}
+                            onMouseUp={() => handleSearch("")}
+                            onMouseDown={() => setIsSelecting(true)}
+                          >
                             {data.analysis_result.source_text?.map((text, index) => {
-                              return <div key={text.key}>
+                              if (checkSourceHasValue(text)) return <div key={index}>
                                 {index >= 1 && <hr />}
                                 <p
-                                  className={classNames('pt-2 mb-2', { 'cursor-pointer source-text-item': checkSourceText(text.value) })}
-                                  onClick={() => checkSourceText(text.value) && handleSearch(text.value)}
+                                  className={classNames('', { 'source-text-item': checkSourceText(text) })}
+                                  onClick={() => checkSourceText(text) && handleSearch(text)}
                                 >
-                                  {text.value}
+                                  {progressText(text)}
                                 </p>
                               </div>
                             })}
@@ -189,7 +234,7 @@ export default function RiskContent(props) {
                         </Row>
                         <Row className="mt-3 m-0">
                           <Col sm="2" className="title-left p-0">Comment</Col>
-                          <Col sm="10">{genComment(data.analysis_result)}</Col>
+                          <Col sm="10" className="content-comment">{genComment(data.analysis_result)}</Col>
                         </Row>
                       </>}
                   </div>

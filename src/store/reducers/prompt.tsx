@@ -1,41 +1,39 @@
-import { promptActionType } from "../actionTypes"
+import { topicsActionType } from "../actionTypes"
 
 // Initial state of Modal
 const initialState = {
-  listPrompt: [],
-  getListPromptSuccess: false,
-  prompt: {},
-  getPromptSuccess: false,
-  createPromptSuccess: false,
-  editPromptSuccess: false,
+  topics: [],
+  getTopicsSuccess: false,
+  createTopicSuccess: false,
+  editTopicSuccess: false,
 }
 
 // Declaring the modal reducer function
 const promptSetting = (state = initialState, action) => {
   switch (action.type) {
     // Case for GET_LIST_PROMPT action type.
-    case promptActionType.GET_LIST_PROMPT:
+    case topicsActionType.GET_LIST_TOPICS:
       return {
         ...state,
-        listPrompt: action.payload
+        topics: action.payload
       }
     // Case for GET_LIST_PROMPT_SUCCESS action type.
-    case promptActionType.GET_LIST_PROMPT_SUCCESS:
+    case topicsActionType.GET_LIST_TOPICS_SUCCESS:
       return {
         ...state,
-        getListPromptSuccess: action.payload,
+        getTopicsSuccess: action.payload,
       }
     // Case for GET_PROMPT action type.
-    case promptActionType.CREATE_PROMPT_SUCCESS:
+    case topicsActionType.CREATE_TOPICS_SUCCESS:
       return {
         ...state,
-        createPromptSuccess: action.payload,
+        createTopicSuccess: action.payload,
       }
     // Case for CREATE_PROMPT_SUCCESS action type.
-    case promptActionType.EDIT_PROMPT_SUCCESS:
+    case topicsActionType.UPDATE_TOPICS_SUCCESS:
       return {
         ...state,
-        editPromptSuccess: action.payload,
+        editTopicSuccess: action.payload,
       }
     // Default fallback case returns the current state.
     default:

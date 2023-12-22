@@ -182,10 +182,10 @@ function RouteWithSubRoutes(route: routes) {
             window.location.href =
               "/login?continue=" + encodeURIComponent(window.location.href);
           }
-        }
-
-        // Redirect to 404 page if user doesn't have required role for the current route
-        if (localStorage.getItem("token") && !route.roles.includes(user.role)) {
+        } else if (route.name === 'dashboard' && user.role === 'member') {
+          window.location.href = "/analyses";
+        } else if (localStorage.getItem("token") && !route.roles.includes(user.role)) {
+          // Redirect to 404 page if user doesn't have required role for the current route
           window.location.href = "/404";
         }
 

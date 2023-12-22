@@ -18,14 +18,14 @@ export default function AnalysisProgress(props) {
   const { showPdf, dataTopics, currentStatus } = props;
 
   // Get listPrompt from app state using useAppSelector hook
-  const [listPrompt] = useAppSelector((state) => [
-    state.prompts.listPrompt,
+  const [topics] = useAppSelector((state) => [
+    state.prompts.topics,
   ]);
 
   const defaultLengthText = showPdf ? 10 : 20
 
   // Sort the listPrompt array based on topic_order property
-  listPrompt.sort(function (a, b) {
+  topics.sort(function (a, b) {
     if (a.topic_order < b.topic_order) {
       return -1;
     }
@@ -126,7 +126,7 @@ export default function AnalysisProgress(props) {
   // Return the content for each step based on the dataProgress and listPrompt
   const contentStep = (prompt) => {
     let icon = iconNone;
-    const findTopic = dataTopics.find(topic => topic.topic === prompt.topic_id)
+    const findTopic = dataTopics.find(topic => topic.topic === prompt.uuid)
 
     if (findTopic) {
       switch (findTopic.executed_status) {
@@ -148,12 +148,12 @@ export default function AnalysisProgress(props) {
     return (
       <StepLabel StepIconComponent={icon}>
         <p data-tooltip-id={`tooltip-${prompt.uuid}`} style={{ cursor: "pointer", fontSize: "13px" }}>
-          {prompt?.topic_name.length > defaultLengthText ? labelDisplay(prompt?.topic_name, defaultLengthText) : prompt?.topic_name}
+          {prompt?.name.length > defaultLengthText ? labelDisplay(prompt?.name, defaultLengthText) : prompt?.name}
         </p>
-        {prompt?.topic_name.length > defaultLengthText &&
+        {prompt?.name.length > defaultLengthText &&
           <ReactTooltip
             id={`tooltip-${prompt?.uuid}`}
-            content={prompt?.topic_name}
+            content={prompt?.name}
             widthTooltip={200}
           />}
       </StepLabel>
@@ -176,7 +176,7 @@ export default function AnalysisProgress(props) {
       </> :
       <>
         <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
-          {listPrompt.map((prompt, index) => (
+          {topics.map((prompt, index) => (
             (index < 6) && (<Step key={prompt.uuid}>
               {contentStep(prompt)}
             </Step>)
@@ -184,7 +184,7 @@ export default function AnalysisProgress(props) {
           ))}
         </Stepper>
         <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
-          {listPrompt.map((prompt, index) => (
+          {topics.map((prompt, index) => (
             (index >= 6) && (<Step key={prompt.uuid}>
               {contentStep(prompt)}
             </Step>)

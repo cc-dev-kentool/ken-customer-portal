@@ -99,13 +99,16 @@ export function Login() {
                 <input
                   type={`${isShowPassword ? 'text' : 'password'}`}
                   {...register("password")}
-                  className={`form-control ${errors.password ? "is-invalid" : ""
+                  className={`form-control feild-pass ${errors.password ? "is-invalid" : ""
                     }`}
                   name="password"
                   placeholder="***************"
                 />
                 {!errors.password?.message &&
-                  <i className="fa-regular fa-eye" onClick={() => setIsShowPassword(!isShowPassword)}/>
+                  <i 
+                    className={`iconShowPass fa-regular fa-eye${isShowPassword ? "-slash" : ""}`} 
+                    onClick={() => setIsShowPassword(!isShowPassword)}
+                  />
                 }
                 <div className="invalid-feedback">
                   {errors.password?.message}

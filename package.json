@@ -1,6 +1,6 @@
 {
   "name": "ken-customer",
-  "version": "1.0.0.18",
+  "version": "1.0.0.19",
   "description": "Ken Customer Portal",
   "private": false,
   "author": {
@@ -38,6 +38,7 @@
     "history": "^4.10.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.1",
     "langflow-chat": "^1.0.22",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",

@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
-import { getListPrompt } from "store/actions/prompt";
-import generatePDF, { Margin } from 'react-to-pdf';
+import { getListTopic } from "store/actions/prompt";
+import { exportPdf } from "./ExportPdf";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
 import PdfDocument from "./PdfDocument";
 import ChatGPT from "./ChatGPT";
-import classNames from "classnames";
 import AdminLayout from "layouts/Admin";
-import ExportPdf from "./ExportPdf";
+import Page404Component from "components/Page404/Page404Component";
+import classNames from "classnames";
 import "./style.css";
 
 // This is the Analysis component which is exported as default.
@@ -24,7 +24,6 @@ export default function Analysis(props) {
   const [showPdf, setShowPdf] = useState<boolean>(true);
   const [showChat, setShowChat] = useState<boolean>(false);
   const [valueSearch, setValueSearch] = useState<string>("");
-  const [isDowndLoad, setIsDowndLoad] = useState<boolean>(false);
   const [currentStatus, setCurrentStatus] = useState<string>("");
   const [dataAnalysis, setDataAnalysis] = useState<object[]>([]);
   const [isShowFullChat, setIsShowFullChat] = useState<boolean>(false);
@@ -32,11 +31,10 @@ export default function Analysis(props) {
 
   // The useAppSelector hook is used here to extract data from the Redux store state.
   // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
-  const [dataAnaly, getDataAnalysisSuccess, conversation, getConversationSuccess] = useAppSelector((state) => [
+  const [dataAnaly, hasPermission, conversation] = useAppSelector((state) => [
     state.analysis.dataAnalysis,
-    state.analysis.getDataAnalysisSuccess,
+    state.analysis.hasPermission,
     state.conversation.conversation,
-    state.conversation.getConversationSuccess,
   ]);
 
   let runningTimeout: any = null;
@@ -48,7 +46,8 @@ export default function Analysis(props) {
 
       dispatch(getAnalysisData(id, true));
       setFieldId(id);
-      dispatch(getListPrompt(false));
+      dispatch(getListTopic(false));
+      dispatch(getConversation(id))
 
       if (runningTimeout) {
         clearTimeout(runningTimeout);
@@ -80,20 +79,10 @@ export default function Analysis(props) {
       setDataAnalysis(dataAnaly?.topic_executions?.[0].execution_details)
     }
   }, [dataAnaly])
-
-  // Use the useEffect hook to run the provided callback when the isDowndLoad state changes
-  useEffect(() => {
-    if (isDowndLoad && getConversationSuccess) {
-      const getTargetElement = () => document.getElementById('divToPrint');
-      generatePDF(getTargetElement, { filename: 'page.pdf', page: { margin: Margin.MEDIUM } });
-      setIsDowndLoad(false);
-    }
-  }, [isDowndLoad, getConversationSuccess]);
-
+  
   // Define a function exportPDF that does the following:
-  const exportPdf = () => {
-    conversation.length === 0 && dispatch(getConversation(fieldId));
-    setIsDowndLoad(true);
+  const handleExportPdf = () => {
+    exportPdf(dataAnalysis, conversation)
   }
 
   // This function handles showing the chat.
@@ -112,14 +101,14 @@ export default function Analysis(props) {
       setShowPdf={setShowPdf}
       setValueSearch={setValueSearch}
     >
-      {dataAnalysis?.length > 0 ?
+      {hasPermission && dataAnalysis?.length > 0 ?
         <Row className="main-content">
           <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
             {dataAnalysis?.length > 0 && currentStatus === 'done' && (
               <i
                 className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
                 style={{ color: "#26ADC9" }}
-                onClick={exportPdf}
+                onClick={handleExportPdf}
               />
             )}
             {!showPdf &&
@@ -168,14 +157,13 @@ export default function Analysis(props) {
             }
           </Col>
         </Row> :
-        getDataAnalysisSuccess && <div className="analysis-index">
+        hasPermission && <div className="analysis-index">
           <h1>Analyses</h1>
         </div>
       }
 
-      {isDowndLoad &&
-        <ExportPdf dataAnalysis={dataAnalysis} conversation={conversation} />
-      }
+      {!hasPermission && <Page404Component />}
+
     </AdminLayout>
   );
 }

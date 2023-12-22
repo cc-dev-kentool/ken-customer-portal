@@ -16,6 +16,7 @@ export default function ChatGPT(props) {
   const [isSendMessage, setIsSendMessage] = useState<boolean>(false);
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState<boolean>(true);
   const [dataConversation, setDataConversation] = useState<any>([]);
+  const [heightTextarea, setHeightTextarea] = useState(30);
 
   // Retrieves the conversation array from the Redux store's state
   const [conversation, getConversationSuccess] = useAppSelector((state) => [
@@ -39,7 +40,7 @@ export default function ChatGPT(props) {
     if (dataConversation.length > 0 || isSendMessage) {
       scrollToBottom();
     }
-  }, [dataConversation.length, isSendMessage])
+  }, [dataConversation.length, isSendMessage, isShowFullChat])
 
   const scrollToBottom = () => {
     const element = window.document.getElementById("conversation");
@@ -70,29 +71,49 @@ export default function ChatGPT(props) {
       setMessage2(e.target.value.trim());
     }
   };
-  
+
   const onChangeTextarea = (value) => {
     setMessage(value)
     value.trim() ? setIsDisabledBtnSend(false) : setIsDisabledBtnSend(true);
   }
 
+  const handleExpandChat = () => {
+    setIsShowFullChat(!isShowFullChat);
+    isShowFullChat && heightTextarea > 130 && setHeightTextarea(130)
+  }
+
+  const handleMouseDown = (e) => {
+    const startY = e.clientY;
+    const startHeight = heightTextarea;
+    const maxHeight = isShowFullChat ? 550 : 130
+
+    const doMouseMove = (e) => {
+      const newHeight = startHeight - (e.clientY  - startY);
+      setHeightTextarea(Math.max(newHeight > maxHeight ? maxHeight : newHeight, 30)); // Enforcing the minimum height of 30px
+    };
+
+    const doMouseUp = () => {
+      document.removeEventListener('mousemove', doMouseMove);
+      document.removeEventListener('mouseup', doMouseUp);
+    };
+
+    document.addEventListener('mousemove', doMouseMove);
+    document.addEventListener('mouseup', doMouseUp);
+  };
+
+
   return (
-    <div className={classNames("chat-content", { "full-chat": isShowFullChat })}>
+    <div id={"chat-content"} className={classNames("chat-content", { "full-chat": isShowFullChat })}>
       <i
         className="fa fa-times icon-close"
         aria-hidden="true"
         onClick={handleCloseChat}
       ></i>
-      {!isShowFullChat
-        ? <i
-          className="fa-solid fa-expand icon-expand"
-          onClick={() => setIsShowFullChat(true)}
-        />
-        : <i
-          className="fa-solid fa-minus icon-expand"
-          onClick={() => setIsShowFullChat(false)}
-        />}
-      <div id="conversation" className={classNames("conversation", { "height-full": isShowFullChat })}>
+      <i
+        className={`fa-solid ${isShowFullChat ? 'fa-minus' : 'fa-expand'}  icon-expand`}
+        onClick={handleExpandChat}
+      />
+      <div id="conversation" className={classNames("conversation", {"fh-conversation": isShowFullChat})}>
         {dataConversation?.map(item => {
           return (
             // Renders each conversation item with question and answer labels
@@ -121,25 +142,27 @@ export default function ChatGPT(props) {
         }
       </div>
       <div className="area-input">
-        {/* Sends the message when the send button is clicked */}
-        <button
-          type="submit"
-          onClick={handleSendMessage}
-          className={classNames("iconSend", {"disabled-icon-send" : isDisabledBtnSend})}
-          disabled={isDisabledBtnSend}
-        >
-          <img src={icon_send} alt="" />
-        </button>
+        <div className="resize-icon" onMouseDown={handleMouseDown}>⇱</div>
         <textarea
-          rows={isShowFullChat ? 2 : 1}
           className="field-input form-control"
           value={showLoading ? "" : message}
           onChange={(e) => onChangeTextarea(e.target.value)}
           onKeyDown={handleKeyDown}
-        />
+          style={{ height: `${heightTextarea}px` }}
+        >
+        </textarea>
+        {/* Sends the message when the send button is clicked */}
+        <button
+          type="submit"
+          onClick={handleSendMessage}
+          className={classNames("iconSend", { "disabled-icon-send": isDisabledBtnSend })}
+          disabled={isDisabledBtnSend}
+        >
+          <img src={icon_send} alt="" />
+        </button>
       </div>
 
-      {!isSendMessage && !getConversationSuccess && 
+      {!isSendMessage && !getConversationSuccess &&
         <div className="text-center iconLoading"><CircularProgress color="inherit" /></div>
       }
 

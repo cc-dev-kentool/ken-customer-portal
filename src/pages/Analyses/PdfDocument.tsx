@@ -1,10 +1,11 @@
-import { Worker, Viewer, ScrollMode } from "@react-pdf-viewer/core";
-import { searchPlugin } from "@react-pdf-viewer/search";
+import { Worker, Viewer, ScrollMode, MinimalButton, Position, Tooltip } from "@react-pdf-viewer/core";
+import { searchPlugin, RenderSearchProps, NextIcon, PreviousIcon } from "@react-pdf-viewer/search";
 import { ToolbarSlot, TransformToolbarSlot, toolbarPlugin } from "@react-pdf-viewer/toolbar";
 import { useEffect, useState } from "react";
 import { add as addAlert, remove } from "store/actions/alert";
 import { useAppDispatch } from "hooks";
 import closePdf from "assets/icon/icon_close.svg";
+import iconSearch from "assets/icon/icon_search.svg";
 import "@react-pdf-viewer/toolbar/lib/styles/index.css";
 import "@react-pdf-viewer/highlight/lib/styles/index.css";
 import "@react-pdf-viewer/core/lib/styles/index.css";
@@ -25,7 +26,7 @@ export default function PdfDocument(props) {
       GoToPreviousPage: () => <></>,
       GoToNextPage: () => <></>,
       Open: () => <></>,
-      // ShowSearchPopover: () => <></>,
+      ShowSearchPopover: () => <></>,
       NumberOfPages: () => <span className="text-white">/ <NumberOfPages /></span>
     }
   }
@@ -36,7 +37,7 @@ export default function PdfDocument(props) {
 
   // Create an instance of the search plugin and get the highlight method
   const searchPluginInstance = searchPlugin();
-  const { highlight, clearHighlights } = searchPluginInstance;
+  const { highlight, clearHighlights, Search } = searchPluginInstance;
 
   const [contentPdf, setContentPdf] = useState<any>([]);
 
@@ -66,17 +67,21 @@ export default function PdfDocument(props) {
     let startIndex = 0;
     const len = calcLength(text);
 
-    const result: any = [];
+    let result: any = [];
     while (startIndex < text.length) {
-      if (text.charAt(startIndex) === '(') {
-        startIndex++;
-      }
-      let endIndex = startIndex + len < text.length ? startIndex + len : text.length - 1;
+      let endIndex = startIndex + len < text.length ? startIndex + len : text.length;
       const newEnd = getEndIndex(text, endIndex);
 
       result.push(text.substring(startIndex, newEnd));
       startIndex = newEnd + 1;
     }
+
+    result = result.map((item, index) => {
+      if (index === result.length - 1 && item.charAt(item.length - 1) === '.') {
+        return item.slice(0, -1);
+      }
+      return item;
+    });
 
     return result;
   }
@@ -89,7 +94,7 @@ export default function PdfDocument(props) {
     const words = searchText.trim().split(/\s+/);
 
     function getRightChar(charVal) {
-      const specialChars = ['(', ')'];
+      const specialChars = ['(', ')', '[', ']', '.', ',', ';'];
       return specialChars.find(p => p === charVal) ? "\\" + charVal : charVal;
     }
 
@@ -170,6 +175,7 @@ export default function PdfDocument(props) {
             matchCase: true,
           },
         ]);
+        scrollToHighlight()
         isFounded = true;
       });
     }
@@ -186,6 +192,10 @@ export default function PdfDocument(props) {
 
     setValueSearch("");
   }
+
+  const scrollToHighlight = () => {
+    window.scrollTo(0, 0);
+  };
 
   // Uses the useEffect hook to perform the highlight when the valueSearch changes
   useEffect(() => {
@@ -220,13 +230,110 @@ export default function PdfDocument(props) {
     setContentPdf(pdfContent)
   }
 
-  // Return the following JSX
+  const [showPopup, setShowPopup] = useState(false);
+  const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
+
+  const handleContextMenu = (e) => {
+    e.preventDefault();
+    // Get the click position
+    const posX = e.pageX;
+    const posY = e.pageY;
+
+    // Update the state with the new position
+    setClickPosition({ x: posX, y: posY });
+
+    // Show the popup
+    setShowPopup(!showPopup);
+
+    // Clear highlighting
+    clearHighlights();
+  };
+
+  const contentPopupSearch = () => {
+    return (
+      <div
+        className="pop-search"
+        style={{
+          top: `${clickPosition.y + 15}px`,
+          left: `${clickPosition.x}px`,
+        }}
+      >
+        <div className="rpv-core__arrow rpv-core__arrow--bl rpv-core__popover-body-arrow"></div>
+        <Search>
+          {(renderSearchProps: RenderSearchProps) => {
+            const [readyToSearch, setReadyToSearch] = useState(false);
+            return (
+              <>
+                <div className="d-flex m-1">
+                  <input
+                    className="inputSearch"
+                    placeholder="Enter to search"
+                    type="text"
+                    value={renderSearchProps.keyword}
+                    onChange={(e) => {
+                      setReadyToSearch(false);
+                      if (e.target.value) {
+                        renderSearchProps.setKeyword(e.target.value);
+                      } else {
+                        renderSearchProps.clearKeyword();
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && renderSearchProps.keyword) {
+                        renderSearchProps.search();
+                        setTimeout(() => { setReadyToSearch(true); }, 1500)
+
+                      }
+                    }}
+                  />
+                  {(readyToSearch && renderSearchProps.keyword) && (
+                    renderSearchProps.numberOfMatches > 0 ?
+                      <div className="result">
+                        {`${renderSearchProps.currentMatch}/${renderSearchProps.numberOfMatches}`}
+                      </div> :
+                      <div className="result">Not found</div>
+                  )}
+                </div>
+
+                <div className="d-flex">
+                  <Tooltip
+                    position={Position.BottomCenter}
+                    target={
+                      <MinimalButton onClick={renderSearchProps.jumpToPreviousMatch}>
+                        <PreviousIcon />
+                      </MinimalButton>
+                    }
+                    content={() => 'Previous match'}
+                    offset={{ left: 0, top: 8 }}
+                  />
+                  <Tooltip
+                    position={Position.BottomCenter}
+                    target={
+                      <MinimalButton onClick={renderSearchProps.jumpToNextMatch}>
+                        <NextIcon />
+                      </MinimalButton>
+                    }
+                    content={() => 'Next match'}
+                    offset={{ left: 0, top: 8 }}
+                  />
+                  <button className="btnCloseSearch" onClick={handleContextMenu}>Close</button>
+                </div>
+              </>
+            );
+          }}
+        </Search>
+      </div>
+    )
+  }
+
   return (
     <div>
       {url && (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.16.105/build/pdf.worker.min.js">
           <div className="component-pdf">
             <div className="header-pdf" >
+              <img src={iconSearch} alt="search" onClick={handleContextMenu} className="icon-search" />
+              {showPopup && contentPopupSearch()}
               <Toolbar>{renderDefaultToolbar(transform)}</Toolbar><br />
               <div className="btn-closePdf">
                 <img src={closePdf} alt="" onClick={() => setShowPdf(false)} />

@@ -1,5 +1,5 @@
 import { PopupDialog } from "components/Modals/PopUpDialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "hooks";
 import { uploadPdf } from "store/actions/analysis";
 import { remove as removeAlert } from "store/actions/alert"
@@ -8,17 +8,19 @@ import UploadFile from "pages/Analyses/UploadFile";
 import SidebarAdmin from "./SidebarAdmin";
 import SidebarMember from "./SidebarMember";
 import logo from "../../../assets/images/logo.png"
+import icon_email from "../../../assets/icon/icon_email.svg";
 
 // Export the Sidebar component as the default export
 export default function Sidebar(props) {
   // Get the dispatch function from the useAppDispatch hook
   const dispatch = useAppDispatch();
-  
+
   // Destructure the props object for easier access to its properties
   const {
     routeName,
     isShowFullSidebar,
     toggleMenu,
+    setIsShowFullSidebar,
     setUrl,
     setShowChat,
     setIsShowFullChat,
@@ -34,6 +36,15 @@ export default function Sidebar(props) {
   const [isShowFiles, setIsShowFiles] = useState<boolean>(true);
   const [file, setFile] = useState<any>(null);
   const [isEnableBtnAnalyze, setIsEnableBtnAnalyze] = useState<boolean>(false);
+
+  const queryStr = window.location.search
+  useEffect(() => {
+    if (queryStr.includes("sidebar-full")) {
+      const checkFull = queryStr.substring(queryStr.indexOf("=") + 1) === "true";
+      setIsShowFullSidebar(checkFull);
+      setIsShowFiles(checkFull);
+    }
+  }, [queryStr])
 
   // Define a function called "getContentPopupArea" that returns some JSX
   const getContentPopupArea = () => {
@@ -55,6 +66,7 @@ export default function Sidebar(props) {
       setShowChat(false);
       setIsShowFullChat(false);
       setFile(null);
+      setValueSearch("");
       dispatch(uploadPdf(file));
     }
   }
@@ -72,6 +84,9 @@ export default function Sidebar(props) {
     setShowModalUplaod(true)
   }
 
+  const basePath = user.role === "member" ? "/analyses" : "/";
+  const hrefValue = `${basePath}?sidebar-full=${isShowFullSidebar}`;
+
   // Render the following JSX
   return (
     <nav
@@ -80,8 +95,8 @@ export default function Sidebar(props) {
     >
       <div className="bg-white">
         <div className="logo">
-          <a href={`${user.role === "member" ? "/analyses" : "/"}`}>
-            <p className="mb-2"><img src={logo} alt="logo" width="70%"/></p>
+          <a href={hrefValue}>
+            <p className="mb-2"><img src={logo} alt="logo" width={isShowFullSidebar ? "200px" : "90px"} /></p>
           </a>
           <span
             className={classNames("sidebar-toggle", { "expand-sidebar": !isShowFullSidebar })}
@@ -93,7 +108,7 @@ export default function Sidebar(props) {
             <i className={`fa fa-chevron-${isShowFullSidebar ? 'left' : 'right'}`} aria-hidden="true"></i>
           </span>
         </div>
-        
+
         <div className="list-group">
           {/* Render SidebarAdmin component if user role is "admin" or "super-admin" */}
           {["admin", "super-admin"].includes(user.role) &&
@@ -116,7 +131,20 @@ export default function Sidebar(props) {
         </div>
       </div>
 
-      <p className={classNames("version", { "full-sidebar": isShowFullSidebar, "small-sidebar": !isShowFullSidebar })}>KEN &copy; 1.0.0.18</p>
+      <div className={classNames("footer", {
+        "full-sidebar": isShowFullSidebar,
+        "small-sidebar": !isShowFullSidebar
+      })}>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfUdRoTe2bYxoZJdLNtJ174Ctd8Pd9jyccadmSlgBbqX4_OUQ/viewform" target="_blank">
+          <button className={`btn-contact ${!isShowFullSidebar && 'text-center'}`}>
+            <img src={icon_email} alt="logo" width="15px" className="icon-contact" />
+            {isShowFullSidebar && <span>Contact Administrator</span>}
+          </button>
+        </a>
+        <p className="version">
+          KEN &copy; 1.0.0.19
+        </p>
+      </div>
 
       {/* Render PopupDialog component with specific props */}
       <PopupDialog

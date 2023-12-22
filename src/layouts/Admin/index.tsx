@@ -17,6 +17,7 @@ function AdminLayout(props) {
     setIsShowFullChat,
     setShowPdf,
     setValueSearch,
+    setShowSidebar,
   } = props;
 
   // Retrieve the value of "isLoading" from the app state using the useAppSelector hook
@@ -28,6 +29,7 @@ function AdminLayout(props) {
   // Define a function called "toggleMenu" that toggles the value of "isShowFullSidebar" when called.
   const toggleMenu = () => {
     setIsShowFullSidebar(!isShowFullSidebar);
+    setShowSidebar?.(!isShowFullSidebar);
   };
 
   return (
@@ -37,6 +39,7 @@ function AdminLayout(props) {
         routeName={routeName}
         isShowFullSidebar={isShowFullSidebar}
         toggleMenu={toggleMenu}
+        setIsShowFullSidebar={setIsShowFullSidebar}
         setUrl={setUrl}
         setShowChat={setShowChat}
         setIsShowFullChat={setIsShowFullChat}
@@ -44,13 +47,10 @@ function AdminLayout(props) {
         setValueSearch={setValueSearch}
       />
       <div className="main">
-        <Navmenu
-          isShowFullSidebar={isShowFullSidebar}
-          toggleMenu={toggleMenu}
-        />
+        <Navmenu isShowFullSidebar={isShowFullSidebar} />
         <main>
           <Backdrop
-            sx={{ color: '#fff', zIndex: 2 }}
+            sx={{ color: '#fff', zIndex: 99 }}
             open={isLoading}
           >
             <CircularProgress color="inherit" />

@@ -1,91 +1,145 @@
-import { statusRisk } from "constants/riskAnalysis";
-import { Col, Row } from "react-bootstrap";
 
-export default function ExportPdf(props) {
+import { statusExport, topicCommentArr } from 'constants/riskAnalysis';
+import { progressTextReadability } from 'helpers/until';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+interface CustomJsPDF extends jsPDF {
+  lastAutoTable: {
+    finalY?: number;
+  };
+}
 
-  // Destructuring props object to get dataAnalysis and conversation variables
-  const { dataAnalysis, conversation } = props;
+export const exportPdf = (dataAnalysis, conversation) => {
+  // Define a function named "getStatusRisk" that takes a "status" parameter and returns a value from the "statusRisk" array based on the label
+  const getStatusExport = (status) => {
+    return statusExport.find(item => item.label === status)?.value;
+  }
 
-  // Define a function named "getStatusRisk" that takes a "status" parameter 
-  // and returns a value from the "statusRisk" array based on the label
-  const getStatusRisk = (status) => {
-    return statusRisk.find(item => item.label === status)?.value;
+  const getSourceTexe = (data) => {
+    let text = '';
+    let isCount = data.length > 1 && data.every(item => item)
+    data.forEach((item) => {
+      if (item) {
+        text += `${isCount ? '- ' : ''}` + item + '\n';
+      }
+    })
+    return text;
   }
 
   const genComment = (data) => {
-    if (data.topic === 'Readability') {
-      return (
-        <div>
-          <span>Readability score for whole document: {data.comment["Readability score for whole document"]}</span> <br />
-          <span>Three worst clauses: </span>
-          {data.comment["Three worst clauses"].length === 0
-            ? "N/A"
-            : data.comment["Three worst clauses"].map((item, index) => (
-              <><br /><span key={index} className="m-3"> - {item[`worst clause ${index + 1}`]} ({item.score})</span></>
-            ))
-          }
-        </div>
-      );
+    let comment = '';
+    const topicName = data.topic
+    if (topicName === 'Readability') {
+      comment = 'Readability score for whole document: '
+        + data.comment["Readability score for whole document"]
+        + '\n'
+        + 'Three worst clauses: ';
+      if (typeof data.comment["Three worst clauses"] === "string" || data.comment["Three worst clauses"].length === 0) {
+        comment += 'N/A';
+      } else {
+        data.comment["Three worst clauses"].forEach(item => {
+          comment += `\n- ` + item.clause + ' ' + item.score
+        })
+      }
+    } else if (!topicCommentArr.includes(topicName)){
+      comment = data.comment;
+    } else if (!data.comment["has_identical_clause"] || typeof data.comment["value"] === "string") {
+      comment = data.comment["value"]
     } else {
-      return data.comment;
+      comment = data.comment["key"] + ": \n";
+      data.comment["value"]?.forEach(item => {
+        comment += "- " + item + "\n";
+      })
     }
+    return comment;
   }
 
-  // Return JSX elements
-  return (
-    <div id="divToPrint" style={{ overflow: "hidden", marginTop: "30px" }}>
-      <h2 className="text-center">Data Analysis</h2>
-      {/* Check if dataAnalysis array has items */}
-      {dataAnalysis?.length > 0 &&
-        <div className="table-content">
-          {dataAnalysis.map((data) => {
-            return (
-              <div key={data.uuid} className="risk-content-item">
-                <Row className="risk-content-item-topic mb-4">
-                  <Col sm="10">
-                    {data.analysis_result?.topic}
-                  </Col>
-                  <Col sm="2" className="text-end">
-                    {getStatusRisk(data.analysis_status)}
-                  </Col>
-                </Row>
-                <Row className="source-text m-0">
-                  <Col sm="2" className="title-left p-0">Source Text</Col>
-                  <Col sm="10" className="p-0">
-                    {data?.analysis_result?.source_text?.map((text, index) => (
-                      <div key={text.key}>
-                        {index >= 1 && <hr />}
-                        <p className="pt-2 mb-2">
-                          {text.value === 'n/a' ? <span>n/a</span> : text.value}
-                        </p>
-                      </div>
-                    ))}
-                  </Col>
-                </Row>
-                <Row className="mt-3 m-0">
-                  <Col sm="2" className="title-left p-0">Comment</Col>
-                  <Col sm="10" className="p-0">{genComment(data.analysis_result)}</Col>
-                </Row>
-              </div>
-            )
-          })}
-        </div>
+  // Instantiate jsPDF object
+  const pdf = new jsPDF() as unknown as CustomJsPDF;
+
+  pdf.text('Risk Analysis Data', 80, 15);
+
+  const headers = [["Name Topic", "Status", "Source Text", "Comment"]];
+
+  let dataExport: any = [];
+  dataAnalysis.sort(function (a, b) {
+    return a["topic_order"] < b["topic_order"] ? -1 : 1;
+  })
+
+  dataAnalysis.forEach((data: any) => {
+    dataExport.push([
+      data.analysis_result.topic,
+      '',
+      getSourceTexe(data.analysis_result.source_text),
+      genComment(data.analysis_result),
+      data.analysis_result.status,
+    ])
+  })
+
+  let drawnRows: any = [];
+  // Add table to PDF document
+  autoTable(pdf, {
+    head: headers,
+    body: dataExport,
+    theme: 'grid',
+    showHead: 'firstPage',
+    headStyles: {
+      fillColor: [38, 173, 201],
+      lineColor: [203, 203, 203],
+      lineWidth: 0.1,
+    },
+    didDrawCell: (data) => {
+      if (data.column.index === 1 && data.cell.section === 'body') {
+        const rowIndex = data.row.index;
+        const cell = data.cell;
+        const icon = getStatusExport(data.row.raw[4])?.toString();
+        // Add image to the cell
+        if (rowIndex >= 0 && !drawnRows.includes(rowIndex) && typeof icon === "string") {
+          // Ensure icon is defined and is not just any Element, but specifically an HTMLImageElement or HTMLCanvasElement, or string.
+          pdf.addImage(icon, 'PNG', cell.x + 4, cell.y + 1, 5, 5); // Adjust position and size accordingly
+          drawnRows.push(rowIndex);
+        }
       }
-      <h2 className="text-center mt-5">Data Chat</h2>
-      <div className="conversation">
-        {conversation?.map(item => {
-          return (
-            <div key={item.uuid}>
-              <p className="question">
-                <label className="question-content">{item.question}</label>
-              </p>
-              <p className="answer">
-                <label className="answer-content">{item.answer}</label>
-              </p>
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  );
+    },
+    startY: 20,
+  });
+
+  autoTable(pdf, {
+    head: [["Chat Data"]],
+    body: [],
+    theme: 'grid',
+    showHead: 'firstPage',
+    headStyles: {
+      fillColor: [255, 255, 255],
+      textColor: [0, 0, 0],
+      fontSize: 16,
+      fontStyle: 'normal',
+      halign: 'center',
+      cellPadding: [5, 0, -3, 0],
+    },
+  });
+
+  const headersChat = [["Question", "Answer"]];
+  let dataChat: any = [];
+  conversation.forEach((message: any) => {
+    dataChat.push([
+      message.question,
+      message.answer,
+    ]);
+  })
+
+  autoTable(pdf, {
+    head: headersChat,
+    body: dataChat,
+    theme: 'grid',
+    showHead: 'firstPage',
+    headStyles: {
+      fillColor: [38, 173, 201],
+      lineColor: [203, 203, 203],
+      lineWidth: 0.1,
+    },
+  });
+
+  // Save the PDF file
+  pdf.save("data.pdf");
 }

@@ -61,11 +61,6 @@ const handleErrorRequest = (err) => {
     window.location.href = "/login"
     return Promise.reject()
   } 
-  else if (err.response?.status === 404) {
-    // Forbidden access to resource, redirect to 403 page
-    window.location.href = "/404"
-    return Promise.reject("404")
-  }
   else return Promise.reject(err.response) // Otherwise, return the error response as the rejection reason
 }
 

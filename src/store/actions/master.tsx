@@ -29,12 +29,12 @@ export function getStatisticsUser() {
   };
 }
 
-export function getStatisticsContract() {
+export function getStatisticsContract(isLoading = true) {
   return async function (dispatch) {
-    dispatch(setLoading(true));
+    isLoading && dispatch(setLoading(true));
     await API({ url: "/statistic/contract", method: "GET" })
       .then((result) => {
-        dispatch(setLoading(false));
+        isLoading && dispatch(setLoading(false));
         dispatch({
           type: masterActionType.GET_STATISTICS_CONTRACT,
           payload: result.data.data,

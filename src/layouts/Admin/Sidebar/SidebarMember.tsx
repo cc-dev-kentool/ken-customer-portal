@@ -36,17 +36,17 @@ export default function SidebarMember(props) {
   let defaultValue: number;
   switch (role) {
     case 'super-admin':
-      defaultValue = 420;
+      defaultValue = 550;
       break;
     case 'admin':
-      defaultValue = 380;
+      defaultValue = 510;
       break;
     default:
-      defaultValue = 200;
+      defaultValue = 330;
   }
 
   // Declare and initialize states using the useState hook
-  const [heightMenu, setHeightMenu] = useState<number>(window.innerHeight - defaultValue)
+  const [heightMenu, setHeightMenu] = useState<number>(0)
   const [activeFile, setActiveFile] = useState<string>("");
   const [isClickToFile, setIsClickToFile] = useState<boolean>(false);
 
@@ -64,18 +64,28 @@ export default function SidebarMember(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const scrollHeight = document.getElementById("sidebar")?.scrollHeight;
+  useEffect(() => {
+    if (scrollHeight) {
+      setHeightMenu(scrollHeight - defaultValue)
+    }
+  }, [scrollHeight])
+
   // Set up side effect using the useEffect hook to update the heightMenu state when window resizes
   useEffect(() => {
     window.addEventListener('resize', function () {
-      setHeightMenu(window.innerHeight - defaultValue - 40);
+      const scrollHeight = document.getElementById("sidebar")?.scrollHeight;
+      if (scrollHeight) {
+        setHeightMenu(scrollHeight - defaultValue);
+      }
     });
   }, []);
 
   useEffect(() => {
     if (!isShowFullSidebar) {
-      setHeightMenu(heightMenu + 40)
+      setHeightMenu(heightMenu + 50)
     } else {
-      setHeightMenu(heightMenu - 40)
+      setHeightMenu(heightMenu - 50)
     }
   }, [isShowFullSidebar])
 
@@ -140,46 +150,45 @@ export default function SidebarMember(props) {
         {isShowFullSidebar && <span>New Document</span>}
       </button>
 
-      {files?.length > 0 && <div
-        className={
-          classNames("main-menu pr-0",
-            { "main-menu-extended": (isShowFiles && !isShowFullSidebar) }
-          )
-        }
-        style={{ height: heightMenu }}
-      >
-        <p className="main-menu-title">
-          <i className="fa-solid fa-chevron-down" />
-          <span className="m-2">Main</span>
-        </p>
+      {files?.length > 0 &&
         <div
-          className={classNames("list-file", { "none-file": !isShowFiles })}
-          style={{ height: '84%' }}
+          className={
+            classNames("main-menu pr-0",
+              { "main-menu-extended": (isShowFiles && !isShowFullSidebar) }
+            )
+          }
         >
-          {files.map((file) => {
-            return (
-              <button
-                id={`${isActiveFile(file.uuid) ? 'activeFile' : ''}`}
-                className={classNames("list-file-item", { "active-file": isActiveFile(file.uuid) })}
-                key={file.uuid}
-                onClick={() => !isActiveFile(file.uuid) && showDetailFile(file.uuid)}
-              >
-                <i className="fa-regular fa-file-lines m-2" style={{ color: "#26adc9" }}></i>
-                <span data-tooltip-id={`tooltip-1-${file.uuid}`}>
-                  {file.file_name?.length > 20 ? labelDisplay(file.file_name, 20) : file.file_name}
-                </span>
-                {file.file_name?.length > 20 &&
+          <p className="main-menu-title">
+            <i className="fa-solid fa-chevron-down" />
+            <span className="m-2">Main</span>
+          </p>
+          <div
+            className={classNames("list-file", { "none-file": !isShowFiles })}
+            style={{ maxHeight: `${heightMenu}px` }}
+          >
+            {files.map((file) => {
+              return (
+                <button
+                  id={`${isActiveFile(file.uuid) ? 'activeFile' : ''}`}
+                  className={classNames("list-file-item", { "active-file": isActiveFile(file.uuid) })}
+                  key={file.uuid}
+                  onClick={() => !isActiveFile(file.uuid) && showDetailFile(file.uuid)}
+                >
+                  <i className="fa-regular fa-file-lines m-2" style={{ color: "#26adc9" }}></i>
+                  <p data-tooltip-id={`tooltip-1-${file.uuid}`} className="fileName">
+                    {file.file_name}
+                  </p>
                   <ReactTooltip
                     id={`tooltip-1-${file.uuid}`}
                     content={file.file_name}
                     widthTooltip={220}
-                  />}
-                <img src={getStatusFile(file.analysis_status)} className="icon-action" alt="" width="15px" />
-              </button>
-            )
-          })}
-        </div>
-      </div>}
+                  />
+                  <img src={getStatusFile(file.analysis_status)} className="icon-action" alt="" width="15px" />
+                </button>
+              )
+            })}
+          </div>
+        </div>}
     </>
   );
 }
