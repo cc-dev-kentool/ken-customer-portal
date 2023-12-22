@@ -106,6 +106,24 @@ export default function RiskContent(props) {
       );
     }
 
+    if (topicName === 'Unused definitions') {
+      if (typeof data.comment === "string") {
+        return data.comment
+      } else {
+        return (
+          <div>
+          <span>{data.comment["key"]}: </span>
+          {data.comment["value"]?.map((item, index) => {
+            return <>
+              <br />
+              <span key={index}>- {item}</span>
+            </>
+          })}
+        </div>
+        )
+      }
+    }
+
     if (!topicCommentArr.includes(topicName)) {
       return data.comment;
     } else if (!data.comment["has_identical_clause"] || typeof data.comment["value"] === "string") {
