@@ -227,11 +227,6 @@
 .conversation {
   overflow: auto;
   margin-top: 20px;
-  height: 65%;
-}
-
-.fh-conversation {
-  height: 90%;
 }
 
 .conversation .question {

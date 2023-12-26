@@ -17,6 +17,7 @@ export default function ChatGPT(props) {
   const [isDisabledBtnSend, setIsDisabledBtnSend] = useState<boolean>(true);
   const [dataConversation, setDataConversation] = useState<any>([]);
   const [heightTextarea, setHeightTextarea] = useState(30);
+  const [heightConversation, setHeightConversation] = useState(0);
 
   // Retrieves the conversation array from the Redux store's state
   const [conversation, getConversationSuccess] = useAppSelector((state) => [
@@ -77,19 +78,30 @@ export default function ChatGPT(props) {
     value.trim() ? setIsDisabledBtnSend(false) : setIsDisabledBtnSend(true);
   }
 
+  const elementCon = document.getElementById('chat-content')?.scrollHeight
+  useEffect(() => {
+    if (elementCon) {
+      setHeightConversation(elementCon - 80)
+    }
+  }, [elementCon, isShowFullChat])
+
   const handleExpandChat = () => {
     setIsShowFullChat(!isShowFullChat);
-    isShowFullChat && heightTextarea > 130 && setHeightTextarea(130)
+    setHeightTextarea(0);
+    setHeightConversation(0);
   }
 
   const handleMouseDown = (e) => {
     const startY = e.clientY;
     const startHeight = heightTextarea;
-    const maxHeight = isShowFullChat ? 550 : 130
+    const maxHeight = isShowFullChat ? 400 : 100
 
     const doMouseMove = (e) => {
-      const newHeight = startHeight - (e.clientY  - startY);
-      setHeightTextarea(Math.max(newHeight > maxHeight ? maxHeight : newHeight, 30)); // Enforcing the minimum height of 30px
+      const newHeight = startHeight - (e.clientY - startY);
+      const height = Math.max(newHeight > maxHeight ? maxHeight : newHeight, 30);
+      setHeightTextarea(height);
+      let element = document.getElementById('chat-content')?.scrollHeight
+      element && setHeightConversation(element - (height + 50))
     };
 
     const doMouseUp = () => {
@@ -113,7 +125,7 @@ export default function ChatGPT(props) {
         className={`fa-solid ${isShowFullChat ? 'fa-minus' : 'fa-expand'}  icon-expand`}
         onClick={handleExpandChat}
       />
-      <div id="conversation" className={classNames("conversation", {"fh-conversation": isShowFullChat})}>
+      <div id="conversation" className="conversation" style={{ height: `${heightConversation}px` }}>
         {dataConversation?.map(item => {
           return (
             // Renders each conversation item with question and answer labels

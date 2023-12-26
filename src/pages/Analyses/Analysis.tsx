@@ -56,6 +56,12 @@ export default function Analysis(props) {
     }
   }, [queryStr])
 
+  useEffect(() => {
+    window.addEventListener('popstate', function () {
+      setUrl(dataAnaly.path)
+    });
+  }, [])
+
   // The useEffect hook is used here to perform side effects after rendering.
   // It will run when the value of dataAnaly changes.
   useEffect(() => {
