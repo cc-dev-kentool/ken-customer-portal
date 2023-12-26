@@ -41,7 +41,16 @@ export const exportPdf = (dataAnalysis, conversation) => {
           comment += `\n- ` + item.clause + ' ' + item.score
         })
       }
-    } else if (!topicCommentArr.includes(topicName)){
+    } else if (topicName === 'Unused definitions') {
+      if (typeof data.comment === "string") {
+        comment = data.comment;
+      } else {
+        comment = data.comment["key"] + ": \n";
+        data.comment["value"]?.forEach(item => {
+          comment += "- " + item + "\n";
+        })
+      }
+    } else if (!topicCommentArr.includes(topicName)) {
       comment = data.comment;
     } else if (!data.comment["has_identical_clause"] || typeof data.comment["value"] === "string") {
       comment = data.comment["value"]

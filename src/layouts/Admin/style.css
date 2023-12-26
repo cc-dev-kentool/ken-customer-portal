@@ -7,7 +7,6 @@
 /* Side bar */
 .sidebar {
   position: relative;
-  min-height: 910px;
 }
 
 .full-sidebar {
@@ -272,7 +271,7 @@
 
 .navbar {
   box-shadow: none !important;
-  height: 65px;
+  height: 9vh;
   background: #F2F2F2;
   padding-left: 0;
   width: 100%;
