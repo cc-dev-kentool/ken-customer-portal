@@ -163,6 +163,29 @@
     color: #26ADC9;
 }
 
+.isWithError {
+    margin-right: 25px;
+    z-index: 2;
+    position: sticky;
+    background: #fff;
+    padding: 3px 7px 0 7px;
+    margin-top: -25px;
+}
+
+.btn-random {
+    cursor: pointer;
+    background-color: #26ADC9;
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    width: 150px;
+}
+
+.btn-random:hover {
+    background-color: #A8DEE9;
+}
+
 .fa-pen {
     margin-right: 5px;
 }

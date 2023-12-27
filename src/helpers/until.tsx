@@ -160,3 +160,27 @@ export const progressTextReadability = (text) => {
 
   return paragraphs
 };
+
+export const generatePassword = () => {
+  const charSets = {
+    upperChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+    lowerChars: 'abcdefghijklmnopqrstuvwxyz',
+    numbers: '0123456789',
+    symbols: `!"#$%&'()*+-./:;<=>?[^{}|~]`
+  };
+
+  // Randomly pick one character from each type of characters to ensure completeness
+  let newPassword = Object.values(charSets).map(
+    (chars) => chars[Math.floor(Math.random() * chars.length)]
+  ).join('');
+
+  // Fill the rest of the password randomly to at least 8 chars
+  while (newPassword.length < 8) {
+    const allChars = Object.values(charSets).join('');
+    newPassword += allChars[Math.floor(Math.random() * allChars.length)];
+  }
+
+  // Shuffle to avoid predictable patterns
+  newPassword = newPassword.split('').sort(() => 0.5 - Math.random()).join('');
+  return newPassword
+};
