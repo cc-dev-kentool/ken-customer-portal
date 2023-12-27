@@ -4,6 +4,7 @@ import { useAppDispatch } from "hooks";
 import { createUser } from "store/actions/user";
 import { userAddValidation } from "schema/user";
 import { useState } from "react";
+import { generatePassword } from "helpers/until";
 
 // Defines a React functional component called "List" that takes props as its parameter
 export default function AddUser(props) {
@@ -23,6 +24,7 @@ export default function AddUser(props) {
   });
 
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [passwordRandom, setPasswordRandom] = useState('');
 
   // Function to handle form submission
   const onSubmit = async (data) => {
@@ -33,6 +35,10 @@ export default function AddUser(props) {
     };
     dispatch(createUser(params));
     setIsShowAdd(false);
+  };
+
+  const genPassword = () => {
+    setPasswordRandom(generatePassword());
   };
 
   // Returns JSX for rendering component on the page
@@ -65,13 +71,17 @@ export default function AddUser(props) {
             name="password"
             placeholder="Please enter password"
           />
-          {!errors.password?.message &&
-            <i
-              className={`iconShowPass fa-regular fa-eye${isShowPassword ? "-slash" : ""}`}
-              onClick={() => setIsShowPassword(!isShowPassword)}
-            />
-          }
+          <i
+            className={`iconShowPass fa-regular fa-eye${isShowPassword ? "-slash" : ""} ${errors.password ? "isWithError" : ""}`}
+            onClick={() => setIsShowPassword(!isShowPassword)}
+          />
           <div className="invalid-feedback">{errors.password?.message}</div>
+        </div>
+        <div className="row">
+          <p className="col">{passwordRandom}</p>
+          <p className="col text-end">
+            <span className="btn-random" onClick={genPassword}>Random Password</span>
+          </p>
         </div>
 
         <div className="mb-3">
