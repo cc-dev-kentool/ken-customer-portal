@@ -113,12 +113,11 @@ export default function RiskContent(props) {
         return (
           <div>
           <span>{data.comment["key"]}: </span>
+          <ul>
           {data.comment["value"]?.map((item, index) => {
-            return <>
-              <br />
-              <span key={index}>- {item}</span>
-            </>
+            return <li key={index}>{item}</li>
           })}
+          </ul>
         </div>
         )
       }
@@ -132,12 +131,11 @@ export default function RiskContent(props) {
       return (
         <div>
           <span>{data.comment["key"]}: </span>
+          <ul>
           {data.comment["value"]?.map((item, index) => {
-            return <>
-              <br />
-              <span key={index}>- {item}</span>
-            </>
+            return <li key={index}>{item}</li>
           })}
+          </ul>
         </div>
       )
     }
