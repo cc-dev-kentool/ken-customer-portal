@@ -15,7 +15,7 @@
     url("./assets/font/23c0fcab84d99da0de762de7e220a6e1.ttf") format("truetype"), /* chrome firefox opera Safari, Android, iOS 4.2+*/
     url("./assets/font/23c0fcab84d99da0de762de7e220a6e1.svg#Europa") format("svg"); /* iOS 4.1- */
 }
-
+ 
 label {
     font-size: 14px !important;
 }

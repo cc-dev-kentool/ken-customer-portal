@@ -1,4 +1,5 @@
 // Importing moment and Popup libraries
+import classNames from "classnames";
 import moment from "moment";
 import Popup from "reactjs-popup";
 
@@ -131,15 +132,72 @@ export const getLocalDate = (dateTime) => {
   return moment.utc(dateTime).local().format("DD-MM-YYYY");
 };
 
-export const progressText = (text) => {
+const charactersLineBreaks = (text, checkSourceText, handleSearch) => {
+  if (text.includes('•')) {
+    const parts = text.split('•');
+    return (
+      <span>
+        {parts.map((part, index) => {
+          if (part) {
+            return <>
+              <span
+                key={index}
+                className={classNames('', { 'source-text-item': checkSourceText(part) })}
+                onClick={() => checkSourceText(part) && handleSearch(part)}
+              >
+                {index > 0 && <span>•</span>} {part}
+              </span>
+              {index < parts.length - 1 && <br />}
+            </>
+          }
+        })}
+      </span>
+    );
+  } else {
+    return <span
+      className={classNames('', { 'source-text-item': checkSourceText(text) })}
+      onClick={() => checkSourceText(text) && handleSearch(text)}
+    >
+      {text}
+    </span>;
+  }
+}
+
+const numberlistLineBreaks = (text, checkSourceText, handleSearch) => {
+  const regex = /(?<=\s)(?=[ivxlcdm]+\.|[ivxlcdm]+\)|[a-z]\)|\d+\.)/gi;
+
+  const formattedText = text.split(regex).map((segment, index) => (
+    <span key={index}>
+      {index !== 0 && <br />}
+      {charactersLineBreaks(segment, checkSourceText, handleSearch)}
+    </span>
+  ));
+
+  return <span>{formattedText}</span>;
+}
+
+const textWithLineBreaks = (text, checkSourceText, handleSearch) => {
+  const sentences = text.split(/(?<=[:])\s*/);
+
+  const formattedText = sentences.map((sentence, index) => {
+    if (sentence) {
+      return <span key={index}>
+        {numberlistLineBreaks(sentence, checkSourceText, handleSearch)}
+        {index !== sentences.length - 1 && <br />}
+      </span>
+    }
+  });
+
+  return <div>{formattedText}</div>;
+}
+
+export const progressText = (text, checkSourceText, handleSearch) => {
   // Split text by double newlines or dot followed by newline, then map through pieces and separate with <br /> elements
-  const paragraphs = text.split(/\n\n|\.\n/).map((part, index) => (
+  const paragraphs = text.split(/\n\n/).map((part, index) => (
     <p key={index} className="m-0">
-      {part.split(/\n\n|\.\n/).map((line, lineIndex) => (
-        <p key={lineIndex} className="m-0">
-          {line}
-        </p>
-      ))}
+      {part.split(/\n\n/).map((line) =>
+        textWithLineBreaks(line, checkSourceText, handleSearch)
+      )}
     </p>
   ));
 
@@ -159,4 +217,49 @@ export const progressTextReadability = (text) => {
   ));
 
   return paragraphs
+};
+
+export const changeFormatComment = (text) => {
+  // Define replacements in an array
+  const replacements = [
+    {
+      oldValue: /The model clause sentence/g,
+      newValue: '<b><i>The model clause sentence</i></b>',
+    },
+    {
+      oldValue: /The contract sentence/g,
+      newValue: '<b><i>The contract sentence</i></b>',
+    }
+  ];
+
+  let formattedText = text;
+  replacements.forEach(element => {
+    formattedText = formattedText.replace(element.oldValue, element.newValue)
+  })
+
+  return <div dangerouslySetInnerHTML={{ __html: formattedText }} />;
+};
+
+export const generatePassword = () => {
+  const charSets = {
+    upperChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+    lowerChars: 'abcdefghijklmnopqrstuvwxyz',
+    numbers: '0123456789',
+    symbols: `!"#$%&'()*+-./:;<=>?[^{}|~]`
+  };
+
+  // Randomly pick one character from each type of characters to ensure completeness
+  let newPassword = Object.values(charSets).map(
+    (chars) => chars[Math.floor(Math.random() * chars.length)]
+  ).join('');
+
+  // Fill the rest of the password randomly to at least 8 chars
+  while (newPassword.length < 8) {
+    const allChars = Object.values(charSets).join('');
+    newPassword += allChars[Math.floor(Math.random() * allChars.length)];
+  }
+
+  // Shuffle to avoid predictable patterns
+  newPassword = newPassword.split('').sort(() => 0.5 - Math.random()).join('');
+  return newPassword
 };
