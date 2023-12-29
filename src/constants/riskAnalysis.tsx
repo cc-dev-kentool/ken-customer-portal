@@ -14,4 +14,4 @@ export const statusExport = [
 
 export const topicCommentArr = ['RUB', 'Communicable disease', 'Sanctions', 'NCBR', 'War', 'Cyber'];
 
-export const topicDisable = ['Unused Definitions', 'Readability'];
+export const topicDisable = ['Unused definitions', 'Readability'];
