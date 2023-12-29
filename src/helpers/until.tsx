@@ -1,4 +1,5 @@
 // Importing moment and Popup libraries
+import classNames from "classnames";
 import moment from "moment";
 import Popup from "reactjs-popup";
 
@@ -131,15 +132,43 @@ export const getLocalDate = (dateTime) => {
   return moment.utc(dateTime).local().format("DD-MM-YYYY");
 };
 
-export const progressText = (text) => {
+const breakLine = (text, checkSourceText, handleSearch) => {
+  if (text.includes('•')) {
+    const parts = text.split('•');
+    return (
+      <div>
+        {parts.map((part, index) => (
+          <>
+            <span
+              key={index}
+              className={classNames('', { 'source-text-item': checkSourceText(part) })}
+              onClick={() => checkSourceText(part) && handleSearch(part)}
+            >
+              {index > 0 && <span>•</span>} {part}
+            </span>
+            {index < parts.length - 1 && <br />}
+          </>
+        ))}
+      </div>
+    );
+  } else {
+    return <span
+      className={classNames('', { 'source-text-item': checkSourceText(text) })}
+      onClick={() => checkSourceText(text) && handleSearch(text)}
+    >
+      {text}
+    </span>;
+  }
+}
+
+export const progressText = (text, checkSourceText, handleSearch) => {
+  console.log("text", text)
   // Split text by double newlines or dot followed by newline, then map through pieces and separate with <br /> elements
   const paragraphs = text.split(/\n\n|\.\n/).map((part, index) => (
     <p key={index} className="m-0">
-      {part.split(/\n\n|\.\n/).map((line, lineIndex) => (
-        <p key={lineIndex} className="m-0">
-          {line}
-        </p>
-      ))}
+      {part.split(/\n\n|\.\n/).map((line) => 
+        breakLine(line, checkSourceText, handleSearch)
+      )}
     </p>
   ));
 
