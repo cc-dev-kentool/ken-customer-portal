@@ -1,7 +1,7 @@
 import { statusRisk, topicCommentArr, topicDisable } from "constants/riskAnalysis";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { progressText, progressTextReadability } from "helpers/until";
+import { changeFormatComment, progressText, progressTextReadability } from "helpers/until";
 import AnalysisProgress from "./AnalysisProgress";
 import classNames from "classnames";
 
@@ -133,7 +133,8 @@ export default function RiskContent(props) {
           <span>{data.comment["key"]}: </span>
           <ul>
           {data.comment["value"]?.map((item, index) => {
-            return <li key={index}>{item}</li>
+            return <li key={index}>{changeFormatComment(item)}</li>
+            // return <li key={index}>{(item)}</li>
           })}
           </ul>
         </div>

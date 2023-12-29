@@ -219,6 +219,27 @@ export const progressTextReadability = (text) => {
   return paragraphs
 };
 
+export const changeFormatComment = (text) => {
+  // Define replacements in an array
+  const replacements = [
+    {
+      oldValue: /The model clause sentence/g,
+      newValue: '<b><i>The model clause sentence</i></b>',
+    },
+    {
+      oldValue: /The contract sentence/g,
+      newValue: '<b><i>The contract sentence</i></b>',
+    }
+  ];
+
+  let formattedText = text;
+  replacements.forEach(element => {
+    formattedText = formattedText.replace(element.oldValue, element.newValue)
+  })
+
+  return <div dangerouslySetInnerHTML={{ __html: formattedText }} />;
+};
+
 export const generatePassword = () => {
   const charSets = {
     upperChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
