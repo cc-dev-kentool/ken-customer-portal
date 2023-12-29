@@ -1,4 +1,4 @@
-import { statusRisk, topicCommentArr } from "constants/riskAnalysis";
+import { statusRisk, topicCommentArr, topicDisable } from "constants/riskAnalysis";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { progressText, progressTextReadability } from "helpers/until";
@@ -189,7 +189,7 @@ export default function RiskContent(props) {
             "tb-content-min": showChat && isShowProgressBar,
           })}>
             {dataAnalysis.map((data) => {
-              if (data.executed_status === 'success') {
+              if (data.executed_status === 'success' && !topicDisable.includes(data.analysis_result?.topic)) {
                 return (
                   <div key={data.uuid} className="risk-content-item">
                     <Row className="risk-content-item-topic">
@@ -220,12 +220,7 @@ export default function RiskContent(props) {
                             {data.analysis_result.source_text?.map((text, index) => {
                               if (checkSourceHasValue(text)) return <div key={index}>
                                 {index >= 1 && <hr />}
-                                <p
-                                  className={classNames('', { 'source-text-item': checkSourceText(text) })}
-                                  onClick={() => checkSourceText(text) && handleSearch(text)}
-                                >
-                                  {progressText(text)}
-                                </p>
+                                {progressText(text, checkSourceText, handleSearch)}
                               </div>
                             })}
                           </Col>
