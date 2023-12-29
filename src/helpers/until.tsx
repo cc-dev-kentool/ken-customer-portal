@@ -132,24 +132,26 @@ export const getLocalDate = (dateTime) => {
   return moment.utc(dateTime).local().format("DD-MM-YYYY");
 };
 
-const breakLine = (text, checkSourceText, handleSearch) => {
+const charactersLineBreaks = (text, checkSourceText, handleSearch) => {
   if (text.includes('•')) {
     const parts = text.split('•');
     return (
-      <div>
-        {parts.map((part, index) => (
-          <>
-            <span
-              key={index}
-              className={classNames('', { 'source-text-item': checkSourceText(part) })}
-              onClick={() => checkSourceText(part) && handleSearch(part)}
-            >
-              {index > 0 && <span>•</span>} {part}
-            </span>
-            {index < parts.length - 1 && <br />}
-          </>
-        ))}
-      </div>
+      <span>
+        {parts.map((part, index) => {
+          if (part) {
+            return <>
+              <span
+                key={index}
+                className={classNames('', { 'source-text-item': checkSourceText(part) })}
+                onClick={() => checkSourceText(part) && handleSearch(part)}
+              >
+                {index > 0 && <span>•</span>} {part}
+              </span>
+              {index < parts.length - 1 && <br />}
+            </>
+          }
+        })}
+      </span>
     );
   } else {
     return <span
@@ -161,13 +163,40 @@ const breakLine = (text, checkSourceText, handleSearch) => {
   }
 }
 
+const numberlistLineBreaks = (text, checkSourceText, handleSearch) => {
+  const regex = /(?<=\s)(?=[ivxlcdm]+\.|[ivxlcdm]+\)|[a-z]\)|\d+\.)/gi;
+
+  const formattedText = text.split(regex).map((segment, index) => (
+    <span key={index}>
+      {index !== 0 && <br />}
+      {charactersLineBreaks(segment, checkSourceText, handleSearch)}
+    </span>
+  ));
+
+  return <span>{formattedText}</span>;
+}
+
+const textWithLineBreaks = (text, checkSourceText, handleSearch) => {
+  const sentences = text.split(/(?<=[:])\s*/);
+
+  const formattedText = sentences.map((sentence, index) => {
+    if (sentence) {
+      return <span key={index}>
+        {numberlistLineBreaks(sentence, checkSourceText, handleSearch)}
+        {index !== sentences.length - 1 && <br />}
+      </span>
+    }
+  });
+
+  return <div>{formattedText}</div>;
+}
+
 export const progressText = (text, checkSourceText, handleSearch) => {
-  console.log("text", text)
   // Split text by double newlines or dot followed by newline, then map through pieces and separate with <br /> elements
   const paragraphs = text.split(/\n\n|\.\n/).map((part, index) => (
     <p key={index} className="m-0">
-      {part.split(/\n\n|\.\n/).map((line) => 
-        breakLine(line, checkSourceText, handleSearch)
+      {part.split(/\n\n|\.\n/).map((line) =>
+        textWithLineBreaks(line, checkSourceText, handleSearch)
       )}
     </p>
   ));
