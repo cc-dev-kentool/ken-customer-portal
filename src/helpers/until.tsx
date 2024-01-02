@@ -164,7 +164,7 @@ const charactersLineBreaks = (text, checkSourceText, handleSearch) => {
 }
 
 const numberlistLineBreaks = (text, checkSourceText, handleSearch) => {
-  const regex = /(?<=\s)(?=[ivxlcdm]+\.|[ivxlcdm]+\)|[a-z]\)|\d+\.)/gi;
+  const regex = /(?<=\s)(?=[ivxlcdm]+\.|[ivxlcdm]+\)|[a-z]\)|[a-z]\.|\d+\.|\d+\))/gi;
 
   const formattedText = text.split(regex).map((segment, index) => (
     <span key={index}>
