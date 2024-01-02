@@ -164,7 +164,7 @@ const charactersLineBreaks = (text, checkSourceText, handleSearch) => {
 }
 
 const numberlistLineBreaks = (text, checkSourceText, handleSearch) => {
-  const regex = /(?<=\s)(?=[ivxlcdm]+\.|[ivxlcdm]+\)|[a-z]\)|[a-z]\.|\d+\.|\d+\))/gi;
+  const regex = /(?<=\s)(?=[ivxlcdm]+\.\s|[ivxlcdm]+\)\s|\([a-z]\)\s|[a-z]\)\s|[a-z]\.\s|\d+\.\s|\d+\)\s)|(?<=\n)(?=\d+\s|[ivxlcdm]+\s|[a-z]\s)/gi;
 
   const formattedText = text.split(regex).map((segment, index) => (
     <span key={index}>
@@ -188,7 +188,7 @@ const textWithLineBreaks = (text, checkSourceText, handleSearch) => {
     }
   });
 
-  return <div>{formattedText}</div>;
+  return <span>{formattedText}</span>;
 }
 
 export const progressText = (text, checkSourceText, handleSearch) => {
