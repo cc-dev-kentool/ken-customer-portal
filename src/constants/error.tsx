@@ -22,6 +22,7 @@ export const error = {
     "TopicExistException": "Topic exist exception!",
     "User exists, canot register again!": "User exists, canot register again!",
     "RecordNotFound": "File not found!",
+    "PasswordRepeatException": "The new password must not be similar to the old password!",
 
 }
 

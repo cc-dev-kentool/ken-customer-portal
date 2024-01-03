@@ -269,6 +269,7 @@
   border-radius: 10px;
   margin-right: 3px;
   padding: 5px 45px 5px 10px;
+  overflow: auto;
 }
 
 .iconSend {
@@ -296,7 +297,7 @@ textarea {
 .resize-icon {
   cursor: ns-resize;
   float: right;
-  padding: 5px;
+  padding: 5px 10px 5px 0;
   margin-bottom: -25px;
   background-color: transparent;
   user-select: none;
