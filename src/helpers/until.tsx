@@ -164,7 +164,7 @@ const charactersLineBreaks = (text, checkSourceText, handleSearch) => {
 }
 
 const numberlistLineBreaks = (text, checkSourceText, handleSearch) => {
-  const regex = /(?<=\s)(?=[ivxlcdm]+\.\s|[ivxlcdm]+\)\s|\([a-z]\)\s|[a-z]\)\s|[a-z]\.\s|\d+\.\s|\d+\)\s)|(?<=\n)(?=\d+\s|[ivxlcdm]+\s|[a-z]\s)/gi;
+  const regex = /(?<=\s)(?=[ivxlcdm]+\.|[ivxlcdm]+\)|\([a-z]\)|[a-z]\)|[a-z]\.|\d+\.|\d+\))|(?<=\n)(?=\d+\s|[ivxlcdm]+\s|[a-z]\s)/gi;
 
   const formattedText = text.split(regex).map((segment, index) => (
     <span key={index}>
@@ -192,6 +192,7 @@ const textWithLineBreaks = (text, checkSourceText, handleSearch) => {
 }
 
 export const progressText = (text, checkSourceText, handleSearch) => {
+  console.log(text)
   // Split text by double newlines or dot followed by newline, then map through pieces and separate with <br /> elements
   const paragraphs = text.split(/\n\n/).map((part, index) => (
     <p key={index} className="m-0">
