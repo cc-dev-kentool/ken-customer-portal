@@ -11,23 +11,25 @@ export function login(data) {
   return async function (dispatch) {
     // Set loading state to true
     dispatch(setLoading(true));
-    // Make a post request to the login endpoint with provided data
-    data = {
-      email: data.username,
-      password: data.password,
-    }
+
+    dispatch({
+      type: authActionType.LOGIN_SUCCESS,
+      payload: false,
+    });
+
     fetch('https://example.com', {
-      mode: 'no-cors' // Để tránh lỗi CORS trong ví dụ này
+      mode: 'no-cors'
     }).then(async () => {
+      // Make a post request to the login endpoint with provided data
+      data = {
+        email: data.username,
+        password: data.password,
+      }
+
       await API({ url: "/login", method: "POST", data })
-        .then((result) => {
+        .then(() => {
           // Set loading state to false
           dispatch(setLoading(false));
-
-          // Otherwise, set user information in local storage and set login success state
-          localStorage.setItem("token", result.data.data.token);
-          localStorage.setItem("user", JSON.stringify(result.data.data.user));
-
           dispatch({
             type: authActionType.LOGIN_SUCCESS,
             payload: true,
@@ -36,13 +38,6 @@ export function login(data) {
             type: authActionType.ERROR_LOGIN,
             payload: "",
           });
-
-          const role = result.data.data.user.role
-          if (role === "admin" || role === "super-admin") {
-            window.location.href = "/";
-          } else {
-            window.location.href = "/analyses";
-          }
         })
         .catch((err) => {
           // If there is an error, set loading state to false and set error message
@@ -59,6 +54,78 @@ export function login(data) {
         payload: "Please check your Internet connection and try again.",
       });
     });
+  };
+}
+
+// Define a function to log out a user
+export function otpConfirm(data) {
+  // Return an async function
+  return async function (dispatch) {
+    dispatch(setLoading(true));
+
+    dispatch({
+      type: authActionType.OTP_CONFIRM_SUCCESS,
+      payload: false,
+    });
+
+    await API({ url: "/login/otp", method: "post", data })
+      .then((result) => {
+        dispatch(setLoading(false));
+        dispatch({
+          type: authActionType.OTP_CONFIRM_SUCCESS,
+          payload: true,
+        });
+
+        localStorage.setItem("token", result.data.data.token);
+        localStorage.setItem("user", JSON.stringify(result.data.data.user));
+
+        const role = result.data.data.user.role
+        if (role === "admin" || role === "super-admin") {
+          window.location.href = "/";
+        } else {
+          window.location.href = "/analyses";
+        }
+      })
+      .catch((err) => {
+        dispatch(setLoading(false));
+        dispatch(onError(err));
+        dispatch({
+          type: authActionType.OTP_CONFIRM_SUCCESS,
+          payload: false,
+        });
+      });
+  };
+}
+
+// Define a function to log out a user
+export function resendOtp(data) {
+  // Return an async function
+  return async function (dispatch) {
+    dispatch(setLoading(true));
+
+    dispatch({
+      type: authActionType.RESEND_OTP_SUCCESS,
+      payload: false,
+    });
+    await API({ url: "/resend_otp", method: "post", data })
+      .then(() => {
+        dispatch(
+          addAlert("Re-send OTP success.", "success")
+        );
+        dispatch(setLoading(false));
+        dispatch({
+          type: authActionType.RESEND_OTP_SUCCESS,
+          payload: true,
+        });
+      })
+      .catch((err) => {
+        dispatch(setLoading(false));
+        dispatch(onError(err))
+        dispatch({
+          type: authActionType.RESEND_OTP_SUCCESS,
+          payload: false,
+        });
+      });
   };
 }
 

@@ -1,3 +1,11 @@
+.notification-top {
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+  height: auto;
+  width: 100%;
+}
+
 .login-form {
   padding: 5% 20%;
   height: 100vh;
@@ -61,6 +69,13 @@
   border: none;
   background-color: #26ADC9;
   margin-top: 10px;
+}
+
+.btn-resend {
+  cursor: pointer;
+  color: #26ADC9;
+  font-style: italic;
+  margin: -5px 0 5px 0;
 }
 
 .error {

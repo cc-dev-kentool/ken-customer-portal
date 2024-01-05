@@ -23,7 +23,8 @@ export const error = {
     "User exists, canot register again!": "User exists, canot register again!",
     "RecordNotFound": "File not found!",
     "PasswordRepeatException": "The new password must not be similar to the old password!",
-
+    "InvalidOtp": "The OTP you entered is not valid. Please try again.",
+    "OtpExpired": "The OTP you entered has expired. Please try again.",
 }
 
 // Define an object called "code" that contains a generic error message mapped to a specific error code.

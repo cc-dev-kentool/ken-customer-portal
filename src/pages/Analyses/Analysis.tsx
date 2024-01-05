@@ -3,7 +3,9 @@ import { useAppDispatch, useAppSelector } from "hooks";
 import { getAnalysisData, getListFile } from "store/actions/analysis";
 import { getConversation } from "store/actions/chatGpt";
 import { getListTopic } from "store/actions/prompt";
-import { exportPdf } from "./ExportPdf";
+import { exportPdf } from "./Export/ExportPdf";
+import { exportToExcel } from "./Export/ExportExcel";
+import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import RiskContent from "./RiskContent";
@@ -85,7 +87,7 @@ export default function Analysis(props) {
       setDataAnalysis(dataAnaly?.topic_executions?.[0].execution_details)
     }
   }, [dataAnaly])
-  
+
   // Define a function exportPDF that does the following:
   const handleExportPdf = () => {
     exportPdf(dataAnalysis, conversation)
@@ -111,22 +113,49 @@ export default function Analysis(props) {
         <Row className="main-content">
           <Col lg={url && showPdf ? 7 : 12} className={classNames("default-risk", { 'main-risk': url })}>
             {dataAnalysis?.length > 0 && currentStatus === 'done' && (
-              <i
-                className="fa-solid fa-file-arrow-down fa-2xl icon-download-pdf"
-                style={{ color: "#26ADC9" }}
-                onClick={handleExportPdf}
-              />
+              <>
+                <i
+                  data-tooltip-id={`tooltip-export-pdf`}
+                  className="fa-regular fa-circle-down fa-2xl icon-download-pdf"
+                  style={{ color: "#26ADC9" }}
+                  onClick={handleExportPdf}
+                />
+                <ReactTooltip
+                  id={`tooltip-export-pdf`}
+                  content={"Export PDF"}
+                  widthTooltip={100}
+                />
+                <i
+                  data-tooltip-id={`tooltip-export-excel`}
+                  className="fa-regular fa-file-excel fa-2xl icon-download-excel"
+                  style={{ color: "#26ADC9" }}
+                  onClick={() => exportToExcel(dataAnalysis, conversation)}
+                />
+                <ReactTooltip
+                  id={`tooltip-export-excel`}
+                  content={"Export Excel"}
+                  widthTooltip={105}
+                />
+              </>
             )}
             {!showPdf &&
-              <i
-                className={
-                  classNames("fa-regular fa-file-pdf fa-2xl icon-show-pdf", {
-                    "icon-pdf-expand": isShowFullChat
-                  })
-                }
-                style={{ color: "#26ADC9" }}
-                onClick={() => setShowPdf(true)}
-              />
+              <>
+                <i
+                  data-tooltip-id={`tooltip-show-pdf`}
+                  className={
+                    classNames("fa-regular fa-file-pdf fa-2xl icon-show-pdf", {
+                      "icon-pdf-expand": isShowFullChat
+                    })
+                  }
+                  style={{ color: "#26ADC9" }}
+                  onClick={() => setShowPdf(true)}
+                />
+                <ReactTooltip
+                  id={`tooltip-show-pdf`}
+                  content={"Show PDF"}
+                  widthTooltip={95}
+                />
+              </>
             }
             <RiskContent
               showPdf={showPdf}

@@ -192,7 +192,6 @@ const textWithLineBreaks = (text, checkSourceText, handleSearch) => {
 }
 
 export const progressText = (text, checkSourceText, handleSearch) => {
-  console.log(text)
   // Split text by double newlines or dot followed by newline, then map through pieces and separate with <br /> elements
   const paragraphs = text.split(/\n\n/).map((part, index) => (
     <p key={index} className="m-0">
