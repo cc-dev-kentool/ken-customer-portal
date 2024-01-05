@@ -42,10 +42,17 @@
 
 .main-content .icon-pdf-expand {
   right: auto;
-  margin-left: 40px;
+  margin-left: 75px;
 }
 
 .main-content .icon-download-pdf {
+  margin: 25px 0 0 40px;
+  cursor: pointer;
+  position: absolute;
+  z-index: 9;
+}
+
+.main-content .icon-download-excel {
   margin: 25px 0 0 10px;
   cursor: pointer;
   position: absolute;

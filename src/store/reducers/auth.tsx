@@ -47,6 +47,9 @@ const initialState = {
   business: {},
   errorBusiness: "",
   isUpdateBusinessSuccess: false,
+
+  otpConfirmSuccess: false, 
+  resendOtpSuccess: false, 
 }
 
 // Define auth reducer function with state and action as parameters.
@@ -62,6 +65,18 @@ const auth = (state = initialState, action) => {
       return {
         ...state,
         isLoginSuccess: action.payload,
+      }
+    // Case for OTP_CONFIRM_SUCCESS action type.
+    case authActionType.OTP_CONFIRM_SUCCESS:
+      return {
+        ...state,
+        otpConfirmSuccess: action.payload,
+      }
+      // Case for RESEND_OTP_SUCCESS action type.
+    case authActionType.RESEND_OTP_SUCCESS:
+      return {
+        ...state,
+        resendOtpSuccess: action.payload,
       }
     // Case for REMEMBER_ME action type.
     case authActionType.REMEMBER_ME:

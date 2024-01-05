@@ -6,6 +6,11 @@ export const LoginValidation = Yup.object().shape({
   password: Yup.string().required("Password is required."),
 });
 
+// LoginValidation schema to validate the username and password fields in login form
+export const OtpValidation = Yup.object().shape({
+  otp: Yup.string().required("OTP is required."),
+});
+
 // SendEmailForgotPasswordValidation schema to validate the email field in forgot password form
 export const SendEmailForgotPasswordValidation = Yup.object().shape({
   email: Yup.string().required("Email is required.").email("Email is invalid."),

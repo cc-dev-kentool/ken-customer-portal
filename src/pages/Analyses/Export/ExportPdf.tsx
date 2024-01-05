@@ -1,8 +1,8 @@
 
-import { statusExport, topicCommentArr } from 'constants/riskAnalysis';
-import { progressTextReadability } from 'helpers/until';
+import { statusExport, topicCommentArr, topicDisable } from 'constants/riskAnalysis';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+
 interface CustomJsPDF extends jsPDF {
   lastAutoTable: {
     finalY?: number;
@@ -76,13 +76,15 @@ export const exportPdf = (dataAnalysis, conversation) => {
   })
 
   dataAnalysis.forEach((data: any) => {
-    dataExport.push([
-      data.analysis_result.topic,
-      '',
-      getSourceTexe(data.analysis_result.source_text),
-      genComment(data.analysis_result),
-      data.analysis_result.status,
-    ])
+    if (!topicDisable.includes(data.analysis_result?.topic)) {
+      dataExport.push([
+        data.analysis_result.topic,
+        '',
+        getSourceTexe(data.analysis_result.source_text),
+        genComment(data.analysis_result),
+        data.analysis_result.status,
+      ])
+    }
   })
 
   let drawnRows: any = [];
