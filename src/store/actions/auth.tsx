@@ -17,6 +17,11 @@ export function login(data) {
       payload: false,
     });
 
+    dispatch({
+      type: authActionType.SEND_NEW_PASSWORD_SUCCESS,
+      payload: false,
+    });
+
     fetch('https://example.com', {
       mode: 'no-cors'
     }).then(async () => {
@@ -150,73 +155,69 @@ export function logout() {
   };
 }
 
-// Define a function to clear error messages
-export function clearErrorMessage() {
+// Define a function to log out a user
+export function sendMailForgotPassword(email) {
   // Return an async function
   return async function (dispatch) {
-    // Set error message state to empty string
-    dispatch({
-      type: authActionType.CLEAR_ERROR_MESSAGE,
-      payload: "",
-    });
-  };
-}
-
-// Define a function to set forgot password data
-export function setForgotPasswordData(data) {
-  return async function (dispatch) {
-    dispatch({
-      type: authActionType.SET_FORGOT_PASSWORD_DATA,
-      payload: data,
-    });
-  };
-}
-
-// Define a function to change password forgot password
-export function changePasswordForgotPassword(code, password) {
-  return async function (dispatch, getState) {
     dispatch(setLoading(true));
+
     dispatch({
       type: authActionType.SEND_EMAIL_FORGOT_PASSWORD_SUCCESS,
       payload: false,
     });
-    dispatch({
-      type: authActionType.CHANGE_PASSWORD_FORGOT_PASSWORD_SUCCESS,
-      payload: false,
-    });
-    const email = getState().auth.forgotPasswordData.email;
-    const data = {
-      email,
-      code,
-      password,
-    };
-    await API({ url: "/auth/confirm-forgot-password", method: "post", data })
+    const data = {email: email}
+    await API({ url: "/forgot_password/send_mail", method: "post", data })
       .then(() => {
         dispatch(setLoading(false));
         dispatch({
-          type: authActionType.CHANGE_PASSWORD_FORGOT_PASSWORD_SUCCESS,
+          type: authActionType.SEND_EMAIL_FORGOT_PASSWORD_SUCCESS,
+          payload: true,
+        });
+      })
+      .catch((err) => {
+        dispatch(setLoading(false));
+        dispatch(onError(err))
+        dispatch({
+          type: authActionType.SEND_EMAIL_FORGOT_PASSWORD_SUCCESS,
+          payload: false,
+        });
+      });
+  };
+}
+
+// Define a function to log out a user
+export function sendNewPassWord(data) {
+  // Return an async function
+  return async function (dispatch) {
+    dispatch(setLoading(true));
+
+    dispatch({
+      type: authActionType.SEND_NEW_PASSWORD_SUCCESS,
+      payload: false,
+    });
+    await API({ url: "/forgot_password/reset", method: "post", data })
+      .then(() => {
+        dispatch(setLoading(false));
+        dispatch({
+          type: authActionType.SEND_NEW_PASSWORD_SUCCESS,
           payload: true,
         });
         dispatch({
           type: authActionType.SEND_EMAIL_FORGOT_PASSWORD_SUCCESS,
           payload: false,
         });
-        dispatch({
-          type: authActionType.ERROR_CHANGE_PASSWORD_FORGOT_PASSWORD,
-          payload: "",
-        });
       })
       .catch((err) => {
         dispatch(setLoading(false));
-        const errMsg =
-          err.data.code in error ? error[err.data.code] : code["502"];
+        dispatch(onError(err))
         dispatch({
-          type: authActionType.ERROR_CHANGE_PASSWORD_FORGOT_PASSWORD,
-          payload: errMsg,
+          type: authActionType.SEND_NEW_PASSWORD_SUCCESS,
+          payload: false,
         });
       });
   };
 }
+
 
 // Define a function to get my account
 export function getMyAccount(isLoading = true) {
@@ -237,16 +238,6 @@ export function getMyAccount(isLoading = true) {
           payload: "BadRequest",
         });
       });
-  };
-}
-
-// Define a function to clear update account status
-export function clearUpdateAccountStatus() {
-  return async function (dispatch) {
-    dispatch({
-      type: authActionType.UPDATE_MY_ACCOUNT_SUCCESS,
-      payload: false,
-    });
   };
 }
 
@@ -277,25 +268,6 @@ export function updateMyAccount(data) {
         localStorage.setItem("user", JSON.stringify(newUser));
         dispatch(setLoading(false));
         dispatch(setStatus(authActionType.UPDATE_MY_ACCOUNT_SUCCESS, true));
-      })
-      .catch((err) => dispatch(onError(err)));
-  };
-}
-
-// Define a function to change password my account
-export function changePasswordMyAccount(data) {
-  return async function (dispatch) {
-    dispatch(setLoading(true));
-    await API({ url: "/auth/change-password", method: "post", data })
-      .then(() => {
-        dispatch(
-          addAlert("You have successfully changed your password.", "success")
-        );
-        dispatch(setLoading(false));
-        dispatch({
-          type: authActionType.CHANGE_PASSWORD_MY_ACCOUNT_SUCCESS,
-          payload: true,
-        });
       })
       .catch((err) => dispatch(onError(err)));
   };

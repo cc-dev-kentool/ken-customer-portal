@@ -12,7 +12,7 @@ Exporting the Login component as a named function
 @returns - the rendered component
 */
 export function LoginForm(props) {
-  const { setCurrentEmail } = props;
+  const { setCurrentEmail, setIsForgetPass } = props;
   const dispatch = useAppDispatch();
   // Using the useAppSelector hook to get variables from the Redux store
   const [error] = useAppSelector(
@@ -46,7 +46,9 @@ export function LoginForm(props) {
   };
 
   const forgotPassword = () => {
-    
+    setIsForgetPass(true)
+    setValue("username", "")
+    setValue("password", "")
   }
 
   return (
