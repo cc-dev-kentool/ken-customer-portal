@@ -132,6 +132,13 @@ export const getLocalDate = (dateTime) => {
   return moment.utc(dateTime).local().format("DD-MM-YYYY");
 };
 
+const cleanSearchText = (input) => {
+  // Pattern to match bullet points, numbers at the start, and colon or period at the end of a sentence
+  const regex = /^[\d\s.]*|\.$|:$/g;
+  // Remove matched patterns from the input string and trim any leading/trailing whitespace
+  return input.replace(regex, '').trim();
+}
+
 const charactersLineBreaks = (text, checkSourceText, handleSearch) => {
   if (text.includes('•')) {
     const parts = text.split('•');
@@ -143,7 +150,7 @@ const charactersLineBreaks = (text, checkSourceText, handleSearch) => {
               <span
                 key={index}
                 className={classNames('', { 'source-text-item': checkSourceText(part) })}
-                onClick={() => checkSourceText(part) && handleSearch(part)}
+                onClick={() => checkSourceText(part) && handleSearch(cleanSearchText(part))}
               >
                 {index > 0 && <span>•</span>} {part}
               </span>
@@ -156,7 +163,7 @@ const charactersLineBreaks = (text, checkSourceText, handleSearch) => {
   } else {
     return <span
       className={classNames('', { 'source-text-item': checkSourceText(text) })}
-      onClick={() => checkSourceText(text) && handleSearch(text)}
+      onClick={() => checkSourceText(text) && handleSearch(cleanSearchText(text))}
     >
       {text}
     </span>;
