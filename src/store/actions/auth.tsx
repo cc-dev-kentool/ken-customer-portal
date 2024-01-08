@@ -197,6 +197,9 @@ export function sendNewPassWord(data) {
     });
     await API({ url: "/forgot_password/reset", method: "post", data })
       .then(() => {
+        dispatch(
+          addAlert("Reset password success!", "success")
+        );
         dispatch(setLoading(false));
         dispatch({
           type: authActionType.SEND_NEW_PASSWORD_SUCCESS,

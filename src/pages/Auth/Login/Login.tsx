@@ -62,6 +62,7 @@ export function Login() {
 
             {((!isLoginSuccess && !sendEmailForgotPasswordSuccess && !isForgetPass) || sendNewPasswordSuccess) && (
               <LoginForm
+                sendNewPasswordSuccess={sendNewPasswordSuccess}
                 setCurrentEmail={setCurrentEmail}
                 setIsForgetPass={setIsForgetPass}
               />
