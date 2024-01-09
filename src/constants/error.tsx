@@ -25,6 +25,8 @@ export const error = {
     "PasswordRepeatException": "The new password must not be similar to the old password!",
     "InvalidOtp": "The OTP you entered is not valid. Please try again.",
     "OtpExpired": "The OTP you entered has expired. Please try again.",
+    "InternalServerError": "The server is currently experiencing an internal server error. Please try again.",
+    "InvalidOldPassword": "Please ensure the entered old password is correct."
 }
 
 // Define an object called "code" that contains a generic error message mapped to a specific error code.

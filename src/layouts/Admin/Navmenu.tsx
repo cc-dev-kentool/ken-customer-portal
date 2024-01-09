@@ -1,7 +1,7 @@
 import SMSYSAlert from "components/SMSYSAlert";
 import { NavDropdown } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import { logout } from "store/actions/auth";
+import { logout, sendMailChangePw } from "store/actions/auth";
 import { useAppDispatch } from "hooks";
 import { upperFistChar } from "helpers/until";
 import avatar from "assets/images/avatar.png";
@@ -25,6 +25,11 @@ export default function Navmenu(props) {
     dispatch(logout());
     history.push("/login");
   };
+
+  const changePassword = () => {
+    dispatch(sendMailChangePw({"email": user.email}))
+    history.push("/change-password");
+  }
 
   // Return the following JSX
   return (
@@ -52,6 +57,9 @@ export default function Navmenu(props) {
                     <li>Email: {user.email}</li>
                     <li>Role: {upperFistChar(user.role)}</li>
                   </ul>
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => changePassword()}>
+                  Change Password
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={() => onLogout()}>
                   Logout

@@ -165,7 +165,7 @@ export function sendMailForgotPassword(email) {
       type: authActionType.SEND_EMAIL_FORGOT_PASSWORD_SUCCESS,
       payload: false,
     });
-    const data = {email: email}
+    const data = { email: email }
     await API({ url: "/forgot_password/send_mail", method: "post", data })
       .then(() => {
         dispatch(setLoading(false));
@@ -221,57 +221,59 @@ export function sendNewPassWord(data) {
   };
 }
 
-
-// Define a function to get my account
-export function getMyAccount(isLoading = true) {
+// Define a function to update my account
+export function sendMailChangePw(data) {
   return async function (dispatch) {
-    isLoading && dispatch(setLoading(true));
-    await API({ url: "/auth/user", method: "get" })
-      .then((result) => {
-        isLoading && dispatch(setLoading(false));
+    dispatch(setLoading(true));
+    dispatch({
+      type: authActionType.GET_OTP_CHANGE_PASSWORD_SUCCESS,
+      payload: false,
+    });
+    await API({ url: "/change_password/send_mail", method: "post", data })
+      .then(() => {
+        dispatch(setLoading(false));
         dispatch({
-          type: authActionType.GET_MY_ACCOUNT,
-          payload: result.data,
+          type: authActionType.GET_OTP_CHANGE_PASSWORD_SUCCESS,
+          payload: true,
         });
       })
       .catch((err) => {
         dispatch(setLoading(false));
+        dispatch(onError(err))
         dispatch({
-          type: authActionType.ERROR_MY_ACCOUNT,
-          payload: "BadRequest",
+          type: authActionType.GET_OTP_CHANGE_PASSWORD_SUCCESS,
+          payload: false,
         });
       });
   };
 }
 
 // Define a function to update my account
-export function updateMyAccount(data) {
-  return async function (dispatch, getState) {
+export function userChangePw(data) {
+  return async function (dispatch) {
     dispatch(setLoading(true));
-    await API({ url: "/auth/user", method: "put", data })
+    dispatch({
+      type: authActionType.USER_CHANGE_PASSWORD_SUCCESS,
+      payload: false,
+    });
+    await API({ url: "/change_password", method: "post", data })
       .then(() => {
-        dispatch(
-          addAlert("You have successfully updated your profile.", "success")
-        );
-        const currentData = getState().auth.myAccount;
-        dispatch({
-          type: authActionType.GET_MY_ACCOUNT,
-          payload: {
-            ...currentData,
-            name: data.name,
-            phone_number: data.phone_number,
-          },
-        });
-        const user = JSON.parse(localStorage.getItem("user") || "{}");
-        const newName = data.name;
-        const newUser = {
-          ...user,
-          name: newName,
-        };
-        localStorage.setItem("user", JSON.stringify(newUser));
         dispatch(setLoading(false));
-        dispatch(setStatus(authActionType.UPDATE_MY_ACCOUNT_SUCCESS, true));
+        dispatch({
+          type: authActionType.USER_CHANGE_PASSWORD_SUCCESS,
+          payload: true,
+        });
+        dispatch(
+          addAlert("Change password success!", "success")
+        );
       })
-      .catch((err) => dispatch(onError(err)));
+      .catch((err) => {
+        dispatch(setLoading(false));
+        dispatch(onError(err))
+        dispatch({
+          type: authActionType.USER_CHANGE_PASSWORD_SUCCESS,
+          payload: false,
+        });
+      });
   };
 }

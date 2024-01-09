@@ -66,6 +66,23 @@ export function createUser(data) {
   };
 }
 
+export function forceChangePw(id) {
+  return async function (dispatch) {
+    // Set loading state to true
+    dispatch(setLoading(true));
+    // Make PUT request to API to update user settings profile
+    await API({ url: `users/${id}/force_change_password`, method: "post"})
+      .then(() => {
+        // Dispatch alert indicating successful update
+        dispatch(addAlert("Change password success.", "success"));
+        // Set loading state to false
+        dispatch(setLoading(false));
+        dispatch(getListUser());
+      })
+      .catch((err) => dispatch(onError(err)));
+  };
+}
+
 export function getLoginHistory(user_id) {
   return async function (dispatch) {
     dispatch({

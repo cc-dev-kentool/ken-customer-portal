@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppDispatch } from "hooks";
-import { updateUser } from "store/actions/user";
+import { forceChangePw, updateUser } from "store/actions/user";
 import { userAddValidation } from "schema/user";
 import { useState } from "react";
 import { generatePassword } from "helpers/until";
@@ -21,23 +21,19 @@ export default function EditUser(props) {
     formState: { errors },
   } = useForm({ resolver: yupResolver(userAddValidation), });
 
-  const [isShowPassword, setIsShowPassword] = useState(false);
-  const [passwordRandom, setPasswordRandom] = useState('');
-
   // Function to handle form submission
   const onSubmit = async (data) => {
     const params = {
       user_id: currentUser.uuid,
       email: data.username,
-      password: data.password.trim(),
       role: data.role,
     };
     dispatch(updateUser(params));
     setIsShowEdit(false);
   };
 
-  const genPassword = () => {
-    setPasswordRandom(generatePassword());
+  const resetPassword = () => {
+    dispatch(forceChangePw(currentUser.uuid))
   };
 
   // Returns JSX for rendering component on the page
@@ -59,30 +55,6 @@ export default function EditUser(props) {
         </div>
 
         <div className="mb-3">
-          <label className="label-input">Password</label>
-          <input
-            type={`${isShowPassword ? "text" : "password"}`}
-            {...register("password")}
-            className={`form-control feild-pass ${errors.password ? "is-invalid" : ""}`}
-            name="password"
-            placeholder="********"
-            value={currentUser?.hashed_password}
-          />
-          <i
-            className={`iconShowPass fa-regular fa-eye${isShowPassword ? "-slash" : ""} ${errors.password ? "isWithError" : ""}`}
-            onClick={() => setIsShowPassword(!isShowPassword)}
-          />
-          <div className="invalid-feedback">{errors.password?.message}</div>
-        </div>
-
-        <div className="row">
-          <p className="col">{passwordRandom}</p>
-          <p className="col text-end">
-            <span className="btn-random" onClick={genPassword}>Random Password</span>
-          </p>
-        </div>
-
-        <div className="mb-3">
           <label className="label-input">Role</label>
           <select
             {...register("role")}
@@ -97,10 +69,15 @@ export default function EditUser(props) {
           <div className="invalid-feedback">{errors.role?.message}</div>
         </div>
 
-        <div className="text-center">
-          <button type="submit" className="btn-save">
-            Save
-          </button>
+        <div className="row">
+          <div className="col text-end">
+            <button type="submit" className="btn-save">
+              Save
+            </button>
+          </div>
+          <div className="col">
+            <p className="btn-resetpw" onClick={resetPassword}>Reset Password</p>
+          </div>
         </div>
       </form>
     </div>

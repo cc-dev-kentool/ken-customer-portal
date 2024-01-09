@@ -172,17 +172,18 @@
     margin-top: -25px;
 }
 
-.btn-random {
+.btn-resetpw {
     cursor: pointer;
     background-color: #26ADC9;
     color: #fff;
-    padding: 8px 10px;
+    padding: 7px;
     border-radius: 8px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    text-align: center;
     width: 150px;
 }
 
-.btn-random:hover {
+.btn-resetpw:hover {
     background-color: #A8DEE9;
 }
 
