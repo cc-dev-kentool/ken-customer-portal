@@ -32,10 +32,6 @@ export default function EditUser(props) {
     setIsShowEdit(false);
   };
 
-  const resetPassword = () => {
-    dispatch(forceChangePw(currentUser.uuid))
-  };
-
   // Returns JSX for rendering component on the page
   return (
     // Renders an AdminLayout component with a prop called `routeName`
@@ -69,15 +65,10 @@ export default function EditUser(props) {
           <div className="invalid-feedback">{errors.role?.message}</div>
         </div>
 
-        <div className="row">
-          <div className="col text-end">
+        <div className="text-center">
             <button type="submit" className="btn-save">
               Save
             </button>
-          </div>
-          <div className="col">
-            <p className="btn-resetpw" onClick={resetPassword}>Reset Password</p>
-          </div>
         </div>
       </form>
     </div>

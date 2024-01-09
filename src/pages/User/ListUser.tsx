@@ -2,7 +2,8 @@ import { Col, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { PopupDialog } from "components/Modals/PopUpDialog";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { getListUser, getLoginHistory } from "store/actions/user";
+import { forceChangePw, getListUser, getLoginHistory } from "store/actions/user";
+import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import { getDateDiff } from "helpers/until";
 import { ContentTable } from "components/Table/ContentTable";
 import { SorterResult } from "antd/es/table/interface";
@@ -196,17 +197,47 @@ export default function ListUser(props) {
     },
     {
       title: "Action",
-      width: loggedUser.role == "super-admin" ? "11%" : "1%",
+      width: loggedUser.role == "super-admin" ? "15%" : "1%",
       className: loggedUser.role == "super-admin" ? "" : "hide-action",
       render: (user) => (
-        <i
-          className="fa-solid fa-pen"
-          style={{ color: "#26ADC9", cursor: "pointer" }}
-          onClick={() => handleShowPopupEdit(user)}
-        ></i>
+        <>
+          <i
+            data-tooltip-id="tooltip-edit"
+            className="fa-solid fa-pen grIconAction"
+            onClick={() => handleShowPopupEdit(user)}
+          ></i>
+          <ReactTooltip
+            id={`tooltip-edit`}
+            content={"Edit user"}
+            widthTooltip={85}
+          />
+          <i
+            data-tooltip-id="tooltip-reset-password"
+            className="fa-solid fa-repeat grIconAction"
+            onClick={() => resetPassword(user)}
+          ></i>
+          <ReactTooltip
+            id={`tooltip-reset-password`}
+            content={"Reset password"}
+            widthTooltip={130}
+          />
+          <i 
+            data-tooltip-id="tooltip-ban"
+            className="fa-solid fa-ban grIconAction m-2"
+          ></i>
+          <ReactTooltip
+            id={`tooltip-ban`}
+            content={"Unactive"}
+            widthTooltip={85}
+          />
+        </>
       ),
     },
   ];
+
+  const resetPassword = (currentUser) => {
+    dispatch(forceChangePw(currentUser.uuid))
+  };
 
   // This function returns the content for the add user popup
   const getContentPopupAdd = () => {
@@ -275,10 +306,10 @@ export default function ListUser(props) {
             <button className="btn-reset" onClick={() => onReset()}> Reset </button>
           </Col>
         </Row>
-        <ContentTable 
-          columns={columns} 
-          listUser={currentData} 
-          onChange={handleChange} 
+        <ContentTable
+          columns={columns}
+          listUser={currentData}
+          onChange={handleChange}
           defaultHeightTop={350}
         />
         <PopupDialog
