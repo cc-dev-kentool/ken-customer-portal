@@ -120,6 +120,11 @@
     padding-top: 15%;
 }
 
+.grIconAction {
+    color: #26ADC9;
+    cursor: pointer;
+}
+
 /* Add new user, Edit user */
 
 .edit-user .titile-add {
