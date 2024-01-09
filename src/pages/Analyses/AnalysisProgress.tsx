@@ -7,6 +7,7 @@ import { labelDisplay } from 'helpers/until';
 import { ReactTooltip } from 'components/Tooltip/ReactTooltip';
 import { useAppSelector } from 'hooks';
 import { CircularProgress } from '@mui/material';
+import { topicDisable } from 'constants/riskAnalysis';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import icon_success from "assets/icon/icon_success.svg";
 import icon_error from "assets/icon/icon_error.svg";
@@ -22,14 +23,16 @@ export default function AnalysisProgress(props) {
     state.prompts.topics,
   ]);
 
-  const defaultLengthText = showPdf ? 10 : 20
+  const defaultLengthText = showPdf ? 15 : 25
+
+  const listTopics = topics.filter(topic => !topicDisable.includes(topic.name))
 
   // Sort the listPrompt array based on topic_order property
-  topics.sort(function (a, b) {
-    if (a.topic_order < b.topic_order) {
+  listTopics.sort(function (a, b) {
+    if (a.order < b.order) {
       return -1;
     }
-    if (a.topic_order > b.topic_order) {
+    if (a.order > b.order) {
       return 1;
     }
     return 0;
@@ -171,21 +174,21 @@ export default function AnalysisProgress(props) {
     <div>
       {isReadFilePdf() ?
       <>
-        <p className="messUploading">Uploading this file and extracting the content is in progress to prepare for analysis...</p>
+        <p className="messUploading text-center">Analysing...</p>
         <div className="text-center m-5"><CircularProgress color="success" /></div>
       </> :
       <>
-        <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
-          {topics.map((prompt, index) => (
-            (index < 6) && (<Step key={prompt.uuid}>
+        <Stepper alternativeLabel activeStep={4} connector={<ColorlibConnector />}>
+          {listTopics.map((prompt, index) => (
+            (index < 5) && (<Step key={prompt.uuid}>
               {contentStep(prompt)}
             </Step>)
 
           ))}
         </Stepper>
-        <Stepper alternativeLabel activeStep={5} connector={<ColorlibConnector />}>
-          {topics.map((prompt, index) => (
-            (index >= 6) && (<Step key={prompt.uuid}>
+        <Stepper alternativeLabel activeStep={4} connector={<ColorlibConnector />}>
+          {listTopics.map((prompt, index) => (
+            (index >= 5) && (<Step key={prompt.uuid}>
               {contentStep(prompt)}
             </Step>)
 

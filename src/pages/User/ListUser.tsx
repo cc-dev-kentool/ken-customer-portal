@@ -2,7 +2,7 @@ import { Col, Row } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { PopupDialog } from "components/Modals/PopUpDialog";
 import { useAppDispatch, useAppSelector } from "hooks";
-import { forceChangePw, getListUser, getLoginHistory } from "store/actions/user";
+import { forceChangePw, getListUser, getLoginHistory, suspendAccount } from "store/actions/user";
 import { ReactTooltip } from "components/Tooltip/ReactTooltip";
 import { getDateDiff } from "helpers/until";
 import { ContentTable } from "components/Table/ContentTable";
@@ -224,19 +224,24 @@ export default function ListUser(props) {
           <i 
             data-tooltip-id="tooltip-ban"
             className="fa-solid fa-ban grIconAction m-2"
+            onClick={() => suspendAcc(user)}
           ></i>
           <ReactTooltip
             id={`tooltip-ban`}
-            content={"Unactive"}
-            widthTooltip={85}
+            content={"Suspend account"}
+            widthTooltip={135}
           />
         </>
       ),
     },
   ];
 
-  const resetPassword = (currentUser) => {
-    dispatch(forceChangePw(currentUser.uuid))
+  const suspendAcc = (user) => {
+    dispatch(suspendAccount(user.uuid))
+  }
+
+  const resetPassword = (user) => {
+    dispatch(forceChangePw(user.uuid))
   };
 
   // This function returns the content for the add user popup

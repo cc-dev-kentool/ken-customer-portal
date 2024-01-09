@@ -11,6 +11,7 @@ const initialState = {
   loginHistory: [],
   getLoginHistorySuccess: false,
   forceChangePwSuccess: false,
+  suspendAccountSuccess: false,
 }
 
 // Declaring the modal reducer function
@@ -57,6 +58,12 @@ const userSetting = (state = initialState, action) => {
       return {
         ...state,
         forceChangePwSuccess: action.payload,
+      }
+    // Case for SUSPEND_ACCOUNT_SUCCESS action type.
+    case userActionType.SUSPEND_ACCOUNT_SUCCESS:
+      return {
+        ...state,
+        suspendAccountSuccess: action.payload,
       }
     // Default fallback case returns the current state.
     default:

@@ -70,16 +70,62 @@ export function forceChangePw(id) {
   return async function (dispatch) {
     // Set loading state to true
     dispatch(setLoading(true));
+    dispatch({
+      type: userActionType.FORCE_CHANGE_PASSWORD_SUCCESS,
+      payload: false,
+    });
     // Make PUT request to API to update user settings profile
     await API({ url: `users/${id}/force_change_password`, method: "post"})
+      .then(() => {
+        // Dispatch alert indicating successful update
+        dispatch(addAlert("Suspend account success.", "success"));
+        // Set loading state to false
+        dispatch(setLoading(false));
+        dispatch(getListUser());
+        dispatch({
+          type: userActionType.FORCE_CHANGE_PASSWORD_SUCCESS,
+          payload: true,
+        });
+      })
+      .catch((err) => {
+        dispatch(setLoading(false));
+        dispatch(onError(err));
+        dispatch({
+          type: userActionType.FORCE_CHANGE_PASSWORD_SUCCESS,
+          payload: false,
+        });
+      });
+  };
+}
+
+export function suspendAccount(id) {
+  return async function (dispatch) {
+    // Set loading state to true
+    dispatch(setLoading(true));
+    dispatch({
+      type: userActionType.SUSPEND_ACCOUNT_SUCCESS,
+      payload: false,
+    });
+    // Make PUT request to API to update user settings profile
+    await API({ url: `users/${id}/suspend`, method: "post"})
       .then(() => {
         // Dispatch alert indicating successful update
         dispatch(addAlert("Change password success.", "success"));
         // Set loading state to false
         dispatch(setLoading(false));
-        dispatch(getListUser());
+        dispatch({
+          type: userActionType.SUSPEND_ACCOUNT_SUCCESS,
+          payload: true,
+        });
       })
-      .catch((err) => dispatch(onError(err)));
+      .catch((err) => {
+        dispatch(setLoading(false));
+        dispatch(onError(err));
+        dispatch({
+          type: userActionType.SUSPEND_ACCOUNT_SUCCESS,
+          payload: false,
+        });
+      });
   };
 }
 

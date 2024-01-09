@@ -59,19 +59,14 @@ export default function UploadFile(props) {
   // Return the following JSX
   return (
     <div className="content-popup-upload">
-      <p>The deal document uploaded into the system will automatically be analyzed for risk by the solution.</p>
-      <div className="area-upload text-center p-2">
+      <div className="area-upload text-center p-2 mb-4">
         <FileUploader handleChange={handleChange}>
           <img className="mt-2" src={image} alt="" />
-          <p>Drag and Drop Files here or</p>
+          <p>Drag and Drop Contract here or</p>
           <button className="btn-upload">Browse File</button>
           <p className="file-type">Supported file types: *.pdf</p>
           {file && <p className="file-name">File name: {fileNameDisplay(file.name, 40)}</p>}
         </FileUploader>
-      </div>
-      <div className="mt-3 mb-3">
-        <img src={warn} alt="" />
-        <span className="content-warn"> By Browsing the file and uploading, this will submit the files automatically.</span>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 import { statusExport, topicCommentArr, topicDisable } from 'constants/riskAnalysis';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import moment from 'moment';
 
 interface CustomJsPDF extends jsPDF {
   lastAutoTable: {
@@ -9,7 +10,7 @@ interface CustomJsPDF extends jsPDF {
   };
 }
 
-export const exportPdf = (dataAnalysis, conversation) => {
+export const exportPdf = (dataAnalysis, conversation, currentFileName) => {
   // Define a function named "getStatusRisk" that takes a "status" parameter and returns a value from the "statusRisk" array based on the label
   const getStatusExport = (status) => {
     return statusExport.find(item => item.label === status)?.value;
@@ -151,6 +152,8 @@ export const exportPdf = (dataAnalysis, conversation) => {
     },
   });
 
+  const date = moment.utc(new Date()).local().format("YYYY-MM-DD HHmmss");
+  const fileName = currentFileName.replace(/\.pdf/g, '');
   // Save the PDF file
-  pdf.save("data.pdf");
+  pdf.save(`${fileName} - ${date}.pdf`);
 }
