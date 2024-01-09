@@ -161,13 +161,13 @@ export default function RiskContent(props) {
   // Return the following JSX
   return (
     <div className={classNames("risk-content", { "full-height": !showChat, "min-height": isShowFullChat })}>
-      <p className="title-risk">Risk Analysis Data</p>
+      <p className="title-risk">KEN Analysis</p>
       {dataAnalysis?.length > 0 &&
         <>
           <div className='analysis-progress'>
             <Row className="risk-content-item-topic m-2">
               <Col sm={10}>
-                Progress bar
+                Progress
               </Col>
               <Col sm={2} className="text-end">
                 <i
@@ -189,7 +189,7 @@ export default function RiskContent(props) {
             "tb-content-medium": showChat && !isShowProgressBar,
             "tb-content-min": showChat && isShowProgressBar,
           })}>
-            {dataAnalysis.map((data) => {
+            {currentStatus === "done" && dataAnalysis.map((data) => {
               if (data.executed_status === 'success' && !topicDisable.includes(data.analysis_result?.topic)) {
                 return (
                   <div key={data.uuid} className="risk-content-item">

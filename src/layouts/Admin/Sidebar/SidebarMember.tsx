@@ -147,7 +147,7 @@ export default function SidebarMember(props) {
         disabled={disableBtnNew()}
       >
         <i className="fa-regular fa-plus fs-1"></i><br />
-        {isShowFullSidebar && <span>New Document</span>}
+        {isShowFullSidebar && <span>New Analysis</span>}
       </button>
 
       {files?.length > 0 &&
@@ -160,7 +160,7 @@ export default function SidebarMember(props) {
         >
           <p className="main-menu-title">
             <i className="fa-solid fa-chevron-down" />
-            <span className="m-2">Main</span>
+            <span className="m-2">History</span>
           </p>
           <div
             className={classNames("list-file", { "none-file": !isShowFiles })}

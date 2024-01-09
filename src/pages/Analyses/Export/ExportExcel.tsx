@@ -1,5 +1,6 @@
 
 import { topicCommentArr, topicDisable } from 'constants/riskAnalysis';
+import moment from 'moment';
 
 const ExcelJS = require('exceljs');
 
@@ -29,7 +30,7 @@ const alignmentStyle = {
   wrapText: true,
 }; 
 
-export const exportToExcel = (dataAnalysis, conversation) => {
+export const exportToExcel = (dataAnalysis, conversation, currentFileName) => {
 
   const getSourceTexe = (data) => {
     let text = '';
@@ -199,7 +200,11 @@ export const exportToExcel = (dataAnalysis, conversation) => {
     const url = window.URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = 'data_excel.xlsx';
+
+    const date = moment.utc(new Date()).local().format("YYYY-MM-DD HHmmss");
+    const fileName = currentFileName.replace(/\.pdf/g, '');
+    anchor.download = `${fileName} - ${date}.xlsx`;
+
     anchor.click();
     window.URL.revokeObjectURL(url);
   })

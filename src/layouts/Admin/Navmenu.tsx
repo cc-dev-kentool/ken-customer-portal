@@ -46,8 +46,8 @@ export default function Navmenu(props) {
                 className="custom-nav-dropdown"
                 title={
                   <b className="">
-                    <i className="fa-solid fa-download"></i>
-                    <img src={avatar} alt="" className="avatar" />
+                    <i className="fa-solid fa-download m-2" style={{color: "#26ADC9"}}></i>
+                    <i className="fa-solid fa-user fa-2xl" style={{color: "#26ADC9"}}></i>
                   </b>
                 }
               >

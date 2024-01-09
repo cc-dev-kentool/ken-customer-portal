@@ -30,6 +30,7 @@ export default function Analysis(props) {
   const [dataAnalysis, setDataAnalysis] = useState<object[]>([]);
   const [isShowFullChat, setIsShowFullChat] = useState<boolean>(false);
   const [fieldId, setFieldId] = useState<string>("");
+  const [currentFileName, setCurrentFileName] = useState<string>("");
 
   // The useAppSelector hook is used here to extract data from the Redux store state.
   // It returns an array containing the values of uploadPdf, dataAnalysis, and conversation.
@@ -78,7 +79,8 @@ export default function Analysis(props) {
           dispatch(getAnalysisData(fieldId));
         }, 3000);
       } else if (executionStatus === 'done') {
-        dispatch(getListFile(false))
+        setCurrentFileName(dataAnaly.file_name);
+        dispatch(getListFile(false));
       }
 
       if (!url) {
@@ -90,7 +92,7 @@ export default function Analysis(props) {
 
   // Define a function exportPDF that does the following:
   const handleExportPdf = () => {
-    exportPdf(dataAnalysis, conversation)
+    exportPdf(dataAnalysis, conversation, currentFileName)
   }
 
   // This function handles showing the chat.
@@ -129,7 +131,7 @@ export default function Analysis(props) {
                   data-tooltip-id={`tooltip-export-excel`}
                   className="fa-regular fa-file-excel fa-2xl icon-download-excel"
                   style={{ color: "#26ADC9" }}
-                  onClick={() => exportToExcel(dataAnalysis, conversation)}
+                  onClick={() => exportToExcel(dataAnalysis, conversation, currentFileName)}
                 />
                 <ReactTooltip
                   id={`tooltip-export-excel`}
@@ -193,7 +195,7 @@ export default function Analysis(props) {
           </Col>
         </Row> :
         hasPermission && <div className="analysis-index">
-          <h1>Analyses</h1>
+          <h1>KEN Analysis</h1>
         </div>
       }
 

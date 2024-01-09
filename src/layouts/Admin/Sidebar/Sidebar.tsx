@@ -138,21 +138,21 @@ export default function Sidebar(props) {
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSfUdRoTe2bYxoZJdLNtJ174Ctd8Pd9jyccadmSlgBbqX4_OUQ/viewform" target="_blank">
           <button className={`btn-contact ${!isShowFullSidebar && 'text-center'}`}>
             <img src={icon_email} alt="logo" width="15px" className="icon-contact" />
-            {isShowFullSidebar && <span>Contact Administrator</span>}
+            {isShowFullSidebar && <span>Give feedback</span>}
           </button>
         </a>
         <p className="version">
-          KEN &copy; 1.0.0.19
+          KEN &copy; 1.0.0.20
         </p>
       </div>
 
       {/* Render PopupDialog component with specific props */}
       <PopupDialog
         isShow={showModalUplaod}
-        title={"Upload Document"}
+        title={"Upload Contract"}
         content={getContentPopupArea()}
         firstLabelButon={"Cancel"}
-        seconLabelButton={"Analyze"}
+        seconLabelButton={"Analyse"}
         handleFirstButtonCalback={handleClosePupopUpload}
         handleSeconButtonCalback={handleSubmitPupopUpload}
         enableSecondButton={isEnableBtnAnalyze}
