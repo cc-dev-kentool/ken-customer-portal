@@ -38,7 +38,7 @@ export function SendMailForgotPwForm(props) {
 
       <div className="mb-3">
         <label className="label-input">
-          Your emal
+          Your email
         </label>
         <input
           type="text"

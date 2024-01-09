@@ -24,6 +24,7 @@ export function SendNewPwForm(props) {
   });
 
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isShowRePassword, setIsShowRePassword] = useState(false);
   const [passwordRandom, setPasswordRandom] = useState('');
 
   useEffect(() => {
@@ -83,12 +84,10 @@ export function SendNewPwForm(props) {
           name="password"
           placeholder="***************"
         />
-        {!errors.password?.message &&
-          <i
-            className={`iconShowPass fa-regular fa-eye${isShowPassword ? "-slash" : ""}`}
-            onClick={() => setIsShowPassword(!isShowPassword)}
-          />
-        }
+        <i
+          className={`iconShowPass fa-regular fa-eye${isShowPassword ? "-slash" : ""} ${errors.password ? "isWithError" : ""}`}
+          onClick={() => setIsShowPassword(!isShowPassword)}
+        />
         <div className="invalid-feedback">
           {errors.password?.message}
         </div>
@@ -99,6 +98,25 @@ export function SendNewPwForm(props) {
         <p className="col-8 text-end">
           <span className="btn-random" onClick={genPassword}>Random Password</span>
         </p>
+      </div>
+
+      <div className="mb-3">
+        <label className="label-input">Re-enter New Password</label>
+        <input
+          type={`${isShowRePassword ? 'text' : 'password'}`}
+          {...register("re_password")}
+          className={`form-control feild-pass ${errors.re_password ? "is-invalid" : ""
+            }`}
+          name="re_password"
+          placeholder="***************"
+        />
+        <i
+          className={`iconShowPass fa-regular fa-eye${isShowRePassword ? "-slash" : ""} ${errors.re_password ? "isWithError" : ""}`}
+          onClick={() => setIsShowRePassword(!isShowRePassword)}
+        />
+        <div className="invalid-feedback">
+          {errors.re_password?.message}
+        </div>
       </div>
 
       <div className="text-center">

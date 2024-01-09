@@ -11,9 +11,8 @@ const initialState = {
   sendEmailForgotPasswordSuccess: false,
   sendNewPasswordSuccess: false,
 
-  myAccount: {},
-  updateMyAccountSuccess: false,
-  errorUpdateMyAccount: "",
+  getOtpChangePasswordSuccess: false,
+  userChangePasswordSuccess: false,
 }
 
 // Define auth reducer function with state and action as parameters.
@@ -61,25 +60,17 @@ const auth = (state = initialState, action) => {
         ...state,
         sendNewPasswordSuccess: action.payload,
       }
-
-
-    // Case for GET_MY_ACCOUNT action type.
-    case authActionType.GET_MY_ACCOUNT:
+    // Case for SEND_NEW_PASSWORD_SUCCESS action type.
+    case authActionType.GET_OTP_CHANGE_PASSWORD_SUCCESS:
       return {
         ...state,
-        myAccount: action.payload,
+        getOtpChangePasswordSuccess: action.payload,
       }
-    // Case for ERROR_MY_ACCOUNT action type.
-    case authActionType.ERROR_MY_ACCOUNT:
+    // Case for SEND_NEW_PASSWORD_SUCCESS action type.
+    case authActionType.USER_CHANGE_PASSWORD_SUCCESS:
       return {
         ...state,
-        errorMyAccount: action.payload,
-      }
-    // Case for UPDATE_MY_ACCOUNT_SUCCESS action type.
-    case authActionType.UPDATE_MY_ACCOUNT_SUCCESS:
-      return {
-        ...state,
-        isUpdateMyAccountSuccess: action.payload,
+        userChangePasswordSuccess: action.payload,
       }
     // Default fallback case returns the current state.
     default:

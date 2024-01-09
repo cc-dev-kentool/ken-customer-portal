@@ -12,6 +12,7 @@ const Dashboard = lazy(() => import("pages/Dashboard"));
 const Configuation = lazy(() => import("pages/Configuation"));
 const Utilities = lazy(() => import("pages/Utilities/Utilities"));
 const Page404 = lazy(() => import("pages/OtherPage/Page404"));
+const ChangePassword = lazy(() => import("layouts/Admin/ChangePassword"));
 
 // Defines a type for individual route objects
 type routeItem = {
@@ -31,6 +32,17 @@ type routes = routeItem & {
 };
 
 const ROUTES: routes[] = [
+  {
+    path: "/change-password", // URL pattern for the login route
+    key: "ROOT", // Unique identifier for this component instance
+    exact: true, // Exact match is required to load the component
+    component: ChangePassword, // Component that will be loaded on this route
+    routes: [], // Optional array of child routes if any
+    requiredAuth: true, // Indicates whether authentication is required or not
+    name: "changePw", // Identifier for this route
+    title: "Change password", // Title that will be displayed in the header
+    roles: ["admin", "super-admin", "member"],
+  },
   {
     path: "/utilities", // URL pattern for the login route
     key: "ROOT", // Unique identifier for this component instance
